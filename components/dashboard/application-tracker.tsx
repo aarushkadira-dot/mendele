@@ -29,7 +29,7 @@ export async function ApplicationTracker() {
         </Link>
       </CardHeader>
       <CardContent className="space-y-3">
-        {applications.map((app) => {
+        {applications.map((app: any) => {
           const config = statusConfig[app.status] || statusConfig.Applied
           const StatusIcon = config.icon
           return (
