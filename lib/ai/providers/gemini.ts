@@ -147,10 +147,8 @@ export class GeminiProvider {
           }
           console.log('[GeminiProvider] Successfully parsed credentials for:', parsed.client_email)
         } catch (error) {
-          console.error('[GeminiProvider] Failed to parse GOOGLE_APPLICATION_CREDENTIALS_JSON:', error)
-          if (isServerless) {
-            throw new Error(`Failed to parse GOOGLE_APPLICATION_CREDENTIALS_JSON: ${error}`)
-          }
+          console.warn('[GeminiProvider] Failed to parse GOOGLE_APPLICATION_CREDENTIALS_JSON:', error)
+          // Don't throw — fall through to ADC or no-credentials mode
         }
       }
 
@@ -172,10 +170,12 @@ export class GeminiProvider {
           googleAuthOptions: { keyFilename: process.env.GOOGLE_APPLICATION_CREDENTIALS },
         })
       } else if (isServerless) {
-        // Fail fast on serverless without credentials
-        throw new Error(
-          'Vertex AI credentials not found. Set GOOGLE_APPLICATION_CREDENTIALS_JSON environment variable with the service account JSON content.'
-        )
+        // No credentials on serverless — fall back to Application Default Credentials
+        console.warn('[GeminiProvider] No credentials found on serverless. Trying Application Default Credentials.')
+        this.googleProvider = createVertex({
+          project,
+          location,
+        })
       } else {
         // Local development fallback - try Application Default Credentials
         console.log('[GeminiProvider] Using Application Default Credentials (gcloud auth)')

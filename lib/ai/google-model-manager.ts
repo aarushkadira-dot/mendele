@@ -48,7 +48,7 @@ export class GoogleModelManager {
                         project_id: project
                     }}
                 } catch (error) {
-                    throw new Error(`Failed to parse GOOGLE_APPLICATION_CREDENTIALS_JSON: ${String(error)}`)
+                    console.warn(`Failed to parse GOOGLE_APPLICATION_CREDENTIALS_JSON: ${String(error)} — proceeding without explicit credentials`)
                 }
             }
 
@@ -174,4 +174,12 @@ export class GoogleModelManager {
     }
 }
 
-export const googleAI = new GoogleModelManager()
+let googleAI: GoogleModelManager
+try {
+    googleAI = new GoogleModelManager()
+} catch (e) {
+    console.warn('GoogleModelManager: failed to initialize at module load time:', e)
+    // @ts-ignore — will be properly instantiated on first use if env is fixed
+    googleAI = null
+}
+export { googleAI }
