@@ -10,36 +10,41 @@ export async function updateSession(request: NextRequest) {
     return { supabaseResponse: NextResponse.next({ request }), user: MOCK_USER }
   }
 
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+  const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY
+
+  // If env vars are missing, pass through without auth
+  if (!supabaseUrl || !supabaseKey) {
+    console.warn('[middleware] Supabase env vars missing — skipping auth')
+    return { supabaseResponse: NextResponse.next({ request }), user: null }
+  }
+
   let supabaseResponse = NextResponse.next({ request })
 
-  const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!,
-    {
+  try {
+    const supabase = createServerClient(supabaseUrl, supabaseKey, {
       cookies: {
         getAll() {
           return request.cookies.getAll()
         },
         setAll(cookiesToSet: CookieToSet[]) {
-          cookiesToSet.forEach(({ name, value }) => request.cookies.set(name, value))
-          supabaseResponse = NextResponse.next({ request })
-          cookiesToSet.forEach(({ name, value, options }) => {
-            supabaseResponse.cookies.set(name, value, options)
-          })
+          try {
+            cookiesToSet.forEach(({ name, value }) => request.cookies.set(name, value))
+            supabaseResponse = NextResponse.next({ request })
+            cookiesToSet.forEach(({ name, value, options }) => {
+              supabaseResponse.cookies.set(name, value, options)
+            })
+          } catch {
+            // Ignore cookie errors
+          }
         },
       },
-    }
-  )
+    })
 
-  try {
     const { data } = await supabase.auth.getUser()
     return { supabaseResponse, user: data.user ?? null }
-  } catch {
-    request.cookies
-      .getAll()
-      .filter((c) => c.name.startsWith("sb-"))
-      .forEach((c) => supabaseResponse.cookies.delete(c.name))
-
+  } catch (err) {
+    console.warn('[middleware] Supabase auth error — continuing as unauthenticated:', String(err))
     return { supabaseResponse, user: null }
   }
 }
