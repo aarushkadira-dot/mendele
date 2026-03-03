@@ -1,0 +1,9 @@
+{
+    "installCommand": "pnpm install --no-frozen-lockfile",
+    "crons": [
+        {
+            "path": "/api/cron/warmup-summaries",
+            "schedule": "0 */6 * * *"
+        }
+    ]
+}
