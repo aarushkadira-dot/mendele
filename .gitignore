@@ -33,4 +33,9 @@ ec-scraper/config_hybrid.env
 # AI cost tracking data (may contain usage patterns)
 /data/ai-costs.json
 .env*.local
-*.json
+# Sensitive credential JSON files only (service accounts, API keys)
+*-firebase-adminsdk-*.json
+*-credentials.json
+networkly-484301-*.json
+mendele-*.json
+service-account*.json
