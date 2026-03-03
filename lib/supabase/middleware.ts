@@ -13,13 +13,11 @@ export async function updateSession(request: NextRequest) {
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
   const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY
 
-  // If env vars are missing, pass through without auth
-  if (!supabaseUrl || !supabaseKey) {
-    console.warn('[middleware] Supabase env vars missing — skipping auth')
-    return { supabaseResponse: NextResponse.next({ request }), user: null }
-  }
+  const supabaseResponse = NextResponse.next({ request })
 
-  let supabaseResponse = NextResponse.next({ request })
+  if (!supabaseUrl || !supabaseKey) {
+    return { supabaseResponse, user: null }
+  }
 
   try {
     const supabase = createServerClient(supabaseUrl, supabaseKey, {
@@ -30,21 +28,29 @@ export async function updateSession(request: NextRequest) {
         setAll(cookiesToSet: CookieToSet[]) {
           try {
             cookiesToSet.forEach(({ name, value }) => request.cookies.set(name, value))
-            supabaseResponse = NextResponse.next({ request })
             cookiesToSet.forEach(({ name, value, options }) => {
               supabaseResponse.cookies.set(name, value, options)
             })
           } catch {
-            // Ignore cookie errors
+            // ignore
           }
         },
       },
     })
 
+    // Patch getUser so it never throws — @supabase/ssr@0.6.x throws on 401
+    const originalGetUser = supabase.auth.getUser.bind(supabase.auth)
+    supabase.auth.getUser = async (...args: Parameters<typeof originalGetUser>) => {
+      try {
+        return await originalGetUser(...args)
+      } catch {
+        return { data: { user: null }, error: null } as any
+      }
+    }
+
     const { data } = await supabase.auth.getUser()
     return { supabaseResponse, user: data.user ?? null }
-  } catch (err) {
-    console.warn('[middleware] Supabase auth error — continuing as unauthenticated:', String(err))
+  } catch {
     return { supabaseResponse, user: null }
   }
 }
