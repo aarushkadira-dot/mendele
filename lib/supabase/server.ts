@@ -81,7 +81,8 @@ export async function getCurrentUser() {
 export async function requireAuth() {
   const user = await getCurrentUser()
   if (!user) {
-    throw new Error("Unauthorized")
+    const { redirect } = await import("next/navigation")
+    redirect("/login")
   }
   return user
 }

@@ -1,11 +1,12 @@
 "use server"
 
-import { createClient, requireAuth } from "@/lib/supabase/server"
+import { createClient, getCurrentUser } from "@/lib/supabase/server"
 import type { User } from "@/lib/types"
 
 export async function getAnalyticsSummary() {
+  const authUser = await getCurrentUser()
+  if (!authUser) return null
   const supabase = await createClient()
-  const authUser = await requireAuth()
 
   const { data: userData, error: userError } = await supabase
     .from("users")
