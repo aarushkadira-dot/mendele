@@ -33,9 +33,15 @@ import { MOCK_USER, isDev } from "./dev-auth"
 export async function getCurrentUser() {
   if (isDev()) return MOCK_USER
 
-  const supabase = await createClient()
-  const { data } = await supabase.auth.getUser()
-  return data.user ?? null
+  try {
+    const supabase = await createClient()
+    const { data } = await supabase.auth.getUser()
+    return data.user ?? null
+  } catch {
+    // @supabase/ssr@0.6.x throws "Unauthorized" instead of returning an error
+    // when the session is invalid or missing — treat as unauthenticated
+    return null
+  }
 }
 
 export async function requireAuth() {
