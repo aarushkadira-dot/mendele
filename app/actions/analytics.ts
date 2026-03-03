@@ -1,6 +1,6 @@
 "use server"
 
-import { createClient, getCurrentUser } from "@/lib/supabase/server"
+import { createClient, getCurrentUser, requireAuth } from "@/lib/supabase/server"
 import type { User } from "@/lib/types"
 
 export async function getAnalyticsSummary() {
