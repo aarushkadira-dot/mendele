@@ -35,7 +35,7 @@ import { SimilarOpportunities } from "@/components/opportunities/similar-opportu
 import { QuickViewSummary } from "@/components/opportunities/quick-view-summary"
 import { ProfessorOutreachModal } from "@/components/opportunities/professor-outreach-modal"
 import type { Opportunity } from "@/types/opportunity"
-import { getTypeGradient, getMatchScoreColor, formatGradeLevels } from "@/types/opportunity"
+import { getTypeGradientStyle, getMatchScoreColor, formatGradeLevels } from "@/types/opportunity"
 
 import { OpportunityStatus } from "@/app/actions/opportunity-status"
 import {
@@ -165,7 +165,8 @@ export function ExpandedOpportunityCard({ opportunity, onClose, onToggleSave, st
         >
           <div className="relative shrink-0">
             <div
-              className={`absolute inset-0 bg-gradient-to-br ${getTypeGradient(opportunity.type)} opacity-10`}
+              className="absolute inset-0 opacity-10"
+              style={{ background: getTypeGradientStyle(opportunity.type) }}
             />
 
             <Button
@@ -306,7 +307,7 @@ export function ExpandedOpportunityCard({ opportunity, onClose, onToggleSave, st
             </div>
           )}
 
-          <ScrollArea className="flex-1 bg-muted/5">
+          <ScrollArea className="flex-1 min-h-0 bg-muted/5">
             <motion.div
               variants={contentVariants}
               initial="hidden"
