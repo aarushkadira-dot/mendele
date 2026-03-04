@@ -4,6 +4,7 @@ import { StatsWidget } from "@/components/dashboard/new/stats-widget"
 import { QuickActionsWidget } from "@/components/dashboard/new/quick-actions"
 import { ActivityFeed } from "@/components/dashboard/new/activity-feed"
 import { OpportunitySpotlight } from "@/components/dashboard/new/opportunity-spotlight"
+import { MomentumScoreWidget } from "@/components/dashboard/momentum-score-widget"
 import { getDashboardData } from "@/app/actions/dashboard"
 import { redirect } from "next/navigation"
 import { ensureUserRecord } from "@/app/actions/user"
@@ -79,9 +80,9 @@ export default async function DashboardPage() {
           <ActivityFeed activities={data.recentActivities} />
         </BentoItem>
 
-        {/* Applications - Bottom Right */}
-        <BentoItem colSpan={{ md: 3, lg: 4 }} className="min-h-[400px] flex items-center justify-center bg-card/50">
-          <p className="text-muted-foreground">Application Tracker Coming Soon</p>
+        {/* Momentum Score - Bottom Right */}
+        <BentoItem colSpan={{ md: 3, lg: 4 }} className="min-h-[400px] bg-card/50">
+          <MomentumScoreWidget />
         </BentoItem>
       </BentoGrid>
     </div>
