@@ -2,12 +2,7 @@ import { NextRequest, NextResponse } from "next/server"
 import { getCurrentUser, createClient } from "@/lib/supabase/server"
 import { checkRateLimit, createRateLimitKey, RATE_LIMITS } from "@/lib/rate-limit"
 import { googleAI } from "@/lib/ai/google-model-manager"
-
-export interface InsightPayload {
-  headline: string
-  tip: string
-  insight_type: "eligibility_boost" | "strategy_tip" | "strong_match" | "stretch_goal"
-}
+import type { InsightPayload } from "@/types/insight"
 
 // In-memory cache: keyed by `${userId}:${opportunityId}`, TTL 30 minutes
 const insightCache = new Map<string, { insight: InsightPayload | null; ts: number }>()
@@ -99,12 +94,12 @@ export async function POST(req: NextRequest) {
           .order("created_at", { ascending: false })
           .limit(10),
         (supabase.from("achievements") as any)
-          .select("title,description,issuer")
+          .select("title,description,category")
           .eq("user_id", user.id)
           .order("created_at", { ascending: false })
           .limit(10),
         (supabase.from("extracurriculars") as any)
-          .select("title,role,organization,description")
+          .select("title,type,organization,description")
           .eq("user_id", user.id)
           .order("created_at", { ascending: false })
           .limit(10),
@@ -138,13 +133,13 @@ export async function POST(req: NextRequest) {
 
     const achievementsText = achievements.length > 0
       ? achievements.map(a =>
-          `- [${a.title || "Untitled"}] ${a.description || "(no description)"} — from ${a.issuer || "Unknown"}`
+          `- [${a.title || "Untitled"}] ${a.description || "(no description)"} (${a.category || "General"})`
         ).join("\n")
       : "No achievements listed"
 
     const ecsText = ecs.length > 0
       ? ecs.map(e =>
-          `- [${e.title || "Untitled"}] Role: ${e.role || "Member"} at ${e.organization || "Unknown"} — ${e.description || "(no description)"}`
+          `- [${e.title || "Untitled"}] Type: ${e.type || "Activity"} at ${e.organization || "Unknown"} — ${e.description || "(no description)"}`
         ).join("\n")
       : "No extracurriculars listed"
 
@@ -203,6 +198,12 @@ Output ONLY valid JSON or the word null (no markdown, no explanation):
 {"headline":"...","tip":"...","insight_type":"eligibility_boost|strategy_tip|strong_match|stretch_goal"}`
 
     // 9. Call AI
+    if (!googleAI) {
+      // AI service not initialized (missing credentials) — return null gracefully
+      setCached(cacheKey, null)
+      return NextResponse.json({ insight: null, cached: false })
+    }
+
     let insight: InsightPayload | null = null
     try {
       const result = await googleAI.complete({

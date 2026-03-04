@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from "framer-motion"
 import { Badge } from "@/components/ui/badge"
 import { Lightbulb } from "lucide-react"
 import type { Opportunity } from "@/types/opportunity"
-import type { InsightPayload } from "@/app/api/opportunities/insight/route"
+import type { InsightPayload } from "@/types/insight"
 
 interface AIInsightCardProps {
   opportunity: Opportunity
