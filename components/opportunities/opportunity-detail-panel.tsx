@@ -43,7 +43,8 @@ import {
   CircleDollarSign
 } from "lucide-react"
 import type { Opportunity } from "@/types/opportunity"
-import { getTypeGradient, getMatchScoreColor, getMatchScoreBgColor, formatGradeLevels } from "@/types/opportunity"
+import { getTypeGradientStyle, getMatchScoreColor, getMatchScoreBgColor, formatGradeLevels } from "@/types/opportunity"
+import { AIInsightCard } from "@/components/opportunities/ai-insight-card"
 
 interface OpportunityDetailPanelProps {
   opportunity: Opportunity | null
@@ -140,7 +141,10 @@ export function OpportunityDetailPanel({
 
       <ScrollArea className="flex-1">
         <div className="p-5 space-y-6">
-          <div className={`-mx-5 -mt-5 mb-2 h-24 bg-gradient-to-br ${getTypeGradient(opportunity.type)} relative overflow-hidden`}>
+          <div
+            className="-mx-5 -mt-5 mb-2 h-24 relative overflow-hidden"
+            style={{ background: getTypeGradientStyle(opportunity.type) }}
+          >
             <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-10" />
             <div className="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-background to-transparent" />
             
@@ -292,6 +296,9 @@ export function OpportunityDetailPanel({
               )}
             </motion.div>
           )}
+
+          {/* AI Insight — auto-surfaces for students with strong profiles on talent-showcase opportunities */}
+          <AIInsightCard opportunity={opportunity} />
 
           <Section title="Quick Info" icon={Info}>
             <div className="rounded-xl border border-border bg-muted/30 p-4">

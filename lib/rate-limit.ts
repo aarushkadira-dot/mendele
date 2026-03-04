@@ -103,6 +103,11 @@ export const RATE_LIMITS = {
     limit: 100,
     windowSeconds: 86400,
   },
+  // AI Insight: 5 per 2 minutes per user
+  INSIGHT: {
+    limit: 5,
+    windowSeconds: 120,
+  },
 } as const
 
 /**
