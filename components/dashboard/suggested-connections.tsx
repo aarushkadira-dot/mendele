@@ -17,7 +17,7 @@ export async function SuggestedConnections() {
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
-        {suggestedConnections.map((connection) => (
+        {suggestedConnections.map((connection: any) => (
           <div key={connection.id} className="flex items-start gap-3">
             <Avatar className="h-12 w-12">
               <AvatarImage src={connection.avatar || "/placeholder.svg"} alt={connection.name} />
