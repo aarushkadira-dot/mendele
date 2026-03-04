@@ -17,7 +17,8 @@ import {
   ChevronLeft,
   ChevronRight,
   GraduationCap,
-  FlaskConical
+  FlaskConical,
+  Users2,
 } from "lucide-react"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { useSupabaseUser } from "@/hooks/use-supabase-user"
@@ -35,6 +36,7 @@ const navigation = [
   { name: "AI Assistant", href: "/assistant", icon: Sparkles },
   { name: "Network", href: "/network", icon: MessageSquare },
   { name: "Mentors", href: "/mentors", icon: GraduationCap },
+  { name: "Researchers", href: "/researchers", icon: Users2 },
   { name: "Events", href: "/events", icon: Calendar },
   { name: "Analytics", href: "/analytics", icon: BarChart3 },
 ]
