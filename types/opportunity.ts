@@ -73,6 +73,26 @@ export const getTypeGradient = (type?: string | null): string => {
   return found?.color || "from-slate-600 to-gray-600"
 }
 
+// CSS gradient strings — used instead of Tailwind classes to avoid purging in production
+// (Tailwind v4 cannot statically detect classes injected via template literal interpolation)
+const TYPE_GRADIENT_CSS: Record<string, string> = {
+  internship:  "linear-gradient(to bottom right, #2563eb, #4338ca)",
+  research:    "linear-gradient(to bottom right, #14b8a6, #0891b2)",
+  competition: "linear-gradient(to bottom right, #f43f5e, #ec4899)",
+  fellowship:  "linear-gradient(to bottom right, #7c3aed, #9333ea)",
+  program:     "linear-gradient(to bottom right, #10b981, #16a34a)",
+  scholarship: "linear-gradient(to bottom right, #f59e0b, #ea580c)",
+  volunteer:   "linear-gradient(to bottom right, #0ea5e9, #2563eb)",
+}
+const DEFAULT_GRADIENT_CSS = "linear-gradient(to bottom right, #475569, #4b5563)"
+
+export const getTypeGradientStyle = (type?: string | null): string => {
+  if (!type) return DEFAULT_GRADIENT_CSS
+  const normalizedType = type.toLowerCase()
+  const found = OPPORTUNITY_TYPES.find(t => normalizedType.includes(t.value))
+  return found ? (TYPE_GRADIENT_CSS[found.value] ?? DEFAULT_GRADIENT_CSS) : DEFAULT_GRADIENT_CSS
+}
+
 export const getMatchScoreColor = (score: number): string => {
   if (score >= 90) return "text-emerald-500"
   if (score >= 75) return "text-blue-500"

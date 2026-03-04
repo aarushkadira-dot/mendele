@@ -22,7 +22,7 @@ import {
 } from "lucide-react"
 import { useUrlValidator } from "@/hooks/use-url-validator"
 import type { Opportunity } from "@/types/opportunity"
-import { getTypeGradient, getMatchScoreColor, formatGradeLevels } from "@/types/opportunity"
+import { getTypeGradientStyle, getMatchScoreColor, formatGradeLevels } from "@/types/opportunity"
 import { QuickViewSummary } from "@/components/opportunities/quick-view-summary"
 import { ProfessorOutreachModal } from "@/components/opportunities/professor-outreach-modal"
 import { OpportunityStatus } from "@/app/actions/opportunity-status"
@@ -124,10 +124,8 @@ export function OpportunityCard({
         >
           <div className="relative">
             <div
-              className={`
-                h-28 w-full bg-gradient-to-br ${getTypeGradient(opportunity.type)} 
-                opacity-90 group-hover:opacity-100 transition-opacity duration-300
-              `}
+              className="h-28 w-full opacity-90 group-hover:opacity-100 transition-opacity duration-300"
+              style={{ background: getTypeGradientStyle(opportunity.type) }}
             >
               <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-10" />
               <div className="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-card to-transparent" />
