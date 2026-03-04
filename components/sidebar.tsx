@@ -19,6 +19,7 @@ import {
   GraduationCap,
   FlaskConical,
   Users2,
+  Building2,
 } from "lucide-react"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { useSupabaseUser } from "@/hooks/use-supabase-user"
@@ -33,6 +34,7 @@ const navigation = [
   { name: "Opportunities", href: "/opportunities", icon: Briefcase },
   { name: "Research", href: "/research", icon: FlaskConical },
   { name: "Projects", href: "/projects", icon: FolderKanban },
+  { name: "Business", href: "/business", icon: Building2 },
   { name: "AI Assistant", href: "/assistant", icon: Sparkles },
   { name: "Network", href: "/network", icon: MessageSquare },
   { name: "Mentors", href: "/mentors", icon: GraduationCap },

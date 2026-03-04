@@ -8,7 +8,7 @@ import { Badge } from "@/components/ui/badge"
 import {
   Search,
   Loader2,
-  FlaskConical,
+  Building2,
   RotateCcw,
   Bookmark,
   ChevronDown,
@@ -20,13 +20,8 @@ import { getSavedResearchers } from "@/app/actions/researchers"
 import { toast } from "sonner"
 import type { ScoredProfile, StudentProfile } from "@/types/researcher"
 
-interface ResearchersClientProps {
-  studentProfile: StudentProfile
-}
+// ─── Skeleton ─────────────────────────────────────────────────────────────────
 
-type SearchType = "researchers"
-
-// Loading skeleton card
 function SkeletonCard() {
   return (
     <div className="rounded-xl border border-border/50 bg-card p-4 space-y-3 animate-pulse">
@@ -51,21 +46,22 @@ function SkeletonCard() {
   )
 }
 
-export function ResearchersClient({ studentProfile }: ResearchersClientProps) {
+// ─── Main Component ───────────────────────────────────────────────────────────
+
+interface InvestorTabProps {
+  studentProfile: StudentProfile
+}
+
+export function InvestorTab({ studentProfile }: InvestorTabProps) {
   const [topic, setTopic] = useState("")
   const [description, setDescription] = useState("")
-  const searchType: SearchType = "researchers"
   const [showFilters, setShowFilters] = useState(false)
-
-  // Filter state
   const [minEngagement, setMinEngagement] = useState(0)
 
-  // Results
   const [results, setResults] = useState<ScoredProfile[]>([])
   const [savedProfiles, setSavedProfiles] = useState<Partial<ScoredProfile>[]>([])
   const [savedNames, setSavedNames] = useState<Set<string>>(new Set())
 
-  // UI state
   const [loading, setLoading] = useState(false)
   const [loadingMore, setLoadingMore] = useState(false)
   const [hasSearched, setHasSearched] = useState(false)
@@ -73,19 +69,22 @@ export function ResearchersClient({ studentProfile }: ResearchersClientProps) {
   const [activeTab, setActiveTab] = useState<"results" | "saved">("results")
   const [currentCount, setCurrentCount] = useState(5)
 
-  // Load saved researchers on mount
+  // Load saved investors on mount
   useEffect(() => {
     getSavedResearchers()
       .then((profiles) => {
-        setSavedProfiles(profiles)
-        setSavedNames(new Set(profiles.map((p) => p.name || "")))
+        const investorProfiles = profiles.filter(
+          (p) => ["partner_vc", "angel_investor", "accelerator"].includes(p.profile_tier || "")
+        )
+        setSavedProfiles(investorProfiles)
+        setSavedNames(new Set(investorProfiles.map((p) => p.name || "")))
       })
       .catch(() => {})
   }, [])
 
   const doSearch = async (count: number, append = false) => {
     if (!topic.trim()) {
-      toast.error("Please enter a topic first")
+      toast.error("Please enter a topic or startup description first")
       return
     }
 
@@ -100,7 +99,7 @@ export function ResearchersClient({ studentProfile }: ResearchersClientProps) {
         body: JSON.stringify({
           topic,
           description,
-          type: searchType,
+          type: "investors", // locked to investors
           count,
         }),
       })
@@ -111,15 +110,15 @@ export function ResearchersClient({ studentProfile }: ResearchersClientProps) {
       }
 
       const data = await res.json()
-      const newResults: ScoredProfile[] = data.results || []
+      const newResults: ScoredProfile[] = (data.results || []).filter(
+        (p: ScoredProfile) => p.type === "investor"
+      )
 
-      // Apply engagement filter
       const filtered = minEngagement > 0
         ? newResults.filter((p) => p.engagement_likelihood >= minEngagement)
         : newResults
 
       if (append) {
-        // Deduplicate by name
         setResults((prev) => {
           const existing = new Set(prev.map((p) => p.name))
           return [...prev, ...filtered.filter((p) => !existing.has(p.name))]
@@ -151,29 +150,22 @@ export function ResearchersClient({ studentProfile }: ResearchersClientProps) {
     setSavedNames((prev) => new Set([...prev, name]))
   }
 
-  const handleRetry = () => {
-    setError(null)
-    doSearch(currentCount)
-  }
-
   return (
-    <div className="container mx-auto px-4 sm:px-6 max-w-7xl py-8 space-y-8">
-      {/* Page header */}
-      <div className="space-y-1">
-        <h1 className="text-3xl font-bold tracking-tight">Find Researchers</h1>
-        <p className="text-muted-foreground">
-          Discover academic researchers and professors to reach out to — scored by collaboration likelihood.
-          Looking for investors? Visit the <a href="/business" className="underline underline-offset-2 hover:text-foreground transition-colors">Business Hub</a>.
-        </p>
-      </div>
-
+    <div className="space-y-6">
       {/* Search panel */}
       <div className="rounded-xl border border-border/50 bg-card p-5 space-y-4">
+        <div>
+          <h3 className="font-semibold text-sm">Find Investors for Your Startup</h3>
+          <p className="text-xs text-muted-foreground mt-0.5">
+            AI-powered matching with angels, VCs, and accelerators who invest in early-stage student founders.
+          </p>
+        </div>
+
         {/* Topic */}
         <div className="space-y-1.5">
-          <label className="text-sm font-medium">Topic or Project</label>
+          <label className="text-sm font-medium">Your startup or project focus</label>
           <Textarea
-            placeholder="e.g. machine learning fairness, CRISPR gene editing, climate-fintech startup…"
+            placeholder="e.g. AI-powered tutoring platform for high schoolers, climate-fintech for Gen Z…"
             value={topic}
             onChange={(e) => setTopic(e.target.value)}
             rows={2}
@@ -184,11 +176,11 @@ export function ResearchersClient({ studentProfile }: ResearchersClientProps) {
         {/* Optional description */}
         <div className="space-y-1.5">
           <label className="text-sm font-medium text-muted-foreground">
-            Brief description{" "}
-            <span className="font-normal">(optional — helps personalize results)</span>
+            More context{" "}
+            <span className="font-normal">(optional — improves matching)</span>
           </label>
           <Textarea
-            placeholder="What have you built or researched? Any specific angle or achievement?"
+            placeholder="What stage are you at? What traction do you have? Any notable achievements?"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
             rows={2}
@@ -196,7 +188,7 @@ export function ResearchersClient({ studentProfile }: ResearchersClientProps) {
           />
         </div>
 
-        {/* Filters toggle */}
+        {/* Filters */}
         <div>
           <button
             className="flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors"
@@ -238,27 +230,26 @@ export function ResearchersClient({ studentProfile }: ResearchersClientProps) {
           </AnimatePresence>
         </div>
 
-        {/* Search button */}
         <Button
-          className="w-full gap-2 bg-gradient-to-r from-violet-500 to-indigo-500 hover:from-violet-600 hover:to-indigo-600 text-white"
+          className="w-full gap-2 bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white"
           onClick={handleSearch}
           disabled={loading || !topic.trim()}
         >
           {loading ? (
             <>
               <Loader2 className="h-4 w-4 animate-spin" />
-              Searching…
+              Finding investors…
             </>
           ) : (
             <>
               <Search className="h-4 w-4" />
-              Find Researchers
+              Find Investors
             </>
           )}
         </Button>
       </div>
 
-      {/* Tabs (only show after first search or if there are saved) */}
+      {/* Tabs */}
       {(hasSearched || savedProfiles.length > 0) && (
         <div className="flex items-center gap-1 border-b border-border/40">
           <button
@@ -271,10 +262,7 @@ export function ResearchersClient({ studentProfile }: ResearchersClientProps) {
           >
             Results
             {results.length > 0 && (
-              <Badge
-                variant="secondary"
-                className="ml-2 h-5 px-1.5 text-[10px]"
-              >
+              <Badge variant="secondary" className="ml-2 h-5 px-1.5 text-[10px]">
                 {results.length}
               </Badge>
             )}
@@ -290,10 +278,7 @@ export function ResearchersClient({ studentProfile }: ResearchersClientProps) {
             <Bookmark className="h-3.5 w-3.5" />
             Saved
             {savedProfiles.length > 0 && (
-              <Badge
-                variant="secondary"
-                className="ml-1 h-5 px-1.5 text-[10px]"
-              >
+              <Badge variant="secondary" className="ml-1 h-5 px-1.5 text-[10px]">
                 {savedProfiles.length}
               </Badge>
             )}
@@ -304,28 +289,21 @@ export function ResearchersClient({ studentProfile }: ResearchersClientProps) {
       {/* Results tab */}
       {activeTab === "results" && (
         <div className="space-y-6">
-          {/* Loading skeletons */}
           {loading && (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-              {[1, 2, 3].map((i) => (
-                <SkeletonCard key={i} />
-              ))}
+              {[1, 2, 3].map((i) => <SkeletonCard key={i} />)}
             </div>
           )}
 
-          {/* Error state */}
           {!loading && error && (
             <div className="text-center py-16 border border-dashed border-border/50 rounded-xl bg-muted/10">
-              <FlaskConical className="h-10 w-10 mx-auto text-muted-foreground mb-3" />
+              <Building2 className="h-10 w-10 mx-auto text-muted-foreground mb-3" />
               <p className="font-medium">{error}</p>
-              <p className="text-sm text-muted-foreground mt-1">
-                Try a broader topic or different keywords.
-              </p>
               <Button
                 variant="outline"
                 size="sm"
                 className="mt-4 gap-2"
-                onClick={handleRetry}
+                onClick={handleSearch}
               >
                 <RotateCcw className="h-3.5 w-3.5" />
                 Retry
@@ -333,27 +311,16 @@ export function ResearchersClient({ studentProfile }: ResearchersClientProps) {
             </div>
           )}
 
-          {/* Empty state (searched but no results) */}
           {!loading && !error && hasSearched && results.length === 0 && (
             <div className="text-center py-16 border border-dashed border-border/50 rounded-xl bg-muted/10">
-              <FlaskConical className="h-10 w-10 mx-auto text-muted-foreground mb-3" />
-              <p className="font-medium">No results found</p>
+              <Building2 className="h-10 w-10 mx-auto text-muted-foreground mb-3" />
+              <p className="font-medium">No investors found</p>
               <p className="text-sm text-muted-foreground mt-1">
-                Try a broader topic or lower the minimum reply rate filter.
+                Try broadening your startup description or lowering the reply rate filter.
               </p>
-              <Button
-                variant="outline"
-                size="sm"
-                className="mt-4 gap-2"
-                onClick={handleRetry}
-              >
-                <RotateCcw className="h-3.5 w-3.5" />
-                Retry
-              </Button>
             </div>
           )}
 
-          {/* Result cards */}
           {!loading && results.length > 0 && (
             <>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
@@ -378,7 +345,6 @@ export function ResearchersClient({ studentProfile }: ResearchersClientProps) {
                 </AnimatePresence>
               </div>
 
-              {/* Load more */}
               <div className="flex justify-center pt-2">
                 <Button
                   variant="outline"
@@ -408,9 +374,9 @@ export function ResearchersClient({ studentProfile }: ResearchersClientProps) {
           {savedProfiles.length === 0 ? (
             <div className="text-center py-16 border border-dashed border-border/50 rounded-xl bg-muted/10">
               <Bookmark className="h-10 w-10 mx-auto text-muted-foreground mb-3" />
-              <p className="font-medium">No saved researchers yet</p>
+              <p className="font-medium">No saved investors yet</p>
               <p className="text-sm text-muted-foreground mt-1">
-                Bookmark profiles from your search results to follow up later.
+                Bookmark investor profiles from your search results to follow up later.
               </p>
             </div>
           ) : (
@@ -422,10 +388,9 @@ export function ResearchersClient({ studentProfile }: ResearchersClientProps) {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: i * 0.04 }}
                 >
-                  {/* Minimal saved card */}
                   <div className="rounded-xl border border-border/50 bg-card p-4 space-y-2">
                     <div className="flex items-start gap-3">
-                      <div className="h-9 w-9 rounded-xl bg-primary/10 flex items-center justify-center shrink-0 font-bold text-primary text-base">
+                      <div className="h-9 w-9 rounded-xl bg-emerald-500/10 flex items-center justify-center shrink-0 font-bold text-emerald-600 text-base">
                         {(p.name || "?").charAt(0)}
                       </div>
                       <div className="flex-1 min-w-0">
@@ -441,11 +406,6 @@ export function ResearchersClient({ studentProfile }: ResearchersClientProps) {
                     {p.research_focus && (
                       <p className="text-xs text-muted-foreground line-clamp-2 pl-12">
                         {p.research_focus}
-                      </p>
-                    )}
-                    {p.email_hint && (
-                      <p className="text-[11px] font-mono text-muted-foreground/70 pl-12">
-                        {p.email_hint}
                       </p>
                     )}
                   </div>
