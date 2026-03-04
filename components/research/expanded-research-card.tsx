@@ -289,7 +289,7 @@ export function ExpandedResearchCard({
           </div>
 
           {/* Scrollable Content */}
-          <ScrollArea className="flex-1">
+          <ScrollArea className="flex-1 min-h-0">
             <motion.div
               variants={contentVariants}
               initial="hidden"

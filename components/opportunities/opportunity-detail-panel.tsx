@@ -139,7 +139,7 @@ export function OpportunityDetailPanel({
         </div>
       </div>
 
-      <ScrollArea className="flex-1">
+      <ScrollArea className="flex-1 min-h-0">
         <div className="p-5 space-y-6">
           <div
             className="-mx-5 -mt-5 mb-2 h-24 relative overflow-hidden"
