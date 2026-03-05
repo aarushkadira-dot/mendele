@@ -27,7 +27,7 @@ export interface RawInvestor {
   investmentFocus: string            // Categories / verticals they invest in
   linkedinUrl: string
   location: string
-  source: "crunchbase" | "harmonic" | "apollo"  // data provenance
+  source: "crunchbase" | "harmonic" | "apollo" | "catalog"  // data provenance
 }
 
 // ─── Keyword extraction ───────────────────────────────────────────────────────
@@ -173,6 +173,14 @@ export function scoreInvestor(
 
 // ─── Deduplication ────────────────────────────────────────────────────────────
 
+// Source preference order: catalog (curated) > crunchbase > apollo > harmonic
+const SOURCE_PRIORITY: Record<RawInvestor["source"], number> = {
+  catalog:    4,
+  crunchbase: 3,
+  apollo:     2,
+  harmonic:   1,
+}
+
 export function deduplicateInvestors(investors: RawInvestor[]): RawInvestor[] {
   const seen = new Map<string, RawInvestor>()
   for (const inv of investors) {
@@ -180,9 +188,10 @@ export function deduplicateInvestors(investors: RawInvestor[]): RawInvestor[] {
     if (!seen.has(key)) {
       seen.set(key, inv)
     } else {
-      // Prefer crunchbase data (more structured) over harmonic
       const existing = seen.get(key)!
-      if (inv.source === "crunchbase" && existing.source !== "crunchbase") {
+      const incomingPriority = SOURCE_PRIORITY[inv.source] ?? 0
+      const existingPriority = SOURCE_PRIORITY[existing.source] ?? 0
+      if (incomingPriority > existingPriority) {
         seen.set(key, inv)
       }
     }
