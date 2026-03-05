@@ -27,7 +27,7 @@ export interface RawInvestor {
   investmentFocus: string            // Categories / verticals they invest in
   linkedinUrl: string
   location: string
-  source: "crunchbase" | "harmonic"  // data provenance
+  source: "crunchbase" | "harmonic" | "apollo"  // data provenance
 }
 
 // ─── Keyword extraction ───────────────────────────────────────────────────────

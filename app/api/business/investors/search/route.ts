@@ -4,9 +4,8 @@
  * 75% Algorithmic + 25% Gemini investor matching pipeline:
  *
  *   Stage 1 — Fetch real data
- *     ├── Crunchbase API (if CRUNCHBASE_API_KEY set)
- *     └── Harmonic API   (if HARMONIC_API_KEY set)
- *     └── Fallback: pure Gemini generation (if neither key present)
+ *     └── Apollo.io People Search API (if APOLLO_API_KEY set)
+ *     └── Fallback: pure Gemini generation (if no key present)
  *
  *   Stage 2 — Algorithmic scoring (75%)
  *     topic_match, student_collaboration, availability,
@@ -25,176 +24,102 @@ import {
   extractTopicKeywords,
   scoreInvestor,
   deduplicateInvestors,
-  detectInvestorTier,
   type RawInvestor,
 } from "@/lib/business/investor-scoring"
 import type { ScoredProfile } from "@/types/researcher"
 
 export const maxDuration = 30
 
-// ─── Crunchbase API v4 ────────────────────────────────────────────────────────
+// ─── Apollo.io People Search API ─────────────────────────────────────────────
 
-async function fetchCrunchbase(
+async function fetchApollo(
   topic: string,
   keywords: string[],
   count: number
 ): Promise<RawInvestor[]> {
-  const key = process.env.CRUNCHBASE_API_KEY
+  const key = process.env.APOLLO_API_KEY
   if (!key) return []
 
   try {
-    // Use top 3 topic keywords to filter investor descriptions
-    const topKeywords = keywords.slice(0, 3)
-
-    const body: Record<string, unknown> = {
-      field_ids: [
-        "first_name",
-        "last_name",
-        "title",
-        "primary_organization",
-        "linkedin",
-        "location_identifiers",
-        "short_description",
-        "investor_types",
-        "num_investments_funding_rounds",
-        "num_investments",
-      ],
-      query: [
-        {
-          type: "predicate",
-          field_id: "facet_ids",
-          operator_id: "includes",
-          values: ["investor"],
-        },
-        // Only include if we have meaningful keywords (avoid over-filtering)
-        ...(topKeywords.length >= 2
-          ? [
-              {
-                type: "predicate",
-                field_id: "short_description",
-                operator_id: "contains",
-                values: topKeywords,
-              },
-            ]
-          : []),
-      ],
-      limit: Math.min(count, 25),
-      order: [{ field_id: "num_investments_funding_rounds", sort: "desc" }],
-    }
-
-    const res = await fetch("https://api.crunchbase.com/api/v4/searches/people", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "X-cb-user-key": key,
-      },
-      body: JSON.stringify(body),
-      signal: AbortSignal.timeout(10_000),
-    })
-
-    if (!res.ok) {
-      console.error("[Crunchbase] HTTP error:", res.status, await res.text())
-      return []
-    }
-
-    const data = await res.json()
-    const entities: any[] = data.entities ?? []
-
-    return entities.map((e): RawInvestor => {
-      const p = e.properties ?? {}
-      const firstName = (p.first_name ?? "").trim()
-      const lastName = (p.last_name ?? "").trim()
-      const fullName = [firstName, lastName].filter(Boolean).join(" ")
-
-      return {
-        name: fullName || "Unknown",
-        title: String(p.title ?? "Investor"),
-        firm: String(p.primary_organization?.value ?? ""),
-        bio: String(p.short_description ?? ""),
-        investmentCount: Number(p.num_investments ?? p.num_investments_funding_rounds ?? 0),
-        recentInvestmentCount: 0,         // Crunchbase basic tier doesn't break out recency
-        investmentFocus: (p.investor_types ?? []).join(", "),
-        linkedinUrl: String(p.linkedin?.value ?? ""),
-        location: (p.location_identifiers ?? [])
-          .filter((l: any) => l.location_type === "city")
-          .map((l: any) => l.value)
-          .join(", "),
-        source: "crunchbase",
-      }
-    })
-  } catch (err) {
-    console.error("[Crunchbase] Fetch error:", err)
-    return []
-  }
-}
-
-// ─── Harmonic API ─────────────────────────────────────────────────────────────
-
-async function fetchHarmonic(
-  topic: string,
-  keywords: string[],
-  count: number
-): Promise<RawInvestor[]> {
-  const key = process.env.HARMONIC_API_KEY
-  if (!key) return []
-
-  try {
-    // Harmonic people search — search by keyword + filter to investors
     const body = {
-      filter: {
-        // Filter to people with investor-related titles
-        "current_title_role_type": ["investor", "venture_capital"],
-        "current_employee_count_range": null,
-      },
-      search: keywords.slice(0, 5).join(" ") || topic,
-      size: Math.min(count, 25),
-      page: 0,
+      api_key: key,
+      // Use top 5 keywords as the free-text search query
+      q_keywords: keywords.slice(0, 5).join(" ") || topic,
+      // Filter to investor-related titles
+      person_titles: [
+        "Partner",
+        "General Partner",
+        "Managing Partner",
+        "Founding Partner",
+        "Angel Investor",
+        "Investor",
+        "Venture Capitalist",
+        "Principal",
+        "Investment Director",
+        "Venture Partner",
+        "Scout",
+      ],
+      page: 1,
+      per_page: Math.min(count * 2, 25), // fetch extras so scoring can filter
     }
 
-    const res = await fetch("https://api.harmonic.ai/search/persons", {
+    const res = await fetch("https://api.apollo.io/v1/mixed_people/search", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "apikey": key,
+        "Cache-Control": "no-cache",
       },
       body: JSON.stringify(body),
-      signal: AbortSignal.timeout(10_000),
+      signal: AbortSignal.timeout(12_000),
     })
 
     if (!res.ok) {
-      console.error("[Harmonic] HTTP error:", res.status, await res.text())
+      console.error("[Apollo] HTTP error:", res.status, await res.text())
       return []
     }
 
     const data = await res.json()
-    // Harmonic may return results under different keys depending on version
-    const results: any[] = data.results ?? data.people ?? data.data ?? []
+    const people: any[] = data.people ?? []
 
-    return results.map((p: any): RawInvestor => {
-      const company =
-        p.current_company?.display_name ??
-        p.current_company?.name ??
-        p.company?.display_name ??
-        p.company?.name ??
-        p.firm ?? ""
+    return people
+      .filter((p) => p.name && p.name !== "Unknown")
+      .map((p): RawInvestor => {
+        const firstName = String(p.first_name ?? "").trim()
+        const lastName = String(p.last_name ?? "").trim()
+        const fullName = p.name ?? [firstName, lastName].filter(Boolean).join(" ") ?? "Unknown"
 
-      return {
-        name: String(p.name ?? p.full_name ?? "Unknown"),
-        title: String(p.title ?? p.current_title ?? "Investor"),
-        firm: String(company),
-        bio: String(p.bio ?? p.summary ?? p.description ?? ""),
-        investmentCount: Number(p.investment_count ?? p.num_investments ?? 0),
-        recentInvestmentCount: Number(p.recent_investment_count ?? 0),
-        investmentFocus: (Array.isArray(p.investment_focus)
-          ? p.investment_focus.join(", ")
-          : String(p.investment_focus ?? p.verticals ?? "")),
-        linkedinUrl: String(p.linkedin_url ?? p.linkedin ?? ""),
-        location: String(p.location ?? p.city ?? ""),
-        source: "harmonic",
-      }
-    })
+        // Build location string
+        const locationParts = [p.city, p.state, p.country].filter(Boolean)
+        const location = locationParts.join(", ")
+
+        // Firm domain for email hint construction downstream
+        const firmDomain =
+          p.organization?.primary_domain ??
+          p.account?.domain ??
+          ""
+
+        // Combine headline + bio for bio field
+        const bio = [p.headline, p.employment_history?.[0]?.description]
+          .filter(Boolean)
+          .join(". ")
+
+        return {
+          name: String(fullName),
+          title: String(p.title ?? "Investor"),
+          firm: String(p.organization_name ?? p.account_name ?? ""),
+          bio: String(bio || p.seo_description || ""),
+          investmentCount: 0,           // Apollo people search doesn't expose investment count
+          recentInvestmentCount: 0,
+          investmentFocus: "",           // Enriched by Gemini in Stage 3
+          linkedinUrl: String(p.linkedin_url ?? ""),
+          location,
+          source: "apollo",
+          // Store domain for email hint fallback
+          _firmDomain: firmDomain,
+        } as RawInvestor & { _firmDomain: string }
+      })
   } catch (err) {
-    console.error("[Harmonic] Fetch error:", err)
+    console.error("[Apollo] Fetch error:", err)
     return []
   }
 }
@@ -214,6 +139,7 @@ Return ONLY valid JSON (no markdown):
   "enrichments": [
     {
       "name": "<exact investor name as given>",
+      "investment_focus": "<comma-separated verticals they invest in, e.g. 'AI, edtech, fintech'>",
       "contact_strategy": "<ONE specific thing to mention in outreach — e.g. 'Reference their investment in TutorAI which is similar to your product'>",
       "email_hint": "<most likely email format, e.g. 'mark@upfront.vc' or 'mark.suster@upfront.vc'>",
       "engagement_likelihood": <integer 0-100, realistic % chance they reply to a cold email from a student founder>
@@ -226,23 +152,24 @@ INVESTORS TO ENRICH:
 
 Rules:
 - engagement_likelihood for a student founder is typically 10-35% — be realistic, not optimistic
-- email_hint should be based on their firm domain if known, e.g. partner@firmname.com
-- contact_strategy must be specific to THEIR portfolio / focus area`
+- email_hint should use the firm domain if provided, e.g. partner@firmname.com
+- contact_strategy must be specific to THEIR portfolio / focus area
+- investment_focus should reflect their known or likely investment verticals`
 
 async function enrichWithGemini(
   investors: RawInvestor[],
   topic: string,
   description: string,
   studentName: string
-): Promise<Map<string, { contact_strategy: string; email_hint: string; engagement_likelihood: number }>> {
-  const result = new Map<string, { contact_strategy: string; email_hint: string; engagement_likelihood: number }>()
+): Promise<Map<string, { investment_focus: string; contact_strategy: string; email_hint: string; engagement_likelihood: number }>> {
+  const result = new Map<string, { investment_focus: string; contact_strategy: string; email_hint: string; engagement_likelihood: number }>()
 
   if (!googleAI || investors.length === 0) return result
 
   const investorList = investors
     .map(
       (inv, i) =>
-        `${i + 1}. ${inv.name} — ${inv.title} at ${inv.firm}. Bio: ${inv.bio.slice(0, 120)}. Focus: ${inv.investmentFocus}.`
+        `${i + 1}. ${inv.name} — ${inv.title} at ${inv.firm}${(inv as any)._firmDomain ? ` (domain: ${(inv as any)._firmDomain})` : ""}. Bio: ${inv.bio.slice(0, 120)}.`
     )
     .join("\n")
 
@@ -255,7 +182,7 @@ async function enrichWithGemini(
   try {
     const res = await googleAI.complete({
       messages: [{ role: "user", content: prompt }],
-      maxTokens: 1500,
+      maxTokens: 1800,
       temperature: 0.2,
     })
 
@@ -270,6 +197,7 @@ async function enrichWithGemini(
     for (const e of parsed.enrichments ?? []) {
       if (e.name) {
         result.set(e.name.toLowerCase(), {
+          investment_focus: String(e.investment_focus ?? ""),
           contact_strategy: String(e.contact_strategy ?? ""),
           email_hint: String(e.email_hint ?? ""),
           engagement_likelihood: Number(e.engagement_likelihood ?? 30),
@@ -284,7 +212,7 @@ async function enrichWithGemini(
   return result
 }
 
-// ─── Pure Gemini fallback (no API keys) ──────────────────────────────────────
+// ─── Pure Gemini fallback (no API key configured) ────────────────────────────
 
 const GEMINI_FALLBACK_PROMPT = `You are a startup advisor helping a high school student find investors for their startup.
 
@@ -354,7 +282,7 @@ async function fetchGeminiFallback(
       investmentFocus: String(r.investmentFocus ?? ""),
       linkedinUrl: String(r.linkedinUrl ?? ""),
       location: String(r.location ?? ""),
-      source: "crunchbase" as const,
+      source: "apollo" as const,
       contact_strategy: String(r.contact_strategy ?? ""),
       email_hint: String(r.email_hint ?? ""),
       engagement_likelihood: Number(r.engagement_likelihood ?? 30),
@@ -370,9 +298,15 @@ async function fetchGeminiFallback(
 function assembleScoredProfile(
   investor: RawInvestor,
   keywords: string[],
-  enrichment: { contact_strategy: string; email_hint: string; engagement_likelihood: number }
+  enrichment: { investment_focus?: string; contact_strategy: string; email_hint: string; engagement_likelihood: number }
 ): ScoredProfile {
-  const { rawInvestor, tier, scores, overall_match } = scoreInvestor(investor, keywords)
+  // Merge Gemini-enriched investment focus back into investor for better scoring
+  const enrichedInvestor: RawInvestor = {
+    ...investor,
+    investmentFocus: enrichment.investment_focus || investor.investmentFocus,
+  }
+
+  const { rawInvestor, tier, scores, overall_match } = scoreInvestor(enrichedInvestor, keywords)
 
   return {
     name: rawInvestor.name,
@@ -381,9 +315,11 @@ function assembleScoredProfile(
     department: rawInvestor.location,
     type: "investor",
     profile_tier: tier,
-    research_focus: rawInvestor.bio || rawInvestor.investmentFocus,
+    research_focus: enrichment.investment_focus || rawInvestor.bio || rawInvestor.investmentFocus,
     evidence_of_student_work:
-      rawInvestor.investmentFocus
+      enrichment.investment_focus
+        ? `Investment focus: ${enrichment.investment_focus}`
+        : rawInvestor.investmentFocus
         ? `Investment focus: ${rawInvestor.investmentFocus}`
         : "Early-stage investor",
     scores,
@@ -436,28 +372,22 @@ export async function POST(req: NextRequest) {
 
     const keywords = extractTopicKeywords(topic, description)
 
-    const hasCrunchbase = !!process.env.CRUNCHBASE_API_KEY
-    const hasHarmonic = !!process.env.HARMONIC_API_KEY
-    const hasAnyKey = hasCrunchbase || hasHarmonic
+    const hasApollo = !!process.env.APOLLO_API_KEY
 
     let results: ScoredProfile[]
 
-    if (hasAnyKey) {
-      // ── Stage 1: Fetch from real databases in parallel ──
-      const [cbInvestors, harmonicInvestors] = await Promise.all([
-        hasCrunchbase ? fetchCrunchbase(topic, keywords, count) : Promise.resolve([]),
-        hasHarmonic   ? fetchHarmonic(topic, keywords, count)   : Promise.resolve([]),
-      ])
+    if (hasApollo) {
+      // ── Stage 1: Fetch from Apollo ──
+      const apolloInvestors = await fetchApollo(topic, keywords, count)
+      const merged = deduplicateInvestors(apolloInvestors)
 
-      const merged = deduplicateInvestors([...cbInvestors, ...harmonicInvestors])
-
-      // ── Stage 2: Algorithmic scoring (75%) ──
+      // ── Stage 2: Algorithmic scoring (75%) — sort by score, take top N ──
       const scored = merged
         .map((inv) => scoreInvestor(inv, keywords))
         .sort((a, b) => b.overall_match - a.overall_match)
         .slice(0, Math.min(count, 15))
 
-      // ── Stage 3: Gemini enrichment (25%) ──
+      // ── Stage 3: Gemini enrichment (25%) — fills investment_focus, contact_strategy, email_hint ──
       const enrichments = await enrichWithGemini(
         scored.map((s) => s.rawInvestor),
         topic,
@@ -467,8 +397,11 @@ export async function POST(req: NextRequest) {
 
       results = scored.map((s) => {
         const enrichment = enrichments.get(s.rawInvestor.name.toLowerCase()) ?? {
-          contact_strategy: `Research ${s.rawInvestor.firm}'s recent investments before reaching out.`,
-          email_hint: s.rawInvestor.firm
+          investment_focus: "",
+          contact_strategy: `Research ${s.rawInvestor.firm || "their firm"}'s recent investments before reaching out.`,
+          email_hint: (s.rawInvestor as any)._firmDomain
+            ? `firstname@${(s.rawInvestor as any)._firmDomain}`
+            : s.rawInvestor.firm
             ? `firstname@${s.rawInvestor.firm.toLowerCase().replace(/\s+/g, "").replace(/[^a-z]/g, "")}.com`
             : "",
           engagement_likelihood: 25,
@@ -476,7 +409,7 @@ export async function POST(req: NextRequest) {
         return assembleScoredProfile(s.rawInvestor, keywords, enrichment)
       })
     } else {
-      // ── Pure Gemini fallback (no API keys configured) ──
+      // ── Pure Gemini fallback (no Apollo key configured) ──
       const geminiResults = await fetchGeminiFallback(topic, description, studentName, count)
       results = geminiResults.map((inv) => {
         const { scores, overall_match, tier } = scoreInvestor(inv, keywords)
@@ -505,11 +438,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({
       results,
       meta: {
-        sources: [
-          ...(hasCrunchbase ? ["crunchbase"] : []),
-          ...(hasHarmonic   ? ["harmonic"]   : []),
-          ...(!hasAnyKey    ? ["gemini"]     : ["gemini-enriched"]),
-        ],
+        sources: hasApollo ? ["apollo", "gemini-enriched"] : ["gemini"],
         topic_keywords: keywords,
       },
     })
