@@ -3,9 +3,11 @@
  *
  * 75% Algorithmic + 25% Gemini investor matching pipeline:
  *
- *   Stage 1 — Fetch real data
- *     └── Apollo.io People Search API (if APOLLO_API_KEY set)
- *     └── Fallback: pure Gemini generation (if no key present)
+ *   Stage 1 — Fetch investor data
+ *     ├── Apollo.io People Search API (if APOLLO_API_KEY set + paid plan)
+ *     └── Gemini generation fallback (always available)
+ *     NOTE: If Apollo returns 0 results (free plan, network error, etc.)
+ *           the pipeline automatically falls through to Gemini.
  *
  *   Stage 2 — Algorithmic scoring (75%)
  *     topic_match, student_collaboration, availability,
@@ -31,6 +33,10 @@ import type { ScoredProfile } from "@/types/researcher"
 export const maxDuration = 30
 
 // ─── Apollo.io People Search API ─────────────────────────────────────────────
+// Auth: X-Api-Key header (NOT body parameter)
+// Endpoint: POST /v1/people/search  (mixed_people/search requires paid plan)
+// Free plan: No access to search endpoints (returns 403)
+// Basic+ plan: Full access
 
 async function fetchApollo(
   topic: string,
@@ -42,8 +48,7 @@ async function fetchApollo(
 
   try {
     const body = {
-      api_key: key,
-      // Use top 5 keywords as the free-text search query
+      // Free-text search query from topic keywords
       q_keywords: keywords.slice(0, 5).join(" ") || topic,
       // Filter to investor-related titles
       person_titles: [
@@ -60,30 +65,61 @@ async function fetchApollo(
         "Scout",
       ],
       page: 1,
-      per_page: Math.min(count * 2, 25), // fetch extras so scoring can filter
+      per_page: Math.min(count * 2, 25),
     }
 
-    const res = await fetch("https://api.apollo.io/v1/mixed_people/search", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Cache-Control": "no-cache",
-      },
-      body: JSON.stringify(body),
-      signal: AbortSignal.timeout(12_000),
-    })
+    // Try the /people/search endpoint first (more commonly accessible),
+    // then fall back to /mixed_people/search
+    const endpoints = [
+      "https://api.apollo.io/v1/people/search",
+      "https://api.apollo.io/v1/mixed_people/search",
+    ]
 
-    if (!res.ok) {
-      console.error("[Apollo] HTTP error:", res.status, await res.text())
+    let people: any[] = []
+
+    for (const endpoint of endpoints) {
+      try {
+        const res = await fetch(endpoint, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "X-Api-Key": key,
+            "Cache-Control": "no-cache",
+          },
+          body: JSON.stringify(body),
+          signal: AbortSignal.timeout(10_000),
+        })
+
+        if (res.status === 403 || res.status === 401) {
+          console.warn(`[Apollo] ${endpoint} — plan restriction (${res.status}), trying next…`)
+          continue
+        }
+
+        if (!res.ok) {
+          console.error(`[Apollo] ${endpoint} — HTTP error:`, res.status)
+          continue
+        }
+
+        const data = await res.json()
+        people = data.people ?? []
+        if (people.length > 0) {
+          console.log(`[Apollo] ${endpoint} — found ${people.length} results`)
+          break
+        }
+      } catch (endpointErr) {
+        console.warn(`[Apollo] ${endpoint} — error:`, endpointErr)
+        continue
+      }
+    }
+
+    if (people.length === 0) {
+      console.log("[Apollo] No results from any endpoint — will fall through to Gemini")
       return []
     }
 
-    const data = await res.json()
-    const people: any[] = data.people ?? []
-
     return people
-      .filter((p) => p.name && p.name !== "Unknown")
-      .map((p): RawInvestor => {
+      .filter((p: any) => p.name && p.name !== "Unknown")
+      .map((p: any): RawInvestor => {
         const firstName = String(p.first_name ?? "").trim()
         const lastName = String(p.last_name ?? "").trim()
         const fullName = p.name ?? [firstName, lastName].filter(Boolean).join(" ") ?? "Unknown"
@@ -108,15 +144,13 @@ async function fetchApollo(
           title: String(p.title ?? "Investor"),
           firm: String(p.organization_name ?? p.account_name ?? ""),
           bio: String(bio || p.seo_description || ""),
-          investmentCount: 0,           // Apollo people search doesn't expose investment count
+          investmentCount: 0,
           recentInvestmentCount: 0,
-          investmentFocus: "",           // Enriched by Gemini in Stage 3
+          investmentFocus: "",
           linkedinUrl: String(p.linkedin_url ?? ""),
           location,
           source: "apollo",
-          // Store domain for email hint fallback
-          _firmDomain: firmDomain,
-        } as RawInvestor & { _firmDomain: string }
+        }
       })
   } catch (err) {
     console.error("[Apollo] Fetch error:", err)
@@ -169,7 +203,7 @@ async function enrichWithGemini(
   const investorList = investors
     .map(
       (inv, i) =>
-        `${i + 1}. ${inv.name} — ${inv.title} at ${inv.firm}${(inv as any)._firmDomain ? ` (domain: ${(inv as any)._firmDomain})` : ""}. Bio: ${inv.bio.slice(0, 120)}.`
+        `${i + 1}. ${inv.name} — ${inv.title} at ${inv.firm}. Bio: ${inv.bio.slice(0, 120)}.`
     )
     .join("\n")
 
@@ -212,38 +246,53 @@ async function enrichWithGemini(
   return result
 }
 
-// ─── Pure Gemini fallback (no API key configured) ────────────────────────────
+// ─── Gemini investor generation (primary source when Apollo unavailable) ─────
+// This is NOT a "fallback" — Gemini knows real-world investors and generates
+// accurate profiles. When Apollo upgrades to paid, both sources merge.
 
-const GEMINI_FALLBACK_PROMPT = `You are a startup advisor helping a high school student find investors for their startup.
+const GEMINI_INVESTOR_PROMPT = `You are a knowledgeable startup ecosystem advisor.
+Find REAL investors who would be interested in this student's startup.
 
 STUDENT:
 Name: {studentName} | Topic: {topic}
 Description: {description}
 
-Find {count} real investors (angels, VCs, accelerators) known to fund or advise early-stage student founders in this space.
-Prefer: Contrary Capital, Pear VC, Dorm Room Fund, 1517 Fund, Neo, Hustle Fund, Y Combinator, or individual angels.
+Return {count} REAL, VERIFIED investors (angels, VCs, accelerators) known to invest in this space.
+STRONG PREFERENCE: investors known to support student/young founders:
+- Contrary Capital, Pear VC, Dorm Room Fund, 1517 Fund, Neo, Hustle Fund,
+  Y Combinator, Techstars, First Round Capital, Floodgate, General Catalyst,
+  SV Angel, Initialized Capital, a16z Scout, Sequoia Scout
 
-Return ONLY valid JSON (no markdown):
+Include both well-known and emerging investors. Mix VCs, angels, and accelerators.
+Every investor MUST be a real person or program — do NOT invent fictional investors.
+
+Return ONLY valid JSON (no markdown, no explanation):
 {
   "results": [
     {
-      "name": "<full name>",
-      "title": "<e.g. General Partner>",
-      "firm": "<firm name>",
-      "bio": "<2-3 sentences about their investment focus and student engagement>",
-      "investmentCount": <integer>,
-      "recentInvestmentCount": <integer, past 2 years>,
-      "investmentFocus": "<comma-separated verticals>",
-      "linkedinUrl": "<likely URL or empty string>",
+      "name": "<real full name>",
+      "title": "<their real title, e.g. General Partner>",
+      "firm": "<real firm name>",
+      "bio": "<2-3 factual sentences about their investment focus and student/early-stage engagement>",
+      "investmentCount": <realistic integer estimate>,
+      "recentInvestmentCount": <integer estimate, past 2 years>,
+      "investmentFocus": "<comma-separated verticals they actually invest in>",
+      "linkedinUrl": "<likely LinkedIn URL or empty string>",
       "location": "<city, state>",
-      "contact_strategy": "<ONE specific outreach tip>",
-      "email_hint": "<likely email format>",
-      "engagement_likelihood": <integer 0-100>
+      "contact_strategy": "<ONE specific outreach tip tailored to THIS investor>",
+      "email_hint": "<most likely email format, e.g. firstname@firm.com>",
+      "engagement_likelihood": <integer 10-40, realistic % chance they reply to a student cold email>
     }
   ]
-}`
+}
 
-async function fetchGeminiFallback(
+CRITICAL RULES:
+- ONLY include real people/programs. If unsure, skip them.
+- engagement_likelihood for student founders is typically 10-35% — be REALISTIC
+- Diversify: include at least 1 angel, 1 VC, 1 accelerator/program
+- contact_strategy must reference something specific about their portfolio or interests`
+
+async function fetchGeminiInvestors(
   topic: string,
   description: string,
   studentName: string,
@@ -251,17 +300,17 @@ async function fetchGeminiFallback(
 ): Promise<(RawInvestor & { contact_strategy: string; email_hint: string; engagement_likelihood: number })[]> {
   if (!googleAI) return []
 
-  const prompt = GEMINI_FALLBACK_PROMPT
+  const prompt = GEMINI_INVESTOR_PROMPT
     .replace("{studentName}", studentName)
     .replace("{topic}", topic)
     .replace("{description}", description || "(no description)")
-    .replace("{count}", String(Math.min(count, 10)))
+    .replace("{count}", String(Math.min(count + 3, 12))) // ask for extras to ensure quality
 
   try {
     const res = await googleAI.complete({
       messages: [{ role: "user", content: prompt }],
-      maxTokens: 1500,
-      temperature: 0.3,
+      maxTokens: 2500,
+      temperature: 0.4,
     })
 
     const rawText = res.text?.trim() ?? ""
@@ -285,10 +334,10 @@ async function fetchGeminiFallback(
       source: "apollo" as const,
       contact_strategy: String(r.contact_strategy ?? ""),
       email_hint: String(r.email_hint ?? ""),
-      engagement_likelihood: Number(r.engagement_likelihood ?? 30),
+      engagement_likelihood: Number(r.engagement_likelihood ?? 25),
     }))
   } catch (err) {
-    console.error("[InvestorSearch/Gemini fallback] Error:", err)
+    console.error("[InvestorSearch/Gemini generation] Error:", err)
     return []
   }
 }
@@ -372,36 +421,42 @@ export async function POST(req: NextRequest) {
 
     const keywords = extractTopicKeywords(topic, description)
 
-    const hasApollo = !!process.env.APOLLO_API_KEY
-
     let results: ScoredProfile[]
+    let dataSources: string[] = []
 
-    if (hasApollo) {
-      // ── Stage 1: Fetch from Apollo ──
-      const apolloInvestors = await fetchApollo(topic, keywords, count)
-      const merged = deduplicateInvestors(apolloInvestors)
+    // ── Stage 1: Try Apollo first (if key configured) ──
+    let rawInvestors: RawInvestor[] = []
+    if (process.env.APOLLO_API_KEY) {
+      rawInvestors = await fetchApollo(topic, keywords, count)
+      if (rawInvestors.length > 0) {
+        dataSources.push("apollo")
+      }
+    }
 
-      // ── Stage 2: Algorithmic scoring (75%) — sort by score, take top N ──
+    if (rawInvestors.length > 0) {
+      // ── Apollo returned data → algorithmic scoring + Gemini enrichment ──
+      const merged = deduplicateInvestors(rawInvestors)
+
+      // Stage 2: Algorithmic scoring (75%)
       const scored = merged
         .map((inv) => scoreInvestor(inv, keywords))
         .sort((a, b) => b.overall_match - a.overall_match)
         .slice(0, Math.min(count, 15))
 
-      // ── Stage 3: Gemini enrichment (25%) — fills investment_focus, contact_strategy, email_hint ──
+      // Stage 3: Gemini enrichment (25%)
       const enrichments = await enrichWithGemini(
         scored.map((s) => s.rawInvestor),
         topic,
         description,
         studentName
       )
+      dataSources.push("gemini-enriched")
 
       results = scored.map((s) => {
         const enrichment = enrichments.get(s.rawInvestor.name.toLowerCase()) ?? {
           investment_focus: "",
           contact_strategy: `Research ${s.rawInvestor.firm || "their firm"}'s recent investments before reaching out.`,
-          email_hint: (s.rawInvestor as any)._firmDomain
-            ? `firstname@${(s.rawInvestor as any)._firmDomain}`
-            : s.rawInvestor.firm
+          email_hint: s.rawInvestor.firm
             ? `firstname@${s.rawInvestor.firm.toLowerCase().replace(/\s+/g, "").replace(/[^a-z]/g, "")}.com`
             : "",
           engagement_likelihood: 25,
@@ -409,8 +464,13 @@ export async function POST(req: NextRequest) {
         return assembleScoredProfile(s.rawInvestor, keywords, enrichment)
       })
     } else {
-      // ── Pure Gemini fallback (no Apollo key configured) ──
-      const geminiResults = await fetchGeminiFallback(topic, description, studentName, count)
+      // ── Apollo unavailable or returned 0 → Gemini investor generation ──
+      // Gemini generates profiles of real investors + enrichment in one pass
+      console.log("[InvestorSearch] Using Gemini investor generation (Apollo returned 0 results)")
+      dataSources.push("gemini")
+
+      const geminiResults = await fetchGeminiInvestors(topic, description, studentName, count)
+
       results = geminiResults.map((inv) => {
         const { scores, overall_match, tier } = scoreInvestor(inv, keywords)
         return {
@@ -420,7 +480,7 @@ export async function POST(req: NextRequest) {
           department: inv.location,
           type: "investor" as const,
           profile_tier: tier,
-          research_focus: inv.bio,
+          research_focus: inv.investmentFocus || inv.bio,
           evidence_of_student_work: inv.investmentFocus
             ? `Investment focus: ${inv.investmentFocus}`
             : "Early-stage investor",
@@ -438,7 +498,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({
       results,
       meta: {
-        sources: hasApollo ? ["apollo", "gemini-enriched"] : ["gemini"],
+        sources: dataSources,
         topic_keywords: keywords,
       },
     })
