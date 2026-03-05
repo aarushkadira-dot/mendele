@@ -93,15 +93,10 @@ export function InvestorTab({ studentProfile }: InvestorTabProps) {
     setError(null)
 
     try {
-      const res = await fetch("/api/researchers/search", {
+      const res = await fetch("/api/business/investors/search", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          topic,
-          description,
-          type: "investors", // locked to investors
-          count,
-        }),
+        body: JSON.stringify({ topic, description, count }),
       })
 
       if (!res.ok) {
@@ -110,9 +105,7 @@ export function InvestorTab({ studentProfile }: InvestorTabProps) {
       }
 
       const data = await res.json()
-      const newResults: ScoredProfile[] = (data.results || []).filter(
-        (p: ScoredProfile) => p.type === "investor"
-      )
+      const newResults: ScoredProfile[] = data.results || []
 
       const filtered = minEngagement > 0
         ? newResults.filter((p) => p.engagement_likelihood >= minEngagement)
