@@ -2,49 +2,77 @@ import { NextRequest, NextResponse } from "next/server"
 import { getCurrentUser, createClient } from "@/lib/supabase/server"
 import { checkRateLimit, createRateLimitKey, RATE_LIMITS } from "@/lib/rate-limit"
 import { googleAI } from "@/lib/ai/google-model-manager"
+import { searchAuthors, broadenQuery } from "@/lib/researchers/semantic-scholar"
+import { tokenize, authorToScoredProfile } from "@/lib/researchers/researcher-scoring"
 import type { ScoredProfile } from "@/types/researcher"
 
 export const maxDuration = 30
 
-const SEARCH_PROMPT = `You are a research advisor helping a high school student find researchers or investors to reach out to about their project.
+// ─── Optional 15% AI semantic re-rank ─────────────────────────────────────────
+// Identical pattern to investor search: single batched Gemini call, graceful fallback.
 
-STUDENT:
-Topic: {topic}
-Description: {description}
-Name: {name} | Grade: {grade} | Interests: {interests} | Skills: {skills}
-Achievements: {achievements}
+async function computeAISemanticScores(
+  profiles: ScoredProfile[],
+  topic: string,
+  description: string
+): Promise<Map<string, number>> {
+  const scores = new Map<string, number>()
+  if (!googleAI || profiles.length === 0) return scores
 
-Find {count} real {type} who actively work in this area AND have shown genuine interest in working with high school or undergraduate students (or early-stage founders for investors).
+  const candidates = profiles.slice(0, 20).map((p, i) => ({
+    idx: i,
+    name: p.name,
+    institution: p.institution,
+    focus: p.research_focus.slice(0, 120),
+  }))
 
-For each person provide:
-- name (full name)
-- title (e.g. "Professor", "Principal Investigator", "General Partner")
-- institution (university or firm name)
-- department (department or team)
-- type: "researcher" or "investor"
-- profile_tier: one of "phd_professor"|"postdoc"|"grad_student"|"partner_vc"|"angel_investor"|"accelerator"
-- research_focus (2-3 specific sentences about their work)
-- evidence_of_student_work (concrete programs, papers with student co-authors, known mentorship, accelerator batches)
-- scores object with integers 0-100:
-  - topic_match: how closely their work overlaps the student's topic (30% weight)
-  - student_collaboration: track record with HS/undergrad students or young founders (25% weight)
-  - availability: estimated openness based on known activity (20% weight)
-  - experience_level: PhD professor=90+, postdoc=70, grad_student=50; partner_vc=90+, angel=75, accelerator=65 (15% weight)
-  - trend_alignment: whether recent work direction matches topic (10% weight)
-- overall_match: weighted average (topic_match*0.30 + student_collaboration*0.25 + availability*0.20 + experience_level*0.15 + trend_alignment*0.10), integer 0-100
-- engagement_likelihood: integer 0-100, estimated % chance they reply to a cold email
-- years_experience: estimated integer
-- active_projects: estimated integer (current workload indicator)
-- contact_strategy: ONE specific thing to mention — e.g. "Reference their 2023 Nature paper on X" or "Mention their RSI alumni network"
-- email_hint: likely email format, e.g. "firstname.lastname@mit.edu"
+  const prompt = `Student topic: "${topic}". ${description ? `Context: "${description}".` : ""}
 
-RULES:
-- Only real, verifiable people — no invented names
-- Prefer people with public evidence of student engagement
-- For investors: prefer those known to fund or advise student/early-stage founders (e.g. Contrary Capital, Pear VC, Dorm Room Fund)
-- Rank results by overall_match descending
+Rate how semantically relevant each researcher is to this student's topic (0–100). Consider conceptual alignment beyond keyword overlap.
 
-Return ONLY valid JSON, no markdown: { "results": [...] }`
+Researchers:
+${candidates.map((c) => `${c.idx}. ${c.name} (${c.institution}) — ${c.focus}`).join("\n")}
+
+Return ONLY valid JSON: { "scores": { "0": <int>, "1": <int>, ... } }`
+
+  try {
+    const result = await Promise.race([
+      googleAI.complete({ messages: [{ role: "user", content: prompt }], maxTokens: 400, temperature: 0.1 }),
+      new Promise<never>((_, reject) => setTimeout(() => reject(new Error("timeout")), 8000)),
+    ]) as Awaited<ReturnType<typeof googleAI.complete>>
+
+    const cleaned = (result.text ?? "")
+      .replace(/^```json\s*/i, "").replace(/^```\s*/i, "").replace(/```\s*$/i, "").trim()
+    const parsed = JSON.parse(cleaned)
+
+    for (const [idxStr, val] of Object.entries(parsed.scores ?? {})) {
+      const idx = parseInt(idxStr, 10)
+      if (!isNaN(idx) && idx < candidates.length) {
+        scores.set(candidates[idx].name, Math.max(0, Math.min(100, Number(val))))
+      }
+    }
+  } catch {
+    // Graceful degradation — AI boost is optional
+  }
+
+  return scores
+}
+
+function blendScores(
+  profiles: ScoredProfile[],
+  aiScores: Map<string, number>
+): ScoredProfile[] {
+  if (aiScores.size === 0) return profiles
+
+  return profiles.map((p) => {
+    const ai = aiScores.get(p.name)
+    if (ai === undefined) return p
+    const blended = Math.round(p.overall_match * 0.85 + ai * 0.15)
+    return { ...p, overall_match: blended }
+  })
+}
+
+// ─── Route handler ─────────────────────────────────────────────────────────────
 
 export async function POST(req: NextRequest) {
   try {
@@ -75,105 +103,79 @@ export async function POST(req: NextRequest) {
     }
 
     const body = await req.json()
-    const { topic, description, type = "researchers", count = 5 } = body
+    const { topic, description, count = 5 } = body
 
     if (!topic?.trim()) {
       return NextResponse.json({ error: "Missing topic" }, { status: 400 })
     }
 
-    // Fetch user profile to personalize results
-    const supabase = await createClient()
-    const [userResult, profileResult, achievementsResult] = await Promise.all([
-      (supabase.from("users") as any)
-        .select("name,skills,interests")
-        .eq("id", user.id)
-        .single(),
-      (supabase.from("user_profiles") as any)
-        .select("grade_level,academic_strengths")
-        .eq("user_id", user.id)
-        .single(),
-      (supabase.from("achievements") as any)
-        .select("title,description,category")
-        .eq("user_id", user.id)
-        .order("created_at", { ascending: false })
-        .limit(5),
-    ])
+    // ── Stage 0: tokenize query ─────────────────────────────────────────────
+    const keywords = tokenize(`${topic} ${description ?? ""}`)
 
-    const userData = userResult.data || {}
-    const profileData = profileResult.data || {}
-    const achievements: any[] = achievementsResult.data || []
+    // ── Stage 1: Semantic Scholar author search ─────────────────────────────
+    // Request enough candidates to have a good scoring pool after filtering
+    const SEARCH_LIMIT = Math.min(Math.max(count * 4, 20), 50)
+    let authors = await searchAuthors(topic, SEARCH_LIMIT)
 
-    const studentName = userData.name || "A student"
-    const grade = profileData.grade_level ? `${profileData.grade_level}th grade` : "high school"
-    const interests = (userData.interests || []).join(", ") || "Not specified"
-    const skills = (userData.skills || []).join(", ") || "Not specified"
-    const achievementsText =
-      achievements.length > 0
-        ? achievements.map((a) => `${a.title}: ${a.description || ""}`).join("; ")
-        : "None listed"
-
-    const typeLabel =
-      type === "investors"
-        ? "investors (angels, VCs, accelerators)"
-        : type === "both"
-        ? "researchers AND investors"
-        : "academic researchers"
-
-    const prompt = SEARCH_PROMPT
-      .replace("{topic}", topic)
-      .replace("{description}", description || "(no description provided)")
-      .replace("{name}", studentName)
-      .replace("{grade}", grade)
-      .replace("{interests}", interests)
-      .replace("{skills}", skills)
-      .replace("{achievements}", achievementsText)
-      .replace("{count}", String(Math.min(count, 15)))
-      .replace("{type}", typeLabel)
-
-    if (!googleAI) {
-      return NextResponse.json({ error: "AI service not configured" }, { status: 503 })
+    // Fallback: if too few results, try a broadened query
+    if (authors.length < 3) {
+      const broaderQuery = broadenQuery(topic)
+      if (broaderQuery && broaderQuery !== topic.toLowerCase()) {
+        const fallback = await searchAuthors(broaderQuery, SEARCH_LIMIT)
+        authors = [...authors, ...fallback]
+      }
     }
 
-    const result = await googleAI.complete({
-      messages: [{ role: "user", content: prompt }],
-      maxTokens: 2000,
-      temperature: 0.3,
+    if (authors.length === 0) {
+      return NextResponse.json(
+        { error: "No researchers found for this topic. Try a broader search term." },
+        {
+          status: 200,
+          headers: {
+            "X-RateLimit-Limit": limit.toString(),
+            "X-RateLimit-Remaining": remaining.toString(),
+            "X-RateLimit-Reset": reset.toString(),
+          },
+        }
+      )
+    }
+
+    // Deduplicate by authorId
+    const seen = new Set<string>()
+    const unique = authors.filter((a) => {
+      if (seen.has(a.authorId)) return false
+      seen.add(a.authorId)
+      return true
     })
 
-    const rawText = result.text?.trim() ?? ""
-    const cleaned = rawText
-      .replace(/^```json\s*/i, "")
-      .replace(/^```\s*/i, "")
-      .replace(/```\s*$/i, "")
-      .trim()
+    // ── Stage 2: Algorithmic scoring ────────────────────────────────────────
+    const scored = unique
+      .map((author) => authorToScoredProfile(author, keywords))
+      .filter((p) => p.overall_match > 0) // drop zero-score profiles
+      .sort((a, b) => {
+        // Primary: overall_match; tiebreak: student_collaboration
+        if (b.overall_match !== a.overall_match) return b.overall_match - a.overall_match
+        return b.scores.student_collaboration - a.scores.student_collaboration
+      })
 
-    const parsed = JSON.parse(cleaned)
-    const results: ScoredProfile[] = (parsed.results || []).map((p: any) => ({
-      name: String(p.name || "Unknown"),
-      title: String(p.title || ""),
-      institution: String(p.institution || ""),
-      department: String(p.department || ""),
-      type: p.type === "investor" ? "investor" : "researcher",
-      profile_tier: p.profile_tier || "phd_professor",
-      research_focus: String(p.research_focus || ""),
-      evidence_of_student_work: String(p.evidence_of_student_work || ""),
-      scores: {
-        topic_match: Number(p.scores?.topic_match ?? 0),
-        student_collaboration: Number(p.scores?.student_collaboration ?? 0),
-        availability: Number(p.scores?.availability ?? 0),
-        experience_level: Number(p.scores?.experience_level ?? 0),
-        trend_alignment: Number(p.scores?.trend_alignment ?? 0),
-      },
-      overall_match: Number(p.overall_match ?? 0),
-      engagement_likelihood: Number(p.engagement_likelihood ?? 0),
-      years_experience: Number(p.years_experience ?? 0),
-      active_projects: Number(p.active_projects ?? 0),
-      contact_strategy: String(p.contact_strategy || ""),
-      email_hint: String(p.email_hint || ""),
-    }))
+    // ── Stage 3: Optional 15% AI semantic boost ─────────────────────────────
+    const aiScores = await computeAISemanticScores(scored, topic, description ?? "")
+    const blended  = blendScores(scored, aiScores)
+
+    // Re-sort after blend
+    blended.sort((a, b) => b.overall_match - a.overall_match)
+
+    const results = blended.slice(0, Math.min(count, 15))
 
     return NextResponse.json(
-      { results },
+      {
+        results,
+        meta: {
+          total_found:  unique.length,
+          ai_boost:     aiScores.size > 0,
+          source:       "semantic_scholar",
+        },
+      },
       {
         headers: {
           "X-RateLimit-Limit": limit.toString(),
@@ -184,9 +186,15 @@ export async function POST(req: NextRequest) {
     )
   } catch (error: any) {
     console.error("[Researchers Search] Error:", error)
-    if (error instanceof SyntaxError) {
-      return NextResponse.json({ error: "Failed to parse AI response" }, { status: 500 })
+
+    // Semantic Scholar API errors — surface clearly
+    if (error?.message?.includes("Semantic Scholar")) {
+      return NextResponse.json(
+        { error: "Researcher database temporarily unavailable. Try again in a moment." },
+        { status: 503 }
+      )
     }
+
     return NextResponse.json({ error: "Internal server error" }, { status: 500 })
   }
 }
