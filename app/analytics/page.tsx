@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic"
+
 import { getAnalyticsSummary, getProfileViewsData, getNetworkGrowthData } from "@/app/actions/analytics"
 import { AnalyticsSummary } from "@/components/analytics/analytics-summary"
 import { ProfileViewsChart } from "@/components/analytics/profile-views-chart"

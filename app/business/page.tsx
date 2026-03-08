@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic"
+
 import { redirect } from "next/navigation"
 import { getCurrentUser } from "@/lib/supabase/server"
 import { getMyStartupProject, getDiscoverStartups, getBusinessStudentProfile } from "@/app/actions/business"

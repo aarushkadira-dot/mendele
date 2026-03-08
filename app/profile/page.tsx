@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic"
+
 import { ProfileHeader } from "@/components/profile/profile-header"
 import { AboutSection } from "@/components/profile/about-section"
 import { SkillsSection } from "@/components/profile/skills-section"

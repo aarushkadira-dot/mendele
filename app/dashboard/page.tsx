@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic"
+
 import { BentoGrid, BentoItem } from "@/components/dashboard/new/bento-grid"
 import { HeroSection } from "@/components/dashboard/new/hero-section"
 import { StatsWidget } from "@/components/dashboard/new/stats-widget"

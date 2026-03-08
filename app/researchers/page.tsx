@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic"
+
 import { createClient, getCurrentUser } from "@/lib/supabase/server"
 import { ResearchersClient } from "./researchers-client"
 import type { StudentProfile } from "@/types/researcher"

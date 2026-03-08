@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic"
+
 import OpportunitiesClient from "./opportunities-client"
 
 export default async function OpportunitiesPage({
