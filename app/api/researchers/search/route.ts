@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server"
 import { getCurrentUser, createClient } from "@/lib/supabase/server"
 import { checkRateLimit, createRateLimitKey, RATE_LIMITS } from "@/lib/rate-limit"
 import { googleAI } from "@/lib/ai/google-model-manager"
-import { searchAuthors, broadenQuery } from "@/lib/researchers/semantic-scholar"
+import { searchWorks, aggregateAuthors, broadenQuery } from "@/lib/researchers/core-api"
 import { tokenize, authorToScoredProfile } from "@/lib/researchers/researcher-scoring"
 import type { ScoredProfile } from "@/types/researcher"
 
@@ -112,21 +112,20 @@ export async function POST(req: NextRequest) {
     // ── Stage 0: tokenize query ─────────────────────────────────────────────
     const keywords = tokenize(`${topic} ${description ?? ""}`)
 
-    // ── Stage 1: Semantic Scholar author search ─────────────────────────────
-    // Request enough candidates to have a good scoring pool after filtering
-    const SEARCH_LIMIT = Math.min(Math.max(count * 4, 20), 50)
-    let authors = await searchAuthors(topic, SEARCH_LIMIT)
+    // ── Stage 1: CORE paper search → author aggregation ────────────────────
+    const SEARCH_LIMIT = Math.min(Math.max(count * 6, 50), 100)
+    let works = await searchWorks(topic, SEARCH_LIMIT)
 
-    // Fallback: if too few results, try a broadened query
-    if (authors.length < 3) {
+    // Fallback: broaden query if too few papers returned
+    if (works.length < 5) {
       const broaderQuery = broadenQuery(topic)
       if (broaderQuery && broaderQuery !== topic.toLowerCase()) {
-        const fallback = await searchAuthors(broaderQuery, SEARCH_LIMIT)
-        authors = [...authors, ...fallback]
+        const fallbackWorks = await searchWorks(broaderQuery, SEARCH_LIMIT)
+        works = [...works, ...fallbackWorks]
       }
     }
 
-    if (authors.length === 0) {
+    if (works.length === 0) {
       return NextResponse.json(
         { error: "No researchers found for this topic. Try a broader search term." },
         {
@@ -140,20 +139,14 @@ export async function POST(req: NextRequest) {
       )
     }
 
-    // Deduplicate by authorId
-    const seen = new Set<string>()
-    const unique = authors.filter((a) => {
-      if (seen.has(a.authorId)) return false
-      seen.add(a.authorId)
-      return true
-    })
+    // Aggregate unique authors from papers
+    const candidates = aggregateAuthors(works)
 
     // ── Stage 2: Algorithmic scoring ────────────────────────────────────────
-    const scored = unique
+    const scored = candidates
       .map((author) => authorToScoredProfile(author, keywords))
-      .filter((p) => p.overall_match > 0) // drop zero-score profiles
+      .filter((p) => p.overall_match > 0)
       .sort((a, b) => {
-        // Primary: overall_match; tiebreak: student_collaboration
         if (b.overall_match !== a.overall_match) return b.overall_match - a.overall_match
         return b.scores.student_collaboration - a.scores.student_collaboration
       })
@@ -171,9 +164,10 @@ export async function POST(req: NextRequest) {
       {
         results,
         meta: {
-          total_found:  unique.length,
+          total_found:  candidates.length,
+          papers_found: works.length,
           ai_boost:     aiScores.size > 0,
-          source:       "semantic_scholar",
+          source:       "core",
         },
       },
       {
@@ -187,8 +181,8 @@ export async function POST(req: NextRequest) {
   } catch (error: any) {
     console.error("[Researchers Search] Error:", error)
 
-    // Semantic Scholar API errors — surface clearly
-    if (error?.message?.includes("Semantic Scholar")) {
+    // CORE API errors — surface clearly
+    if (error?.message?.includes("CORE API")) {
       return NextResponse.json(
         { error: "Researcher database temporarily unavailable. Try again in a moment." },
         { status: 503 }
