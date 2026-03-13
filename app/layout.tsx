@@ -11,7 +11,6 @@ const _plusJakartaSans = Plus_Jakarta_Sans({ subsets: ["latin"] })
 export const metadata: Metadata = {
   title: "Networkly - AI-Powered Professional Networking",
   description: "Connect, grow, and succeed with AI-powered networking, opportunity discovery, and career guidance.",
-  generator: "v0.app",
   icons: {
     icon: [
       {
