@@ -81,7 +81,6 @@ export default function OpportunitiesClient({ initialHighlightId }: Opportunitie
   const [personalizedOpportunities, setPersonalizedOpportunities] = useState<Opportunity[]>([])
   const [personalizedLoading, setPersonalizedLoading] = useState(false)
   const [profileComplete, setProfileComplete] = useState(false)
-  const [profileChecked, setProfileChecked] = useState(false)
   const [activeTab, setActiveTab] = useState("all")
   const hasMounted = useHasMounted()
   const router = useRouter()
@@ -185,8 +184,6 @@ export default function OpportunitiesClient({ initialHighlightId }: Opportunitie
         }
       } catch (error) {
         console.error("[OpportunitiesPage] Error fetching profile:", error)
-      } finally {
-        setProfileChecked(true)
       }
     }
     fetchProfile()
@@ -891,10 +888,11 @@ export default function OpportunitiesClient({ initialHighlightId }: Opportunitie
                   )}
                 </AnimatePresence>
 
-                <AnimatePresence mode="wait">
-                  {(!profileChecked || (personalized && personalizedLoading)) ? null : (
-                    filteredOpportunities.length === 0 ? (
-                      personalized && !personalizedLoading && profileComplete ? (
+                {/* Skip rendering the list while personalized results are loading — spinner above handles that */}
+                {!(personalized && personalizedLoading) && (
+                  <AnimatePresence mode="wait">
+                    {filteredOpportunities.length === 0 ? (
+                      personalized && profileComplete ? (
                         <motion.div
                           key="no-personalized"
                           initial={{ opacity: 0 }}
@@ -913,6 +911,22 @@ export default function OpportunitiesClient({ initialHighlightId }: Opportunitie
                             <Users className="h-4 w-4 mr-2" />
                             Show all opportunities
                           </Button>
+                        </motion.div>
+                      ) : statusFilter === "past" ? (
+                        <motion.div
+                          key="no-past"
+                          initial={{ opacity: 0 }}
+                          animate={{ opacity: 1 }}
+                          exit={{ opacity: 0 }}
+                          className="flex flex-col items-center justify-center py-16 text-center"
+                        >
+                          <div className="rounded-full bg-muted p-4 mb-4">
+                            <Archive className="h-8 w-8 text-muted-foreground" />
+                          </div>
+                          <h3 className="text-lg font-medium text-foreground mb-1">No past opportunities</h3>
+                          <p className="text-sm text-muted-foreground max-w-sm">
+                            Opportunities with passed deadlines will appear here.
+                          </p>
                         </motion.div>
                       ) : searchQuery || typeFilter !== "all" ? (
                         <motion.div
@@ -964,9 +978,9 @@ export default function OpportunitiesClient({ initialHighlightId }: Opportunitie
                           </div>
                         )}
                       </motion.div>
-                    )
-                  )}
-                </AnimatePresence>
+                    )}
+                  </AnimatePresence>
+                )}
               </TabsContent>
 
               <TabsContent value="saved" className="mt-0">
