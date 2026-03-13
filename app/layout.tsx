@@ -13,14 +13,9 @@ export const metadata: Metadata = {
   description: "Connect, grow, and succeed with AI-powered networking, opportunity discovery, and career guidance.",
   icons: {
     icon: [
-      {
-        url: "/networkly-logo-mini.png",
-        media: "(prefers-color-scheme: light)",
-      },
-      {
-        url: "/networkly-logo-mini-dark.png",
-        media: "(prefers-color-scheme: dark)",
-      },
+      { url: "/favicon.ico", sizes: "any" },
+      { url: "/networkly-logo-mini.png", media: "(prefers-color-scheme: light)" },
+      { url: "/networkly-logo-mini-dark.png", media: "(prefers-color-scheme: dark)" },
     ],
     apple: "/networkly-logo-mini.png",
   },
