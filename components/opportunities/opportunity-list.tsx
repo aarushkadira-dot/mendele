@@ -3,10 +3,12 @@
 import { useState } from "react"
 import { motion, AnimatePresence, LayoutGroup } from "framer-motion"
 import { Button } from "@/components/ui/button"
-import { Sparkles, Search, ArrowRight, Globe, TrendingUp, Zap } from "lucide-react"
+import { Sparkles, Search, ArrowRight, Globe, TrendingUp, Zap, ChevronDown } from "lucide-react"
 import { OpportunityCard } from "@/components/opportunities/opportunity-card"
 import { InlineDiscovery } from "@/components/discovery/inline-discovery"
 import type { Opportunity } from "@/types/opportunity"
+
+const BROWSE_PAGE_SIZE = 30
 
 interface OpportunityListProps {
   opportunities: Opportunity[]
@@ -56,6 +58,14 @@ export function OpportunityList({
   onNewOpportunity
 }: OpportunityListProps) {
   const [savingIds, setSavingIds] = useState<Set<string>>(new Set())
+  const [browseVisible, setBrowseVisible] = useState(BROWSE_PAGE_SIZE)
+
+  // Reset visible count when the opportunity list changes (filter/search)
+  const prevLengthRef = useState(opportunities.length)
+  if (prevLengthRef[0] !== opportunities.length) {
+    prevLengthRef[1](opportunities.length)
+    if (browseVisible > BROWSE_PAGE_SIZE) setBrowseVisible(BROWSE_PAGE_SIZE)
+  }
 
   const handleToggleSave = async (e: React.MouseEvent, id: string) => {
     e.stopPropagation()
@@ -270,11 +280,13 @@ export function OpportunityList({
               </div>
               <div>
                 <h2 className="text-xl font-bold text-foreground tracking-tight">Browse All</h2>
-                <p className="text-sm text-muted-foreground">{newest.length} more opportunities to explore</p>
+                <p className="text-sm text-muted-foreground">
+                  Showing {Math.min(browseVisible, newest.length)} of {newest.length} opportunities
+                </p>
               </div>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-              {newest.map((opp) => (
+              {newest.slice(0, browseVisible).map((opp) => (
                 <motion.div
                   key={opp.id}
                   initial={{ opacity: 0, y: 12 }}
@@ -291,6 +303,19 @@ export function OpportunityList({
                 </motion.div>
               ))}
             </div>
+            {browseVisible < newest.length && (
+              <div className="flex justify-center mt-8">
+                <Button
+                  variant="outline"
+                  size="lg"
+                  className="gap-2 h-11 px-8"
+                  onClick={() => setBrowseVisible(v => v + BROWSE_PAGE_SIZE)}
+                >
+                  <ChevronDown className="h-4 w-4" />
+                  Show more ({newest.length - browseVisible} remaining)
+                </Button>
+              </div>
+            )}
           </motion.section>
         )}
 
