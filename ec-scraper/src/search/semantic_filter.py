@@ -19,15 +19,15 @@ from ..utils.retry import retry_async, EMBEDDING_RETRY_CONFIG
 # Reference text representing ideal opportunities (combined for one embedding)
 REFERENCE_TEXT = """
 high school student internship program application deadline summer 2026
-scholarship competition for teenagers research opportunity apply now
+scholarship competition for high school students research opportunity apply now
 STEM summer camp program for high school students registration open
-youth leadership program college prep academic enrichment opportunity
-science olympiad math competition robotics challenge for students
-research mentorship program for underrepresented high schoolers
-volunteer community service program for teens nonprofit organization
+youth leadership program high school academic enrichment opportunity
+science olympiad math competition robotics challenge for high schoolers
+research mentorship program for underrepresented high school students
+volunteer community service program for high school students nonprofit organization
 NASA science program for high school students application
-university pre-college summer program admissions deadline
-coding bootcamp hackathon for teenage developers
+pre-college summer program for high school students application deadline
+coding bootcamp hackathon for high school developers grades 9-12
 """
 
 GUIDE_HINTS = [
@@ -44,6 +44,21 @@ PREFILTER_URL_HINTS = [
 PREFILTER_TEXT_HINTS = [
     "ultimate guide", "how to", "step-by-step", "tips for", "tips to",
     "best ", "top ", "list of", "ranking", "ranked",
+]
+
+# Signals for filtering college-only content (high school filter)
+COLLEGE_SIGNALS = [
+    "undergraduate", "graduate student", "college student",
+    "bachelor's", "master's", "phd", "doctoral",
+    "university students only", "must be enrolled in college",
+    "18+", "ages 18-25", "college freshmen", "college sophomore",
+    "post-secondary", "higher education only",
+]
+
+HS_POSITIVE_SIGNALS = [
+    "high school", "9th grade", "10th grade", "11th grade", "12th grade",
+    "grades 9-12", "9th-12th", "pre-college", "high schooler",
+    "teenager", "teen", "rising junior", "rising senior",
 ]
 
 
@@ -127,8 +142,8 @@ class SemanticFilter:
             # Combine user query with light opportunity context so the
             # embedding captures *both* the topic and the "student opportunity" signal
             ref_text = (
-                f"{query} — student opportunity program application for high school students "
-                f"summer 2026 apply deadline registration"
+                f"{query} — high school student opportunity program application "
+                f"for 9th 10th 11th 12th grade students summer 2026 apply deadline registration"
             )
         else:
             ref_text = REFERENCE_TEXT
@@ -186,6 +201,22 @@ class SemanticFilter:
         if any(hint in text for hint in ["ultimate guide", "how to", "step-by-step", "tips for", "tips to"]):
             penalty += 0.03
         return min(penalty, 0.08)
+
+    def _college_penalty(self, title: str, snippet: str) -> float:
+        """Penalize results that target college students, not high schoolers."""
+        text = f"{title} {snippet}".lower()
+
+        hs_hits = sum(1 for sig in HS_POSITIVE_SIGNALS if sig in text)
+        # If text has HS signals, no penalty (even if it mentions college)
+        if hs_hits > 0:
+            return 0.0
+
+        college_hits = sum(1 for sig in COLLEGE_SIGNALS if sig in text)
+        if college_hits >= 2:
+            return 0.15  # Heavy penalty — almost certainly college-only
+        elif college_hits == 1:
+            return 0.08  # Moderate penalty — might be dual-audience
+        return 0.0
 
     def _should_prefilter(self, url: str, title: str, snippet: str) -> bool:
         """Cheap filter to skip obvious listicles or guides before embeddings."""
@@ -282,7 +313,7 @@ class SemanticFilter:
             scored_results = []
             for i, (url, title, snippet) in enumerate(filtered_results):
                 similarity = similarities[i]
-                adjusted_similarity = similarity - self._guide_penalty(title, snippet)
+                adjusted_similarity = similarity - self._guide_penalty(title, snippet) - self._college_penalty(title, snippet)
                 if adjusted_similarity >= threshold:
                     scored_results.append((url, adjusted_similarity, title))
             

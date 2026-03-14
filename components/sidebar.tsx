@@ -10,13 +10,10 @@ import {
   Briefcase,
   FolderKanban,
   MessageSquare,
-  Calendar,
-  BarChart3,
   Settings,
   Sparkles,
   ChevronLeft,
   ChevronRight,
-  GraduationCap,
   FlaskConical,
   Users2,
   Building2,
@@ -37,10 +34,7 @@ const navigation = [
   { name: "Business", href: "/business", icon: Building2 },
   { name: "AI Assistant", href: "/assistant", icon: Sparkles },
   { name: "Network", href: "/network", icon: MessageSquare },
-  { name: "Mentors", href: "/mentors", icon: GraduationCap },
   { name: "Researchers", href: "/researchers", icon: Users2 },
-  { name: "Events", href: "/events", icon: Calendar },
-  { name: "Analytics", href: "/analytics", icon: BarChart3 },
 ]
 
 interface SidebarProps {

@@ -118,7 +118,7 @@ export function OpportunityCard({
             hover:shadow-xl hover:shadow-primary/5 hover:border-primary/20
             ${isSelected
               ? "ring-2 ring-primary border-primary shadow-lg shadow-primary/10"
-              : "bg-card/50 backdrop-blur-sm"
+              : "bg-card backdrop-blur-sm"
             }
           `}
         >

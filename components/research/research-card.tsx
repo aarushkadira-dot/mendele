@@ -81,7 +81,7 @@ export function ResearchCard({
             ${
               isSelected
                 ? "ring-2 ring-teal-500 border-teal-500 shadow-lg shadow-teal-500/10"
-                : "bg-card/50 backdrop-blur-sm"
+                : "bg-card backdrop-blur-sm"
             }
           `}
         >

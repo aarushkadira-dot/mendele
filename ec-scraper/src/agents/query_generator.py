@@ -60,18 +60,18 @@ CATEGORY_KEYWORDS = {
 CATEGORY_TEMPLATES = {
     "competitions": [
         "{focus} olympiad high school 2026",
-        "{focus} competition for teenagers",
+        "{focus} competition for high school students",
         "{focus} challenge high school registration",
     ],
     "internships": [
         "{focus} internship high school summer 2026",
-        "paid {focus} internship teenagers",
-        "remote {focus} internship students",
+        "paid {focus} internship high school students",
+        "remote {focus} internship high school",
     ],
     "summer_programs": [
         "{focus} summer program high school",
         "university {focus} summer program",
-        "{focus} camp for teenagers",
+        "{focus} camp for high school students",
     ],
     "scholarships": [
         "{focus} scholarship high school students",
@@ -80,18 +80,18 @@ CATEGORY_TEMPLATES = {
     ],
     "research": [
         "{focus} research opportunity high school",
-        "{focus} science research program teenagers",
+        "{focus} science research program high school",
         "{focus} lab mentorship high school",
     ],
     "volunteering": [
-        "{focus} volunteer opportunities youth",
+        "{focus} volunteer opportunities high school students",
         "{focus} community service program high school",
         "nonprofit {focus} volunteer high school",
     ],
     "general": [
         "high school {focus} opportunities 2026",
-        "{focus} program for teenagers",
-        "{focus} opportunities students apply now",
+        "{focus} program for high school students",
+        "{focus} opportunities high school students apply now",
     ],
 }
 
@@ -236,52 +236,53 @@ class QueryGenerator:
         query: str,
         user_profile: Optional[Dict] = None,
         max_institutional: int = 8,
-        max_social: int = 7,
+        max_general: int = 7,
     ) -> Dict[str, List[str]]:
         """
-        Generate queries optimized for institutional sources first,
-        with social media fallback queries.
+        Generate queries in two stages:
+        Stage 1 (reputable): .edu, .org, .gov — high-authority sources
+        Stage 2 (general): broader web, still high-school focused
 
         Key principle: NEVER change the user's intent. If they search
         "robotics competitions", don't turn it into "robotics internships".
         Only add context (year, audience, domain filters).
+        ALL queries enforce high-school audience.
 
         Returns:
             {
-                "institutional": [...],  # .edu, .org, .gov focused
-                "social": [...],         # reddit, facebook, forums
+                "institutional": [...],  # .edu, .org, .gov focused (reputable)
+                "general": [...],        # broader web, still HS-focused
             }
         """
         from datetime import datetime
         current_year = datetime.now().year
 
-        # Stage 1: Institutional queries — respect user intent, vary only
-        # the domain filter and light contextual modifiers
+        # Stage 1: Reputable sources — .edu, .org, .gov with explicit HS targeting
         institutional_templates = [
-            f"site:edu {query} {current_year}",
-            f"site:gov {query} high school students",
-            f"site:org {query} {current_year}",
-            f"{query} for high school students {current_year}",
-            f"{query} {current_year} apply",
-            f"{query} summer {current_year} students",
-            f"{query} for teens {current_year}",
-            f"{query} youth {current_year} application",
+            f'site:edu "{query}" high school {current_year}',
+            f'site:gov "{query}" high school program',
+            f'site:org "{query}" high school {current_year}',
+            f'"{query}" high school students application {current_year}',
+            f'"{query}" high school program apply {current_year}',
+            f'"{query}" summer {current_year} high school students',
+            f'"{query}" 9th 10th 11th 12th grade program {current_year}',
+            f'"{query}" high school deadline registration {current_year}',
         ]
 
-        # Stage 2: Social queries — community knowledge, keep user intent
-        social_templates = [
-            f'site:reddit.com "high school" {query}',
-            f'site:reddit.com {query} {current_year}',
-            f'site:quora.com {query} students',
-            f'{query} "for high school students" {current_year}',
-            f'{query} student experiences',
-            f'{query} recommendations students',
-            f'{query} best {current_year}',
+        # Stage 2: General web queries — broader reach, still HS-only
+        general_templates = [
+            f'site:reddit.com "high school" "{query}"',
+            f'"{query}" "for high school students" {current_year}',
+            f'"{query}" "high schoolers" apply {current_year}',
+            f'"{query}" high school program recommendations',
+            f'"{query}" "grades 9-12" OR "9th-12th grade" {current_year}',
+            f'"{query}" teen high school program application {current_year}',
+            f'"{query}" pre-college program {current_year}',
         ]
 
         return {
             "institutional": institutional_templates[:max_institutional],
-            "social": social_templates[:max_social],
+            "general": general_templates[:max_general],
         }
 
     def _generate_profile_queries(

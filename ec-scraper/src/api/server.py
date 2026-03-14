@@ -767,15 +767,15 @@ async def discovery_stream(
                 yield emit("layer_complete", {"layer": "database_search", "stats": {"found": 0}})
 
             # Generate two-stage search queries
-            yield emit("reasoning", {"layer": "query_generation", "thought": "Using two-stage search (institutional + social fallback)..."})
+            yield emit("reasoning", {"layer": "query_generation", "thought": "Using two-stage search (reputable sources first, then general)..."})
             try:
                 search_queries_two_stage = await query_generator.generate_two_stage_queries(query)
-                all_queries = search_queries_two_stage["institutional"] + search_queries_two_stage["social"]
+                all_queries = search_queries_two_stage["institutional"] + search_queries_two_stage["general"]
             except Exception as e:
                 sys.stderr.write(f"Two-stage query generation failed: {e}. Falling back to single-stage.\n")
                 try:
                     all_queries = await query_generator.generate_queries(query, count=discovery_profile.max_queries)
-                    search_queries_two_stage = {"institutional": all_queries, "social": []}
+                    search_queries_two_stage = {"institutional": all_queries, "general": []}
                 except Exception:
                     current_year = datetime.now().year
                     all_queries = [
@@ -783,14 +783,14 @@ async def discovery_stream(
                         f"{query} internship for high school students",
                         f"{query} research opportunities for high schoolers",
                         f"{query} competitions high school {current_year}",
-                        f"{query} volunteer work for teens",
+                        f"{query} volunteer work for high school students",
                     ]
-                    search_queries_two_stage = {"institutional": all_queries, "social": []}
+                    search_queries_two_stage = {"institutional": all_queries, "general": []}
 
             query_category = detect_query_category(all_queries, query)
             yield emit("layer_complete", {
                 "layer": "query_generation",
-                "stats": {"count": len(all_queries), "institutional": len(search_queries_two_stage["institutional"]), "social": len(search_queries_two_stage["social"])},
+                "stats": {"count": len(all_queries), "institutional": len(search_queries_two_stage["institutional"]), "general": len(search_queries_two_stage["general"])},
                 "items": all_queries
             })
 
@@ -850,18 +850,18 @@ async def discovery_stream(
                         }
                         yield emit("found", {"url": result.url, "source": result.title or "Web Result", "stage": "institutional"})
 
-            # Check if we need social fallback
+            # Check if we need general fallback
             valid_institutional = len([u for u in all_results if not _is_social_domain(u[0])])
-            sys.stderr.write(f"[Two-Stage] Stage 1 complete: {valid_institutional} institutional results\n")
+            sys.stderr.write(f"[Two-Stage] Stage 1 (reputable) complete: {valid_institutional} institutional results\n")
 
-            if valid_institutional < 8 and search_queries_two_stage["social"]:
-                # Stage 2: Social fallback (concurrent)
-                yield emit("layer_start", {"layer": "web_search", "message": f"Stage 2: Social fallback (found {valid_institutional} < 8 institutional results)..."})
-                social_queries = search_queries_two_stage["social"]
-                for sq in social_queries:
-                    yield emit("search", {"query": sq, "stage": "social"})
+            if valid_institutional < 8 and search_queries_two_stage["general"]:
+                # Stage 2: General web fallback (concurrent, still HS-focused)
+                yield emit("layer_start", {"layer": "web_search", "message": f"Stage 2: General search (found {valid_institutional} < 8 reputable results)..."})
+                general_queries = search_queries_two_stage["general"]
+                for sq in general_queries:
+                    yield emit("search", {"query": sq, "stage": "general"})
 
-                stage2_results = await _run_batch(social_queries, "Stage 2")
+                stage2_results = await _run_batch(general_queries, "Stage 2")
 
                 for search_query, results in stage2_results:
                     for result in results:
@@ -871,15 +871,15 @@ async def discovery_stream(
                             url_metadata[result.url] = {
                                 "title": result.title or "",
                                 "snippet": result.snippet or "",
-                                "stage": "social",
+                                "stage": "general",
                                 "domain": urlparse(result.url).hostname,
                                 "query_origin": search_query,
                                 "is_social": _is_social_domain(result.url),
                             }
-                            yield emit("found", {"url": result.url, "source": result.title or "Web Result", "stage": "social"})
-                sys.stderr.write(f"[Two-Stage] Stage 2 complete: total {len(all_results)} results ({len([u for u in all_results if _is_social_domain(u[0])])} social)\n")
+                            yield emit("found", {"url": result.url, "source": result.title or "Web Result", "stage": "general"})
+                sys.stderr.write(f"[Two-Stage] Stage 2 (general) complete: total {len(all_results)} results\n")
             else:
-                sys.stderr.write(f"[Two-Stage] Skipping Stage 2 (sufficient institutional results)\n")
+                sys.stderr.write(f"[Two-Stage] Skipping Stage 2 (sufficient reputable results)\n")
             
             yield emit("layer_complete", {
                 "layer": "web_search",
@@ -925,6 +925,21 @@ async def discovery_stream(
                 "stats": {"input": len(all_results), "output": len(filtered_urls)},
                 "items": filtered_urls
             })
+
+            # College-only URL filter: drop URLs clearly targeting college/grad students
+            COLLEGE_ONLY_URL_PATTERNS = [
+                "/undergraduate", "/graduate-students", "/college-students",
+                "/alumni/", "/grad-school", "/mba-program", "/graduate-program",
+                "/phd-program", "/doctoral",
+            ]
+            pre_college_count = len(filtered_urls)
+            filtered_urls = [
+                u for u in filtered_urls
+                if not any(p in u.lower() for p in COLLEGE_ONLY_URL_PATTERNS)
+            ]
+            college_dropped = pre_college_count - len(filtered_urls)
+            if college_dropped:
+                sys.stderr.write(f"[Stream] College filter: dropped {college_dropped} college-only URLs\n")
 
             # Intent-based URL filtering: drop guide/blog URLs for strict intents
             STRICT_INTENTS = {
@@ -979,6 +994,17 @@ async def discovery_stream(
                 else:
                     dedup_stats["new"] += 1
                     urls_to_process.append(url)
+
+            # Sort by reputability: .edu/.gov/.org first, social last
+            REPUTABLE_TLDS = {'.edu', '.gov', '.org'}
+            def _reputability_score(url: str) -> int:
+                host = (urlparse(url).hostname or "").lower()
+                if any(host.endswith(tld) for tld in REPUTABLE_TLDS):
+                    return 0  # Most reputable
+                if _is_social_domain(url):
+                    return 2  # Least priority
+                return 1  # General web
+            urls_to_process.sort(key=_reputability_score)
 
             urls_to_process = urls_to_process[:discovery_profile.max_crawl_urls]
 
@@ -1074,8 +1100,8 @@ async def discovery_stream(
                         tags.append("community-reported")
                     if stage == "institutional":
                         tags.append("institutional")
-                    elif stage == "social":
-                        tags.append("social-media")
+                    elif stage == "general":
+                        tags.append("general-web")
 
                     # Lower confidence for social sources
                     confidence = 0.4 if not is_social else 0.3
