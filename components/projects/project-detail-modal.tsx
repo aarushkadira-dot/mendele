@@ -35,7 +35,7 @@ export function ProjectDetailModal({ project, open, onOpenChange }: ProjectDetai
   const statusColors: Record<string, string> = {
     "In Progress": "bg-primary/10 text-primary",
     Completed: "bg-secondary/10 text-secondary",
-    Planning: "bg-amber-500/10 text-amber-500",
+    Planning: "bg-blue-400/10 text-blue-400",
     "On Hold": "bg-muted text-muted-foreground",
   }
 
@@ -153,17 +153,17 @@ export function ProjectDetailModal({ project, open, onOpenChange }: ProjectDetai
           </GlassCard>
 
           {project.lookingFor.length > 0 && (
-            <GlassCard className="border-border bg-rose-500/5">
+            <GlassCard className="border-border bg-blue-400/5">
               <CardHeader className="pb-2">
                 <CardTitle className="text-base flex items-center gap-2">
-                  <Users className="h-5 w-5 text-rose-500" />
+                  <Users className="h-5 w-5 text-blue-400" />
                   Looking for Contributors
                 </CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="flex flex-wrap gap-2">
                   {project.lookingFor.map((role) => (
-                    <Badge key={role} variant="outline" className="border-rose-500/30 text-rose-500">
+                    <Badge key={role} variant="outline" className="border-blue-400/30 text-blue-400">
                       {role}
                     </Badge>
                   ))}

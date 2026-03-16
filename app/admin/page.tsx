@@ -207,7 +207,7 @@ export default function AdminPanel() {
                   {stats.apis.map((api, i) => (
                     <div key={i} className="flex items-center justify-between text-sm">
                       <span className="text-muted-foreground">{api.name}</span>
-                      <Badge variant={api.status === 'ok' ? 'outline' : 'destructive'} className={api.status === 'ok' ? 'text-green-500 border-green-500' : ''}>
+                      <Badge variant={api.status === 'ok' ? 'outline' : 'destructive'} className={api.status === 'ok' ? 'text-blue-400 border-blue-400/20' : ''}>
                         {api.status}
                       </Badge>
                     </div>
@@ -279,13 +279,13 @@ export default function AdminPanel() {
                   </Badge>
                 </div>
                 <div className="grid grid-cols-2 gap-2 text-sm">
-                  <div className="flex justify-between p-2 bg-green-500/10 rounded">
+                  <div className="flex justify-between p-2 bg-blue-400/10 rounded">
                     <span>Passed</span>
-                    <span className="font-bold text-green-600">{testResult.passed}</span>
+                    <span className="font-bold text-blue-400">{testResult.passed}</span>
                   </div>
-                  <div className="flex justify-between p-2 bg-red-500/10 rounded">
+                  <div className="flex justify-between p-2 bg-blue-400/10 rounded">
                     <span>Failed</span>
-                    <span className="font-bold text-red-600">{testResult.failed}</span>
+                    <span className="font-bold text-blue-400">{testResult.failed}</span>
                   </div>
                 </div>
               </div>
@@ -422,17 +422,17 @@ export default function AdminPanel() {
                   <div className="text-sm text-muted-foreground">Total Queries</div>
                   <div className="text-2xl font-bold">{aiQueries.total}</div>
                 </div>
-                <div className="p-4 bg-green-500/10 rounded-lg">
-                  <div className="text-sm text-green-600">Success</div>
-                  <div className="text-2xl font-bold text-green-700">{aiQueries.success}</div>
+                <div className="p-4 bg-blue-400/10 rounded-lg">
+                  <div className="text-sm text-blue-400">Success</div>
+                  <div className="text-2xl font-bold text-blue-400">{aiQueries.success}</div>
                 </div>
-                <div className="p-4 bg-red-500/10 rounded-lg">
-                  <div className="text-sm text-red-600">Failed</div>
-                  <div className="text-2xl font-bold text-red-700">{aiQueries.failed}</div>
+                <div className="p-4 bg-blue-400/10 rounded-lg">
+                  <div className="text-sm text-blue-400">Failed</div>
+                  <div className="text-2xl font-bold text-blue-400">{aiQueries.failed}</div>
                 </div>
-                <div className="p-4 bg-blue-500/10 rounded-lg">
-                  <div className="text-sm text-blue-600">Avg Latency</div>
-                  <div className="text-2xl font-bold text-blue-700">{aiQueries.avgLatency.toFixed(0)}ms</div>
+                <div className="p-4 bg-blue-400/10 rounded-lg">
+                  <div className="text-sm text-blue-400">Avg Latency</div>
+                  <div className="text-2xl font-bold text-blue-400">{aiQueries.avgLatency.toFixed(0)}ms</div>
                 </div>
               </div>
 
@@ -444,8 +444,8 @@ export default function AdminPanel() {
                       <div key={provider} className="flex items-center justify-between p-2 border rounded">
                         <span className="font-medium capitalize">{provider}</span>
                         <div className="flex gap-3 text-sm">
-                          <span className="text-green-600">{stats.success}</span>
-                          <span className="text-red-600">{stats.failed}</span>
+                          <span className="text-blue-400">{stats.success}</span>
+                          <span className="text-blue-400">{stats.failed}</span>
                         </div>
                       </div>
                     ))}
@@ -458,8 +458,8 @@ export default function AdminPanel() {
                       <div key={useCase} className="flex items-center justify-between p-2 border rounded">
                         <span className="font-medium capitalize">{useCase}</span>
                         <div className="flex gap-3 text-sm">
-                          <span className="text-green-600">{stats.success}</span>
-                          <span className="text-red-600">{stats.failed}</span>
+                          <span className="text-blue-400">{stats.success}</span>
+                          <span className="text-blue-400">{stats.failed}</span>
                         </div>
                       </div>
                     ))}
@@ -484,7 +484,7 @@ export default function AdminPanel() {
                           <tr key={err.id} className="border-t">
                             <td className="p-2">{new Date(err.timestamp).toLocaleTimeString()}</td>
                             <td className="p-2">{err.provider}</td>
-                            <td className="p-2 text-red-600 truncate max-w-[200px]" title={err.error}>{err.error}</td>
+                            <td className="p-2 text-blue-400 truncate max-w-[200px]" title={err.error}>{err.error}</td>
                           </tr>
                         ))}
                       </tbody>

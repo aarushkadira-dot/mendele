@@ -99,16 +99,16 @@ function StatCard({
       relative overflow-hidden rounded-2xl p-4
       ${
         accent
-          ? "bg-gradient-to-br from-teal-500/10 to-cyan-500/5 border border-teal-500/20"
+          ? "   border border-blue-400/20"
           : "bg-muted/50 border border-border/40"
       }
-      transition-all duration-200 hover:border-teal-500/30 hover:shadow-sm
+      transition-all duration-200 hover:border-blue-400/30 hover:shadow-sm
     `}
     >
       <div
         className={`
         inline-flex items-center justify-center w-10 h-10 rounded-xl mb-3
-        ${accent ? "bg-teal-500/15 text-teal-600 dark:text-teal-400" : "bg-background text-muted-foreground"}
+        ${accent ? "bg-blue-400/15 text-blue-400 dark:text-blue-400" : "bg-background text-muted-foreground"}
       `}
       >
         <Icon className="h-5 w-5" />
@@ -177,8 +177,8 @@ export function ExpandedResearchCard({
         >
           {/* Hero Header */}
           <div className="relative shrink-0">
-            <div className="absolute inset-0 bg-gradient-to-br from-teal-500 to-cyan-600 opacity-[0.08]" />
-            <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-background/80" />
+            <div className="absolute inset-0    opacity-[0.08]" />
+            <div className="absolute inset-0    " />
 
             {/* Top Actions */}
             <div className="absolute top-4 right-4 z-20 flex items-center gap-2">
@@ -189,7 +189,7 @@ export function ExpandedResearchCard({
                 onClick={() => onToggleSave(opportunity.id)}
               >
                 {opportunity.saved ? (
-                  <BookmarkCheck className="h-5 w-5 text-teal-500" />
+                  <BookmarkCheck className="h-5 w-5 text-blue-400" />
                 ) : (
                   <Bookmark className="h-5 w-5" />
                 )}
@@ -215,10 +215,10 @@ export function ExpandedResearchCard({
             <div className="relative z-10 p-8 sm:p-10 pb-6">
               <div className="flex flex-col sm:flex-row gap-6 items-start">
                 <div className="relative group">
-                  <div className="absolute inset-0 bg-gradient-to-br from-teal-500/20 to-cyan-500/10 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity" />
+                  <div className="absolute inset-0    rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity" />
                   <Avatar className="h-24 w-24 rounded-2xl border-4 border-background shadow-2xl relative [image-rendering:crisp-edges]">
                     <AvatarImage src={logoUrl} className="object-cover [image-rendering:crisp-edges]" />
-                    <AvatarFallback className="text-3xl font-bold bg-gradient-to-br from-teal-500/20 to-cyan-500/10 text-teal-600 dark:text-teal-400 rounded-2xl">
+                    <AvatarFallback className="text-3xl font-bold    text-blue-400 dark:text-blue-400 rounded-2xl">
                       {institution[0].toUpperCase()}
                     </AvatarFallback>
                   </Avatar>
@@ -226,18 +226,18 @@ export function ExpandedResearchCard({
 
                 <div className="flex-1 min-w-0 space-y-4">
                   <div className="flex flex-wrap gap-2">
-                    <Badge className="bg-gradient-to-r from-teal-500 to-cyan-600 text-white border-0 px-3 py-1 shadow-sm">
+                    <Badge className="   text-white border-0 px-3 py-1 shadow-sm">
                       <FlaskConical className="h-3.5 w-3.5 mr-1.5" />
                       Research
                     </Badge>
                     {opportunity.remote && (
-                      <Badge className="bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border-emerald-200/50 dark:border-emerald-700/50 px-3 py-1">
+                      <Badge className="bg-blue-400/15 text-blue-400 dark:text-blue-400 border-emerald-200/50 dark:border-blue-400/50 px-3 py-1">
                         <Globe className="h-3.5 w-3.5 mr-1.5" />
                         Remote
                       </Badge>
                     )}
                     {isFree && (
-                      <Badge className="bg-blue-500/15 text-blue-600 dark:text-blue-400 border-blue-200/50 dark:border-blue-700/50 px-3 py-1">
+                      <Badge className="bg-blue-400/15 text-blue-400 dark:text-blue-400 border-blue-200/50 dark:border-blue-400/50 px-3 py-1">
                         Free
                       </Badge>
                     )}
@@ -264,7 +264,7 @@ export function ExpandedResearchCard({
                 <div className="flex flex-col gap-3 sm:items-end shrink-0 w-full sm:w-auto mt-6 sm:mt-10">
                   <Button
                     size="lg"
-                    className="w-full sm:w-auto min-w-[200px] h-12 gap-2 text-base font-semibold shadow-lg shadow-teal-500/25 rounded-xl bg-gradient-to-r from-teal-500 to-cyan-600 hover:from-teal-600 hover:to-cyan-700 text-white"
+                    className="w-full sm:w-auto min-w-[200px] h-12 gap-2 text-base font-semibold shadow-lg shadow-blue-400/25 rounded-xl    hover: hover: text-white"
                     onClick={() => onGenerateEmail?.(opportunity)}
                   >
                     <Mail className="h-5 w-5" />
@@ -328,14 +328,14 @@ export function ExpandedResearchCard({
               {opportunity.matchExplanation && (
                 <motion.div
                   variants={itemVariants}
-                  className="relative bg-gradient-to-br from-teal-500/5 via-teal-500/3 to-transparent rounded-2xl p-6 border border-teal-500/20"
+                  className="relative     rounded-2xl p-6 border border-blue-400/20"
                 >
                   <div className="absolute top-4 right-4 opacity-[0.07]">
                     <Sparkles className="h-32 w-32" />
                   </div>
 
                   <div className="flex items-center gap-3 mb-4">
-                    <div className="p-2.5 rounded-xl bg-teal-500/15 text-teal-600 dark:text-teal-400">
+                    <div className="p-2.5 rounded-xl bg-blue-400/15 text-blue-400 dark:text-blue-400">
                       <Sparkles className="h-5 w-5" />
                     </div>
                     <div>
@@ -358,7 +358,7 @@ export function ExpandedResearchCard({
                   {/* About */}
                   <motion.div variants={itemVariants} className="space-y-4">
                     <h2 className="text-xl font-bold flex items-center gap-2">
-                      <div className="w-1 h-6 bg-teal-500 rounded-full" />
+                      <div className="w-1 h-6 bg-blue-400/10 rounded-full" />
                       About this Program
                     </h2>
                     <div className="prose prose-sm prose-gray dark:prose-invert max-w-none text-muted-foreground leading-relaxed whitespace-pre-wrap pl-4">
@@ -370,10 +370,10 @@ export function ExpandedResearchCard({
                   {opportunity.requirements && (
                     <motion.div variants={itemVariants} className="space-y-4">
                       <h2 className="text-xl font-bold flex items-center gap-2">
-                        <div className="w-1 h-6 bg-amber-500 rounded-full" />
+                        <div className="w-1 h-6 bg-blue-400/10 rounded-full" />
                         Requirements & Eligibility
                       </h2>
-                      <div className="bg-amber-500/5 border border-amber-500/20 rounded-2xl p-5">
+                      <div className="bg-blue-400/5 border border-blue-400/20 rounded-2xl p-5">
                         <div className="prose prose-sm dark:prose-invert max-w-none text-muted-foreground leading-relaxed whitespace-pre-wrap">
                           {opportunity.requirements}
                         </div>
@@ -385,14 +385,14 @@ export function ExpandedResearchCard({
                   {opportunity.researchAreas && opportunity.researchAreas.length > 0 && (
                     <motion.div variants={itemVariants} className="space-y-4">
                       <h2 className="text-xl font-bold flex items-center gap-2">
-                        <div className="w-1 h-6 bg-cyan-500 rounded-full" />
+                        <div className="w-1 h-6 bg-blue-400/10 rounded-full" />
                         Research Focus Areas
                       </h2>
                       <div className="flex flex-wrap gap-2">
                         {opportunity.researchAreas.map((area) => (
                           <Badge
                             key={area}
-                            className="px-4 py-2 text-sm font-medium bg-teal-500/10 hover:bg-teal-500/20 border-teal-500/20 text-teal-700 dark:text-teal-300 rounded-xl transition-colors"
+                            className="px-4 py-2 text-sm font-medium bg-blue-400/10 hover:bg-blue-400/20 border-blue-400/20 text-blue-400 dark:text-teal-300 rounded-xl transition-colors"
                           >
                             {area}
                           </Badge>
@@ -426,10 +426,10 @@ export function ExpandedResearchCard({
                   {opportunity.contactEmail && (
                     <motion.div
                       variants={itemVariants}
-                      className="bg-teal-500/5 rounded-2xl p-5 border border-teal-500/20"
+                      className="bg-blue-400/5 rounded-2xl p-5 border border-blue-400/20"
                     >
-                      <div className="flex items-center gap-3 mb-3 text-teal-600 dark:text-teal-400">
-                        <div className="p-2 rounded-lg bg-teal-500/15">
+                      <div className="flex items-center gap-3 mb-3 text-blue-400 dark:text-blue-400">
+                        <div className="p-2 rounded-lg bg-blue-400/15">
                           <Mail className="h-5 w-5" />
                         </div>
                         <h3 className="font-semibold">Contact</h3>
@@ -458,7 +458,7 @@ export function ExpandedResearchCard({
                         href={opportunity.sourceUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="flex items-center gap-2 text-sm text-teal-600 dark:text-teal-400 hover:underline pt-2 font-medium"
+                        className="flex items-center gap-2 text-sm text-blue-400 dark:text-blue-400 hover:underline pt-2 font-medium"
                       >
                         <ExternalLink className="h-4 w-4" />
                         View Original Source

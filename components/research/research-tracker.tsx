@@ -86,8 +86,8 @@ export function ResearchTracker({ labs, onStatusChange, onLabClick }: ResearchTr
         animate={{ opacity: 1, y: 0 }}
         className="flex flex-col items-center justify-center py-16 px-4 text-center"
       >
-        <div className="h-20 w-20 rounded-2xl bg-teal-500/10 flex items-center justify-center mb-6">
-          <Inbox className="h-10 w-10 text-teal-500/60" />
+        <div className="h-20 w-20 rounded-2xl bg-blue-400/10 flex items-center justify-center mb-6">
+          <Inbox className="h-10 w-10 text-blue-400" />
         </div>
         <h3 className="text-lg font-semibold mb-2">No Labs Tracked Yet</h3>
         <p className="text-sm text-muted-foreground max-w-sm">
@@ -205,13 +205,13 @@ function TrackerCard({
       transition={{ type: "spring", stiffness: 400, damping: 30 }}
     >
       <Card
-        className="p-3 border-border/50 bg-card/50 backdrop-blur-sm hover:border-teal-500/20 hover:shadow-sm transition-all cursor-pointer"
+        className="p-3 border-border/50 bg-card/50 backdrop-blur-sm hover:border-blue-400/20 hover:shadow-sm transition-all cursor-pointer"
         onClick={onClick}
       >
         <div className="flex items-start gap-3">
           <Avatar className="h-9 w-9 rounded-lg shrink-0">
             <AvatarImage src={logoUrl} className="object-cover" />
-            <AvatarFallback className="rounded-lg text-xs font-bold bg-teal-500/10 text-teal-600 dark:text-teal-400">
+            <AvatarFallback className="rounded-lg text-xs font-bold bg-blue-400/10 text-blue-400 dark:text-blue-400">
               {(lab.institution || lab.company || "R")[0].toUpperCase()}
             </AvatarFallback>
           </Avatar>

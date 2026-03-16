@@ -44,24 +44,24 @@ export function LiveOpportunitiesFeed({ opportunities, className }: LiveOpportun
 
     const getCategoryColor = (category: string) => {
         const colors: Record<string, string> = {
-            "STEM": "bg-blue-500/10 text-blue-700 dark:text-blue-400",
-            "Arts": "bg-purple-500/10 text-purple-700 dark:text-purple-400",
-            "Business": "bg-green-500/10 text-green-700 dark:text-green-400",
-            "Leadership": "bg-orange-500/10 text-orange-700 dark:text-orange-400",
-            "Community Service": "bg-pink-500/10 text-pink-700 dark:text-pink-400",
-            "Sports": "bg-red-500/10 text-red-700 dark:text-red-400",
-            "Humanities": "bg-indigo-500/10 text-indigo-700 dark:text-indigo-400",
+            "STEM": "bg-blue-400/10 text-blue-400 dark:text-blue-400",
+            "Arts": "bg-blue-400/10 text-blue-400 dark:text-blue-400",
+            "Business": "bg-blue-400/10 text-blue-400 dark:text-blue-400",
+            "Leadership": "bg-blue-400/10 text-blue-400 dark:text-blue-400",
+            "Community Service": "bg-blue-400/10 text-blue-400 dark:text-blue-400",
+            "Sports": "bg-blue-400/10 text-blue-400 dark:text-blue-400",
+            "Humanities": "bg-blue-400/10 text-blue-400 dark:text-blue-400",
         }
         return colors[category] || "bg-gray-500/10 text-gray-700 dark:text-gray-400"
     }
 
     const getTypeColor = (type: string) => {
         const colors: Record<string, string> = {
-            "Competition": "border-blue-500/30 text-blue-600 dark:text-blue-400",
-            "Internship": "border-green-500/30 text-green-600 dark:text-green-400",
-            "Summer Program": "border-orange-500/30 text-orange-600 dark:text-orange-400",
-            "Scholarship": "border-purple-500/30 text-purple-600 dark:text-purple-400",
-            "Research": "border-indigo-500/30 text-indigo-600 dark:text-indigo-400",
+            "Competition": "border-blue-400/30 text-blue-400 dark:text-blue-400",
+            "Internship": "border-blue-400/30 text-blue-400 dark:text-blue-400",
+            "Summer Program": "border-blue-400/30 text-blue-400 dark:text-blue-400",
+            "Scholarship": "border-blue-400/30 text-blue-400 dark:text-blue-400",
+            "Research": "border-blue-400/30 text-blue-400 dark:text-blue-400",
         }
         return colors[type] || "border-gray-500/30 text-gray-600 dark:text-gray-400"
     }
@@ -85,7 +85,7 @@ export function LiveOpportunitiesFeed({ opportunities, className }: LiveOpportun
                         key={opp.id}
                         className={cn(
                             "p-4 hover:shadow-md transition-all duration-300",
-                            "animate-in slide-in-from-top-2 fade-in",
+                            "animate-in slide-in- fade-in",
                             index === 0 && "border-primary/50 shadow-sm"
                         )}
                         style={{
@@ -118,7 +118,7 @@ export function LiveOpportunitiesFeed({ opportunities, className }: LiveOpportun
                                 
                                 {/* Confidence Badge */}
                                 {opp.confidence >= 0.7 && (
-                                    <Badge variant="outline" className="text-xs border-green-500/30 text-green-600">
+                                    <Badge variant="outline" className="text-xs border-blue-400/30 text-blue-400">
                                         {Math.round(opp.confidence * 100)}% match
                                     </Badge>
                                 )}

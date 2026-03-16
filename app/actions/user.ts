@@ -4,7 +4,7 @@ import { cache } from "react"
 import { revalidatePath } from "next/cache"
 import { z } from "zod"
 
-import { createClient, requireAuth, getCurrentUser as getAuthUser } from "@/lib/supabase/server"
+import { createClient, requireAuth, getCurrentUser as getAuthUser, isDev } from "@/lib/supabase/server"
 import type { User, Achievement, Extracurricular, AppEvent } from "@/lib/types"
 
 async function fetchCurrentUser() {
@@ -28,7 +28,39 @@ async function fetchCurrentUser() {
 
   const user = data as any | null
 
-  if (error || !user) return null
+  if (error || !user) {
+    if (isDev() || error?.message === 'Supabase not configured') {
+      return {
+        id: authUser.id,
+        name: (authUser as any).user_metadata?.full_name || authUser.email?.split("@")[0] || "User",
+        email: authUser.email || "",
+        avatar: (authUser as any).user_metadata?.avatar_url || null,
+        headline: "Innovation Researcher",
+        bio: "Passionate about building software that helps people connect and grow.",
+        location: "New York, NY",
+        university: "Networkly Institute",
+        graduationYear: "2026",
+        skills: ["React", "TypeScript", "Next.js", "AI Integration"],
+        interests: ["Future Tech", "Community Building", "UI Design"],
+        connections: 542,
+        profileViews: 1240,
+        searchAppearances: 86,
+        completedProjects: 12,
+        linkedinUrl: "#",
+        githubUrl: "#",
+        portfolioUrl: "#",
+        achievements: [
+          { id: "a1", title: "Dean's List 2024", date: "2024-12", icon: "Medal" },
+          { id: "a2", title: "Hackathon Winner", date: "2025-01", icon: "Code" }
+        ],
+        extracurriculars: [
+          { id: "e1", title: "Tech Club President", organization: "Networkly HS", type: "Leadership", startDate: "2023-09", endDate: "Present", description: "Led a team of 30+ students in web development projects." }
+        ],
+        analyticsData: null
+      }
+    }
+    return null
+  }
 
   const analyticsData = Array.isArray(user.analytics_data) ? user.analytics_data[0] : user.analytics_data
 
@@ -105,7 +137,14 @@ export async function ensureUserRecord() {
     .select("id")
     .single()
 
-  if (error) throw new Error(error.message)
+  if (error || !createdUser) {
+    if (isDev() || error?.message === 'Supabase not configured') {
+      console.warn("[ensureUserRecord] Supabase not configured or insertion failed — continuing with authUser.id")
+      return { id: authUser.id }
+    }
+    if (error) throw new Error(error.message)
+    return null
+  }
 
   return createdUser as any
 }
@@ -125,6 +164,26 @@ export async function getUserAnalytics() {
   const ad = analyticsData as any | null
 
   if (!ad) {
+    if (isDev()) {
+      return {
+        profileViews: [
+          { date: "2024-03-01", views: 10 },
+          { date: "2024-03-05", views: 25 },
+          { date: "2024-03-10", views: 15 },
+          { date: "2024-03-15", views: 40 }
+        ],
+        networkGrowth: [
+          { month: "Jan", connections: 400 },
+          { month: "Feb", connections: 450 },
+          { month: "Mar", connections: 542 }
+        ],
+        skillEndorsements: [
+          { skill: "React", count: 12 },
+          { skill: "TypeScript", count: 8 },
+          { skill: "Design", count: 15 }
+        ],
+      }
+    }
     return {
       profileViews: [],
       networkGrowth: [],
@@ -223,6 +282,20 @@ export async function getUserProfile() {
   }
 
   if (!userProfile) {
+    if (isDev()) {
+      return {
+        id: "mock-profile",
+        user_id: authUser.id,
+        school: "Networkly University",
+        grade_level: 12,
+        interests: ["Machine Learning", "Product Management"],
+        location: "New York, NY",
+        career_goals: "To become a Lead Product Designer in the AI space.",
+        preferred_opportunity_types: ["Internship", "Research"],
+        academic_strengths: ["Problem Solving", "Collaboration"],
+        availability: "Full-time",
+      }
+    }
     console.log("[getUserProfile] No profile found for user:", authUser.id)
     return null
   }

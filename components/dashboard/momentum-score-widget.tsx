@@ -16,18 +16,18 @@ const COMPONENTS = [
 ] as const
 
 const GRADE_CONFIG: Record<string, { color: string; ring: string; label: string }> = {
-  A:   { color: "text-emerald-400", ring: "stroke-emerald-400",   label: "Exceptional" },
+  A:   { color: "text-blue-400", ring: "stroke-blue-400",   label: "Exceptional" },
   B:   { color: "text-blue-400",    ring: "stroke-blue-400",      label: "Strong" },
-  C:   { color: "text-amber-400",   ring: "stroke-amber-400",     label: "Building" },
-  D:   { color: "text-orange-400",  ring: "stroke-orange-400",    label: "Early Stage" },
+  C:   { color: "text-blue-400",   ring: "stroke-blue-400",     label: "Building" },
+  D:   { color: "text-blue-400",  ring: "stroke-blue-400",    label: "Early Stage" },
   "N/A": { color: "text-muted-foreground", ring: "stroke-muted-foreground", label: "No Data Yet" },
 }
 
 function barColor(pct: number) {
-  if (pct >= 0.75) return "bg-emerald-500"
-  if (pct >= 0.50) return "bg-blue-500"
-  if (pct >= 0.25) return "bg-amber-500"
-  return "bg-orange-500"
+  if (pct >= 0.75) return "bg-blue-400/10"
+  if (pct >= 0.50) return "bg-blue-400/10"
+  if (pct >= 0.25) return "bg-blue-400/10"
+  return "bg-blue-400/10"
 }
 
 // ─── Circular Gauge ───────────────────────────────────────────────────────────

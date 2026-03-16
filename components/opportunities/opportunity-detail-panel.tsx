@@ -146,7 +146,7 @@ export function OpportunityDetailPanel({
             style={{ background: getTypeGradientStyle(opportunity.type) }}
           >
             <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-10" />
-            <div className="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-background to-transparent" />
+            <div className="absolute bottom-0 left-0 right-0 h-16   " />
             
             {opportunity.isExpired && (
               <motion.div 
@@ -165,7 +165,7 @@ export function OpportunityDetailPanel({
           <div className="flex items-start gap-4 -mt-14 relative z-10">
             <Avatar className="h-18 w-18 rounded-xl border-4 border-background shadow-xl bg-background">
               <AvatarImage src={opportunity.logo || "/placeholder.svg"} className="object-cover" />
-              <AvatarFallback className="text-xl font-bold rounded-xl bg-gradient-to-br from-muted to-muted/50">
+              <AvatarFallback className="text-xl font-bold rounded-xl   ">
                 {opportunity.company[0]}
               </AvatarFallback>
             </Avatar>
@@ -206,24 +206,24 @@ export function OpportunityDetailPanel({
               </Badge>
             )}
             {opportunity.remote && (
-              <Badge variant="secondary" className="text-xs px-2.5 py-1 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-medium gap-1">
+              <Badge variant="secondary" className="text-xs px-2.5 py-1 bg-blue-400/10 text-blue-400 dark:text-blue-400 font-medium gap-1">
                 <Globe className="h-3 w-3" />
                 Remote
               </Badge>
             )}
             {isFree && (
-              <Badge variant="secondary" className="text-xs px-2.5 py-1 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-medium">
+              <Badge variant="secondary" className="text-xs px-2.5 py-1 bg-blue-400/10 text-blue-400 dark:text-blue-400 font-medium">
                 Free
               </Badge>
             )}
             {hasPrizes && (
-              <Badge variant="secondary" className="text-xs px-2.5 py-1 bg-amber-500/10 text-amber-600 dark:text-amber-400 font-medium gap-1">
+              <Badge variant="secondary" className="text-xs px-2.5 py-1 bg-blue-400/10 text-blue-400 dark:text-blue-400 font-medium gap-1">
                 <Trophy className="h-3 w-3" />
                 Prizes
               </Badge>
             )}
             {opportunity.timingType && opportunity.timingType !== "one-time" && (
-              <Badge variant="secondary" className="text-xs px-2.5 py-1 bg-blue-500/10 text-blue-600 dark:text-blue-400 font-medium capitalize">
+              <Badge variant="secondary" className="text-xs px-2.5 py-1 bg-blue-400/10 text-blue-400 dark:text-blue-400 font-medium capitalize">
                 {opportunity.timingType.replace("-", " ")}
               </Badge>
             )}
@@ -258,7 +258,7 @@ export function OpportunityDetailPanel({
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.1 }}
-              className="rounded-xl bg-gradient-to-br from-primary/5 via-primary/3 to-secondary/5 border border-primary/10 p-4 space-y-3"
+              className="rounded-xl     border border-primary/10 p-4 space-y-3"
             >
               <div className="flex items-center gap-2">
                 <div className="p-1.5 rounded-lg bg-primary/10">
@@ -276,7 +276,7 @@ export function OpportunityDetailPanel({
                     transition={{ delay: 0.1 + i * 0.05 }}
                     className="flex items-start gap-2 text-sm text-muted-foreground"
                   >
-                    <CheckCircle2 className="h-4 w-4 text-emerald-500 shrink-0 mt-0.5" />
+                    <CheckCircle2 className="h-4 w-4 text-blue-400 shrink-0 mt-0.5" />
                     <span>{reason}</span>
                   </motion.div>
                 ))}
@@ -368,7 +368,7 @@ export function OpportunityDetailPanel({
 
           {hasPrizes && (
             <Section title="Prizes & Awards" icon={Trophy}>
-              <div className="rounded-xl border border-amber-500/20 bg-amber-500/5 p-4">
+              <div className="rounded-xl border border-blue-400/20 bg-blue-400/5 p-4">
                 <p className="text-sm text-foreground whitespace-pre-wrap">{opportunity.prizes}</p>
               </div>
             </Section>
@@ -463,7 +463,7 @@ export function OpportunityDetailPanel({
                 <span className="text-muted-foreground">Status</span>
                 <Badge 
                   variant={opportunity.isActive ? "secondary" : "outline"} 
-                  className={`text-xs ${opportunity.isActive ? "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400" : ""}`}
+                  className={`text-xs ${opportunity.isActive ? "bg-blue-400/10 text-blue-400 dark:text-blue-400" : ""}`}
                 >
                   {opportunity.isActive ? "Active" : "Inactive"}
                 </Badge>

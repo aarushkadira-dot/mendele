@@ -44,9 +44,9 @@ export function LiveOpportunityCard({
     index = 0
 }: LiveOpportunityCardProps) {
     const confidenceColor = opportunity.confidence && opportunity.confidence >= 0.8
-        ? "text-green-500"
+        ? "text-blue-400"
         : opportunity.confidence && opportunity.confidence >= 0.6
-            ? "text-amber-500"
+            ? "text-blue-400"
             : "text-muted-foreground"
 
     return (
@@ -67,7 +67,7 @@ export function LiveOpportunityCard({
             )}>
                 <div className="flex items-start gap-3">
                     {/* Icon/Logo placeholder */}
-                    <div className="shrink-0 w-10 h-10 rounded-lg bg-gradient-to-br from-primary/20 to-primary/10 flex items-center justify-center">
+                    <div className="shrink-0 w-10 h-10 rounded-lg    flex items-center justify-center">
                         <Building2 className="h-5 w-5 text-primary" />
                     </div>
 

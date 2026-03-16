@@ -192,7 +192,7 @@ export function ExpandedOpportunityCard({ opportunity, onClose, onToggleSave, st
                     {opportunity.type}
                   </Badge>
                   {opportunity.remote && (
-                    <Badge variant="secondary" className="bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-200/50 dark:border-emerald-800/50">
+                    <Badge variant="secondary" className="bg-blue-400/10 text-blue-400 dark:text-blue-400 border-emerald-200/50 dark:border-emerald-800/50">
                       <Globe className="h-3 w-3 mr-1" />
                       Remote
                     </Badge>
@@ -274,11 +274,11 @@ export function ExpandedOpportunityCard({ opportunity, onClose, onToggleSave, st
 
           {deadLink && (
             <div className="mx-6 sm:mx-8 mb-2 p-3 rounded-lg bg-red-50 dark:bg-red-950/30 border border-red-200/50 dark:border-red-800/50 text-sm">
-              <div className="flex items-center gap-2 text-red-600 dark:text-red-400 font-medium">
+              <div className="flex items-center gap-2 text-blue-400 dark:text-blue-400 font-medium">
                 <AlertTriangle className="h-4 w-4" />
                 This link appears to be broken
               </div>
-              <p className="text-xs text-red-600/70 dark:text-red-400/70 mt-1">
+              <p className="text-xs text-blue-400 dark:text-blue-400 mt-1">
                 The opportunity may have moved or expired. Try searching for it directly.
               </p>
               <div className="flex flex-wrap gap-2 mt-2">
@@ -297,7 +297,7 @@ export function ExpandedOpportunityCard({ opportunity, onClose, onToggleSave, st
                 <Button
                   variant="outline"
                   size="sm"
-                  className="text-xs gap-1.5 border-amber-500/40 text-amber-700 dark:text-amber-400 hover:bg-amber-500/10"
+                  className="text-xs gap-1.5 border-blue-400/40 text-blue-400 dark:text-blue-400 hover:bg-blue-400/10"
                   onClick={() => setProfessorModalOpen(true)}
                 >
                   <Users className="h-3 w-3" />
@@ -334,7 +334,7 @@ export function ExpandedOpportunityCard({ opportunity, onClose, onToggleSave, st
                     <div className="grid sm:grid-cols-2 gap-3">
                       {opportunity.matchReasons.map((reason, i) => (
                         <div key={i} className="flex items-start gap-2.5 bg-muted/40 p-3 rounded-lg">
-                          <CheckCircle2 className="h-4 w-4 text-emerald-500 shrink-0 mt-0.5" />
+                          <CheckCircle2 className="h-4 w-4 text-blue-400 shrink-0 mt-0.5" />
                           <span className="text-sm">{reason}</span>
                         </div>
                       ))}
@@ -431,7 +431,7 @@ export function ExpandedOpportunityCard({ opportunity, onClose, onToggleSave, st
                     variants={itemVariants}
                     className="bg-amber-50 dark:bg-amber-950/30 rounded-xl p-5 border border-amber-200/50 dark:border-amber-800/50"
                   >
-                    <div className="flex items-center gap-2 mb-3 text-amber-700 dark:text-amber-400 font-semibold">
+                    <div className="flex items-center gap-2 mb-3 text-blue-400 dark:text-blue-400 font-semibold">
                       <Trophy className="h-4 w-4" />
                       <h3>Prizes & Awards</h3>
                     </div>
@@ -487,7 +487,7 @@ export function ExpandedOpportunityCard({ opportunity, onClose, onToggleSave, st
                 >
                   <div className="flex flex-col sm:flex-row sm:items-center gap-4 justify-between">
                     <div className="space-y-1">
-                      <div className="flex items-center gap-2 font-semibold text-amber-700 dark:text-amber-400">
+                      <div className="flex items-center gap-2 font-semibold text-blue-400 dark:text-blue-400">
                         <Users className="h-4 w-4" />
                         Program not running this year?
                       </div>
@@ -496,7 +496,7 @@ export function ExpandedOpportunityCard({ opportunity, onClose, onToggleSave, st
                       </p>
                     </div>
                     <Button
-                      className="shrink-0 gap-2 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white shadow-md shadow-amber-500/20"
+                      className="shrink-0 gap-2    hover: hover: text-white shadow-md shadow-blue-400/20"
                       onClick={() => setProfessorModalOpen(true)}
                     >
                       <Users className="h-4 w-4" />

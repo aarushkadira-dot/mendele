@@ -60,9 +60,9 @@ export function ProfileSidebar({
             <div className="flex items-center justify-between">
               <span className="text-2xl font-bold text-foreground">{profileStrength}%</span>
               <span className={`text-sm font-medium ${
-                profileStrength >= 80 ? "text-green-500" : 
-                profileStrength >= 50 ? "text-amber-500" : 
-                "text-red-500"
+                profileStrength >= 80 ? "text-blue-400" : 
+                profileStrength >= 50 ? "text-blue-400" : 
+                "text-blue-400"
               }`}>
                 {profileStrength >= 80 ? "Strong" : profileStrength >= 50 ? "Good" : "Needs Work"}
               </span>

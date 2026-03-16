@@ -49,7 +49,7 @@ export function CuratedOpportunitiesWidget() {
     const getMatchColor = (score: number) => {
         if (score >= 90) return "text-secondary bg-secondary/10"
         if (score >= 75) return "text-primary bg-primary/10"
-        if (score >= 60) return "text-amber-500 bg-amber-500/10"
+        if (score >= 60) return "text-blue-400 bg-blue-400/10"
         return "text-muted-foreground bg-muted"
     }
 

@@ -33,16 +33,16 @@ function DimensionBar({
   index: number
 }) {
   const color =
-    score >= 75 ? "bg-emerald-500"
-    : score >= 55 ? "bg-blue-500"
-    : score >= 35 ? "bg-amber-500"
-    : "bg-orange-500"
+    score >= 75 ? "bg-blue-400/10"
+    : score >= 55 ? "bg-blue-400/10"
+    : score >= 35 ? "bg-blue-400/10"
+    : "bg-blue-400/10"
 
   const textColor =
-    score >= 75 ? "text-emerald-500"
-    : score >= 55 ? "text-blue-500"
-    : score >= 35 ? "text-amber-500"
-    : "text-orange-500"
+    score >= 75 ? "text-blue-400"
+    : score >= 55 ? "text-blue-400"
+    : score >= 35 ? "text-blue-400"
+    : "text-blue-400"
 
   return (
     <div>
@@ -74,16 +74,16 @@ function ScoreRing({ score }: { score: number }) {
   const r = 38
   const circumference = 2 * Math.PI * r
   const color =
-    score >= 75 ? "stroke-emerald-400"
+    score >= 75 ? "stroke-blue-400"
     : score >= 55 ? "stroke-blue-400"
-    : score >= 35 ? "stroke-amber-400"
-    : "stroke-orange-400"
+    : score >= 35 ? "stroke-blue-400"
+    : "stroke-blue-400"
 
   const textColor =
-    score >= 75 ? "text-emerald-400"
+    score >= 75 ? "text-blue-400"
     : score >= 55 ? "text-blue-400"
-    : score >= 35 ? "text-amber-400"
-    : "text-orange-400"
+    : score >= 35 ? "text-blue-400"
+    : "text-blue-400"
 
   return (
     <div className="relative w-24 h-24 shrink-0">
@@ -167,8 +167,8 @@ export function FeedbackPanel({ projectId, projectTitle }: FeedbackPanelProps) {
         }}
       >
         <div className="flex items-center gap-3">
-          <div className="p-2 rounded-xl bg-violet-500/10">
-            <Sparkles className="h-5 w-5 text-violet-500" />
+          <div className="p-2 rounded-xl bg-blue-400/10">
+            <Sparkles className="h-5 w-5 text-blue-400" />
           </div>
           <div>
             <p className="font-semibold text-sm">AI Investor Feedback</p>
@@ -210,7 +210,7 @@ export function FeedbackPanel({ projectId, projectTitle }: FeedbackPanelProps) {
               {/* Loading */}
               {loading && (
                 <div className="flex flex-col items-center justify-center py-10 gap-3">
-                  <Loader2 className="h-8 w-8 animate-spin text-violet-500" />
+                  <Loader2 className="h-8 w-8 animate-spin text-blue-400" />
                   <p className="text-sm text-muted-foreground">
                     Analyzing {projectTitle} as a VC would…
                   </p>
@@ -269,13 +269,13 @@ export function FeedbackPanel({ projectId, projectTitle }: FeedbackPanelProps) {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="space-y-2">
                       <p className="text-sm font-semibold flex items-center gap-1.5">
-                        <CheckCircle2 className="h-4 w-4 text-emerald-500" />
+                        <CheckCircle2 className="h-4 w-4 text-blue-400" />
                         Strengths
                       </p>
                       <ul className="space-y-1.5">
                         {feedback.strengths.map((s, i) => (
                           <li key={i} className="text-xs text-muted-foreground flex items-start gap-2">
-                            <span className="text-emerald-500 mt-0.5 shrink-0">✓</span>
+                            <span className="text-blue-400 mt-0.5 shrink-0">✓</span>
                             {s}
                           </li>
                         ))}
@@ -284,13 +284,13 @@ export function FeedbackPanel({ projectId, projectTitle }: FeedbackPanelProps) {
 
                     <div className="space-y-2">
                       <p className="text-sm font-semibold flex items-center gap-1.5">
-                        <AlertTriangle className="h-4 w-4 text-amber-500" />
+                        <AlertTriangle className="h-4 w-4 text-blue-400" />
                         Critical Gaps
                       </p>
                       <ul className="space-y-1.5">
                         {feedback.critical_gaps.map((g, i) => (
                           <li key={i} className="text-xs text-muted-foreground flex items-start gap-2">
-                            <span className="text-amber-500 mt-0.5 shrink-0">!</span>
+                            <span className="text-blue-400 mt-0.5 shrink-0">!</span>
                             {g}
                           </li>
                         ))}

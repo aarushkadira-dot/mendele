@@ -207,9 +207,9 @@ export function DiscoveryTriggerCard({
         isRunning
           ? "border-primary/20 bg-primary/5 shadow-[0_0_30px_-5px_rgba(var(--primary-rgb),0.1)]"
           : isError
-            ? "border-red-500/20 bg-red-500/5"
+            ? "border-blue-400/20 bg-blue-400/5"
             : isComplete
-              ? "border-green-500/20 bg-green-500/5"
+              ? "border-blue-400/20 bg-blue-400/5"
               : "border-border/40 bg-background/40 hover:border-border/60 hover:bg-background/60 shadow-sm",
         compact && !showExpanded ? "p-3 cursor-pointer" : compact ? "p-4" : "p-6",
         className
@@ -250,15 +250,15 @@ export function DiscoveryTriggerCard({
                   isRunning
                     ? "bg-primary/10"
                     : isError
-                      ? "bg-red-500/10"
+                      ? "bg-blue-400/10"
                       : isComplete
-                        ? "bg-green-500/10"
+                        ? "bg-blue-400/10"
                         : "bg-muted"
                 )}
               >
                 {isRunning && <Loader2 className="h-5 w-5 text-primary animate-spin" />}
-                {isError && <X className="h-5 w-5 text-red-500" />}
-                {isComplete && <CheckCircle2 className="h-5 w-5 text-green-500" />}
+                {isError && <X className="h-5 w-5 text-blue-400" />}
+                {isComplete && <CheckCircle2 className="h-5 w-5 text-blue-400" />}
                 {!isRunning && !isComplete && !isError && <Globe className="h-5 w-5 text-muted-foreground" />}
               </div>
 
@@ -425,7 +425,7 @@ export function DiscoveryTriggerCard({
                     </div>
                     <div className="h-2 bg-muted rounded-full overflow-hidden">
                       <motion.div
-                        className="h-full bg-gradient-to-r from-primary to-primary/80 rounded-full"
+                        className="h-full    rounded-full"
                         initial={{ width: 0 }}
                         animate={{ width: `${state.overallProgress}%` }}
                         transition={{ duration: 0.3, ease: "easeOut" }}
@@ -460,10 +460,10 @@ export function DiscoveryTriggerCard({
                   exit={{ opacity: 0, height: 0 }}
                   className="space-y-3"
                 >
-                  <div className="flex items-center justify-between p-3 rounded-lg bg-red-500/5 border border-red-500/20">
+                  <div className="flex items-center justify-between p-3 rounded-lg bg-blue-400/5 border border-blue-400/20">
                     <div className="flex items-center gap-2">
-                      <X className="h-4 w-4 text-red-500" />
-                      <span className="text-sm text-red-400">
+                      <X className="h-4 w-4 text-blue-400" />
+                      <span className="text-sm text-blue-400">
                         Discovery service unavailable. Please try again.
                       </span>
                     </div>
@@ -491,9 +491,9 @@ export function DiscoveryTriggerCard({
                   exit={{ opacity: 0, height: 0 }}
                   className="space-y-3"
                 >
-                  <div className="flex items-center justify-between p-3 rounded-lg bg-green-500/5 border border-green-500/20">
+                  <div className="flex items-center justify-between p-3 rounded-lg bg-blue-400/5 border border-blue-400/20">
                     <div className="flex items-center gap-2">
-                      <Sparkles className="h-4 w-4 text-green-500" />
+                      <Sparkles className="h-4 w-4 text-blue-400" />
                       <span className="text-sm font-medium">
                         {liveOpportunities.length} {liveOpportunities.length === 1 ? "opportunity" : "opportunities"} found
                       </span>
@@ -511,7 +511,7 @@ export function DiscoveryTriggerCard({
                           disabled={imported}
                           className={cn(
                             "gap-2 text-xs",
-                            imported && "text-green-500"
+                            imported && "text-blue-400"
                           )}
                         >
                           {imported ? (

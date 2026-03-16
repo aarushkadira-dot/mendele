@@ -70,7 +70,7 @@ function StatItem({ label, value, trend, data, color }: any) {
         <p className="text-sm text-muted-foreground font-medium mb-1">{label}</p>
         <div className="flex items-baseline gap-2">
           <span className="text-2xl font-bold text-foreground">{value}</span>
-          <span className={`text-xs font-medium flex items-center ${isPositive ? 'text-emerald-500' : 'text-rose-500'}`}>
+          <span className={`text-xs font-medium flex items-center ${isPositive ? 'text-blue-400' : 'text-blue-400'}`}>
             {isPositive ? <ArrowUpRight className="w-3 h-3 mr-0.5" /> : <ArrowDownRight className="w-3 h-3 mr-0.5" />}
             {Math.abs(trend)}%
           </span>

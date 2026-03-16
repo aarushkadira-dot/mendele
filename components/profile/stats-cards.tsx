@@ -18,7 +18,7 @@ export function StatsCards({ connections, views, strength, growth = 0 }: StatsCa
           <div className="flex justify-between items-start">
             <Users className="h-5 w-5 text-primary" />
             {growth > 0 && (
-              <span className="text-[10px] bg-green-500/10 text-green-500 px-1.5 py-0.5 rounded-full flex items-center gap-0.5">
+              <span className="text-[10px] bg-blue-400/10 text-blue-400 px-1.5 py-0.5 rounded-full flex items-center gap-0.5">
                 <TrendingUp className="h-3 w-3" />
                 +{growth}%
               </span>
@@ -41,18 +41,18 @@ export function StatsCards({ connections, views, strength, growth = 0 }: StatsCa
         </CardContent>
       </Card>
 
-      <Card className="col-span-2 bg-gradient-to-r from-violet-500/10 to-fuchsia-500/10 border-violet-500/20">
+      <Card className="col-span-2    border-blue-400/20">
         <CardContent className="p-4 flex items-center justify-between">
           <div className="flex flex-col">
             <span className="text-xs font-medium text-muted-foreground uppercase tracking-wider">Profile Strength</span>
             <div className="flex items-baseline gap-2">
-              <span className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-violet-500 to-fuchsia-500">
+              <span className="text-3xl font-bold bg-clip-text text-transparent   ">
                 {strength}%
               </span>
               <span className="text-xs text-muted-foreground">Keep it up!</span>
             </div>
           </div>
-          <div className="h-10 w-10 rounded-full bg-gradient-to-br from-violet-500 to-fuchsia-500 flex items-center justify-center shadow-lg shadow-violet-500/20">
+          <div className="h-10 w-10 rounded-full    flex items-center justify-center shadow-lg shadow-blue-400/20">
             <Zap className="h-5 w-5 text-white" />
           </div>
         </CardContent>

@@ -140,8 +140,8 @@ export function EmailGeneratorModal({
       <DialogContent className="sm:max-w-2xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2 text-xl">
-            <div className="p-2 rounded-lg bg-teal-500/10">
-              <Mail className="h-5 w-5 text-teal-500" />
+            <div className="p-2 rounded-lg bg-blue-400/10">
+              <Mail className="h-5 w-5 text-blue-400" />
             </div>
             Generate Cold Email
           </DialogTitle>
@@ -165,7 +165,7 @@ export function EmailGeneratorModal({
               className="space-y-4"
             >
               <div className="flex items-center gap-2 mb-2">
-                <Sparkles className="h-4 w-4 text-teal-500" />
+                <Sparkles className="h-4 w-4 text-blue-400" />
                 <span className="text-sm font-medium">Tell us about yourself</span>
               </div>
 
@@ -222,11 +222,11 @@ export function EmailGeneratorModal({
               </div>
 
               {error && (
-                <p className="text-sm text-red-500">{error}</p>
+                <p className="text-sm text-blue-400">{error}</p>
               )}
 
               <Button
-                className="w-full gap-2 bg-gradient-to-r from-teal-500 to-cyan-600 hover:from-teal-600 hover:to-cyan-700 text-white"
+                className="w-full gap-2    hover: hover: text-white"
                 onClick={generateEmails}
                 disabled={!studentName.trim() || isGenerating}
               >
@@ -244,8 +244,8 @@ export function EmailGeneratorModal({
               className="flex flex-col items-center justify-center py-12 gap-4"
             >
               <div className="relative">
-                <div className="h-16 w-16 rounded-full bg-teal-500/10 flex items-center justify-center">
-                  <Loader2 className="h-8 w-8 text-teal-500 animate-spin" />
+                <div className="h-16 w-16 rounded-full bg-blue-400/10 flex items-center justify-center">
+                  <Loader2 className="h-8 w-8 text-blue-400 animate-spin" />
                 </div>
               </div>
               <div className="text-center">
@@ -284,7 +284,7 @@ export function EmailGeneratorModal({
                       flex-1 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 border
                       ${
                         activeTone === tone
-                          ? "bg-teal-500/10 border-teal-500/30 text-teal-700 dark:text-teal-300"
+                          ? "bg-blue-400/10 border-blue-400/30 text-blue-400 dark:text-teal-300"
                           : "bg-muted/30 border-border/40 text-muted-foreground hover:bg-muted/60"
                       }
                     `}

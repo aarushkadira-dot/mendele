@@ -53,19 +53,19 @@ interface QuickViewSummaryProps {
 const difficultyConfig = {
     beginner: {
         label: "Beginner",
-        color: "bg-emerald-500/10 text-emerald-600 border-emerald-500/20",
+        color: "bg-blue-400/10 text-blue-400 border-blue-400/20",
         icon: "🟢",
         description: "Open to all, no prerequisites",
     },
     intermediate: {
         label: "Intermediate",
-        color: "bg-amber-500/10 text-amber-600 border-amber-500/20",
+        color: "bg-blue-400/10 text-blue-400 border-blue-400/20",
         icon: "🟡",
         description: "Some experience required",
     },
     advanced: {
         label: "Advanced",
-        color: "bg-red-500/10 text-red-600 border-red-500/20",
+        color: "bg-blue-400/10 text-blue-400 border-blue-400/20",
         icon: "🔴",
         description: "Highly selective",
     },
@@ -74,19 +74,19 @@ const difficultyConfig = {
 const deadlineConfig = {
     urgent: {
         label: "Urgent",
-        color: "bg-red-500/10 text-red-600 border-red-500/20",
+        color: "bg-blue-400/10 text-blue-400 border-blue-400/20",
         icon: <Zap className="h-3 w-3" />,
         emoji: "⚡",
     },
     soon: {
         label: "Closing Soon",
-        color: "bg-amber-500/10 text-amber-600 border-amber-500/20",
+        color: "bg-blue-400/10 text-blue-400 border-blue-400/20",
         icon: <Clock className="h-3 w-3" />,
         emoji: "⏰",
     },
     flexible: {
         label: "Flexible",
-        color: "bg-emerald-500/10 text-emerald-600 border-emerald-500/20",
+        color: "bg-blue-400/10 text-blue-400 border-blue-400/20",
         icon: <Calendar className="h-3 w-3" />,
         emoji: "📅",
     },
@@ -235,9 +235,9 @@ export function QuickViewSummary({
                     {isLoading ? (
                         <Loader2 className="h-3.5 w-3.5 animate-spin text-primary" />
                     ) : summary?.success ? (
-                        <CheckCircle2 className="h-3.5 w-3.5 text-green-500" />
+                        <CheckCircle2 className="h-3.5 w-3.5 text-blue-400" />
                     ) : error ? (
-                        <AlertTriangle className="h-3.5 w-3.5 text-amber-500" />
+                        <AlertTriangle className="h-3.5 w-3.5 text-blue-400" />
                     ) : (
                         <Eye className="h-3.5 w-3.5" />
                     )}
@@ -303,7 +303,7 @@ export function QuickViewSummary({
                                 {summary.summary.is_expired && (
                                     <Badge
                                         variant="outline"
-                                        className="text-[11px] px-2 py-0.5 bg-red-500/10 text-red-500 border-red-500/20"
+                                        className="text-[11px] px-2 py-0.5 bg-blue-400/10 text-blue-400 border-blue-400/20"
                                     >
                                         ❌ Expired
                                     </Badge>
@@ -340,10 +340,10 @@ export function QuickViewSummary({
                                         className={cn(
                                             "text-[10px] font-medium",
                                             confidencePercent >= 70
-                                                ? "text-emerald-500"
+                                                ? "text-blue-400"
                                                 : confidencePercent >= 40
-                                                    ? "text-amber-500"
-                                                    : "text-red-500"
+                                                    ? "text-blue-400"
+                                                    : "text-blue-400"
                                         )}
                                     >
                                         {confidencePercent}% confidence
@@ -421,22 +421,22 @@ export function SummaryBadges({
                 </Badge>
             )}
             {summary.is_expired && (
-                <Badge variant="outline" className="text-[10px] px-1.5 py-0 h-4 bg-red-500/10 text-red-500 border-red-500/20">
+                <Badge variant="outline" className="text-[10px] px-1.5 py-0 h-4 bg-blue-400/10 text-blue-400 border-blue-400/20">
                     ❌ Expired
                 </Badge>
             )}
             {hasStipend && (
-                <Badge variant="outline" className="text-[10px] px-1.5 py-0 h-4 bg-green-500/10 text-green-600 border-green-500/20">
+                <Badge variant="outline" className="text-[10px] px-1.5 py-0 h-4 bg-blue-400/10 text-blue-400 border-blue-400/20">
                     💰 Stipend
                 </Badge>
             )}
             {hasMentorship && (
-                <Badge variant="outline" className="text-[10px] px-1.5 py-0 h-4 bg-blue-500/10 text-blue-600 border-blue-500/20">
+                <Badge variant="outline" className="text-[10px] px-1.5 py-0 h-4 bg-blue-400/10 text-blue-400 border-blue-400/20">
                     🎓 Mentorship
                 </Badge>
             )}
             {hasCertificate && (
-                <Badge variant="outline" className="text-[10px] px-1.5 py-0 h-4 bg-violet-500/10 text-violet-600 border-violet-500/20">
+                <Badge variant="outline" className="text-[10px] px-1.5 py-0 h-4 bg-blue-400/10 text-blue-400 border-blue-400/20">
                     📜 Certificate
                 </Badge>
             )}

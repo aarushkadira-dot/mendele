@@ -116,8 +116,8 @@ export function KnownBugsModal() {
                         transition={{ duration: 0.2 }}
                     >
                         <div className="bg-[#0a0a0a] rounded-3xl border border-white/10 p-8 shadow-2xl flex flex-col items-center text-center">
-                            <div className="mb-6 w-16 h-16 rounded-full bg-blue-500/10 border border-blue-500/20 flex items-center justify-center">
-                                <Bug className="w-8 h-8 text-blue-500" />
+                            <div className="mb-6 w-16 h-16 rounded-full bg-blue-400/10 border border-blue-400/20 flex items-center justify-center">
+                                <Bug className="w-8 h-8 text-blue-400" />
                             </div>
 
                             <h2 className="text-2xl font-bold text-white mb-4">
@@ -142,7 +142,7 @@ export function KnownBugsModal() {
 
                             <button
                                 onClick={handleDismiss}
-                                className="w-full py-4 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-medium transition-colors shadow-lg shadow-blue-600/20 active:scale-[0.98]"
+                                className="w-full py-4 rounded-xl bg-blue-400/10 hover:bg-blue-400/10 text-white font-medium transition-colors shadow-lg shadow-blue-400/20 active:scale-[0.98]"
                             >
                                 Continue
                             </button>

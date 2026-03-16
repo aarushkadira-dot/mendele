@@ -91,7 +91,7 @@ export function OpportunityList({
         className="flex flex-col items-center justify-center py-20 text-center"
       >
         <div className="relative">
-          <div className="h-24 w-24 rounded-full bg-gradient-to-br from-muted/80 to-muted/40 flex items-center justify-center mb-6 shadow-inner">
+          <div className="h-24 w-24 rounded-full    flex items-center justify-center mb-6 shadow-inner">
             <Sparkles className="h-12 w-12 text-muted-foreground/40" />
           </div>
           <motion.div
@@ -198,15 +198,15 @@ export function OpportunityList({
           >
             <div className="flex items-center justify-between mb-6">
               <div className="flex items-center gap-3">
-                <div className="p-2.5 rounded-xl bg-amber-500/10 border border-amber-500/20 shadow-sm backdrop-blur-sm">
-                  <Sparkles className="h-5 w-5 text-amber-500" />
+                <div className="p-2.5 rounded-xl bg-blue-400/10 border border-blue-400/20 shadow-sm backdrop-blur-sm">
+                  <Sparkles className="h-5 w-5 text-blue-400" />
                 </div>
                 <div>
                   <h2 className="text-xl font-bold text-foreground tracking-tight">Top Matches</h2>
                   <p className="text-sm text-muted-foreground">Opportunities that best match your profile</p>
                 </div>
               </div>
-              <div className="hidden sm:flex items-center gap-1.5 text-xs font-medium text-emerald-600 bg-emerald-500/10 border border-emerald-500/20 px-3 py-1 rounded-full">
+              <div className="hidden sm:flex items-center gap-1.5 text-xs font-medium text-blue-400 bg-blue-400/10 border border-blue-400/20 px-3 py-1 rounded-full">
                 <TrendingUp className="h-3.5 w-3.5" />
                 85%+ match score
               </div>
@@ -239,8 +239,8 @@ export function OpportunityList({
             animate="visible"
           >
             <div className="flex items-center gap-3 mb-6">
-              <div className="p-2.5 rounded-xl bg-blue-500/10 border border-blue-500/20 shadow-sm backdrop-blur-sm">
-                <Zap className="h-5 w-5 text-blue-500" />
+              <div className="p-2.5 rounded-xl bg-blue-400/10 border border-blue-400/20 shadow-sm backdrop-blur-sm">
+                <Zap className="h-5 w-5 text-blue-400" />
               </div>
               <div>
                 <h2 className="text-xl font-bold text-foreground tracking-tight">Recommended for You</h2>

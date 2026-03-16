@@ -30,7 +30,7 @@ export async function POST(req: NextRequest) {
     const tierWordCount: Record<string, string> = {
       phd_professor: "≤180 words, formal, research-focused — cite their specific published work",
       postdoc: "≤150 words, collegial, collaborative framing",
-      grad_student: "≤150 words, collegial, peer-to-peer tone",
+      grad_student: "≤150 words, collegial, peer- tone",
       partner_vc: "≤160 words, business-focused, lead with impact and scalability",
       angel_investor: "≤160 words, business-focused, mention traction or key insight",
       accelerator: "≤150 words, structured, explicitly mention program fit",

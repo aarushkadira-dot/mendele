@@ -44,9 +44,9 @@ export default async function RootLayout({
         />
       </head>
       <body className={`font-sans antialiased`}>
-        <div className="fixed inset-0 -z-0 bg-gradient-to-br from-primary/10 via-background to-secondary/10">
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-primary/20 via-transparent to-transparent" />
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_left,_var(--tw-gradient-stops))] from-secondary/20 via-transparent to-transparent" />
+        <div className="fixed inset-0 -z-0    ">
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))]   " />
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_left,_var(--tw-gradient-stops))]   " />
         </div>
 
         <ThemeProvider

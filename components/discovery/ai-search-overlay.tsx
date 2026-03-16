@@ -118,7 +118,7 @@ export function AiSearchOverlay({ isOpen, query, onClose, onComplete }: AiSearch
                 {/* Header */}
                 <div className="p-6 border-b border-border flex items-center justify-between bg-muted/30">
                     <div className="flex items-center gap-3">
-                        <div className={`p-2 rounded-full ${phase === 'complete' ? 'bg-green-500/10 text-green-500' : 'bg-primary/10 text-primary'}`}>
+                        <div className={`p-2 rounded-full ${phase === 'complete' ? 'bg-blue-400/10 text-blue-400' : 'bg-primary/10 text-primary'}`}>
                             {phase === 'planning' && <BrainCircuit className="h-6 w-6 animate-pulse" />}
                             {phase === 'searching' && <Globe className="h-6 w-6 animate-spin-slow" />}
                             {phase === 'analyzing' && <Sparkles className="h-6 w-6 animate-pulse" />}
@@ -151,7 +151,7 @@ export function AiSearchOverlay({ isOpen, query, onClose, onComplete }: AiSearch
                                     className="flex gap-2 text-xs"
                                 >
                                     <span className="text-muted-foreground w-16 shrink-0 text-[10px] uppercase tracking-wider">{evt.type}</span>
-                                    <span className={evt.type === 'error' ? 'text-red-500' : 'text-foreground'}>
+                                    <span className={evt.type === 'error' ? 'text-blue-400' : 'text-foreground'}>
                                         {evt.message || evt.query || (evt.url ? `Found: ${evt.source}` : '') || (evt.card ? `Extracted: ${evt.card.title}` : '')}
                                     </span>
                                 </motion.div>
@@ -160,7 +160,7 @@ export function AiSearchOverlay({ isOpen, query, onClose, onComplete }: AiSearch
                     </div>
 
                     {/* Right: Visualizer */}
-                    <div className="flex-1 p-6 relative bg-gradient-to-br from-background to-muted/20">
+                    <div className="flex-1 p-6 relative   ">
                         {/* Fan-out Visualization */}
                         <div className="grid grid-cols-2 gap-4">
                             <AnimatePresence>
@@ -173,13 +173,13 @@ export function AiSearchOverlay({ isOpen, query, onClose, onComplete }: AiSearch
                                         className={`
                       relative overflow-hidden rounded-lg border p-4 transition-colors
                       ${item.status === 'scanning' ? 'border-primary shadow-lg shadow-primary/10 bg-card' : ''}
-                      ${item.status === 'extracted' ? 'border-green-500 bg-green-500/5' : 'border-border bg-card/50'}
+                      ${item.status === 'extracted' ? 'border-blue-400/20 bg-blue-400/5' : 'border-border bg-card/50'}
                     `}
                                     >
                                         {/* Scanning Beam */}
                                         {item.status === 'scanning' && (
                                             <motion.div
-                                                className="absolute inset-0 bg-gradient-to-r from-transparent via-primary/10 to-transparent w-full h-full -skew-x-12"
+                                                className="absolute inset-0     w-full h-full -skew-x-12"
                                                 animate={{ x: ['-100%', '100%'] }}
                                                 transition={{ duration: 1.5, repeat: Infinity, ease: "linear" }}
                                             />
@@ -188,7 +188,7 @@ export function AiSearchOverlay({ isOpen, query, onClose, onComplete }: AiSearch
                                         <div className="flex items-start gap-3 relative z-10">
                                             <div className={`
                         p-1.5 rounded-md shrink-0 
-                        ${item.status === 'extracted' ? 'bg-green-500 text-white' : 'bg-muted text-muted-foreground'}
+                        ${item.status === 'extracted' ? 'bg-blue-400/10 text-white' : 'bg-muted text-muted-foreground'}
                       `}>
                                                 {item.status === 'extracted' ? <CheckCircle2 className="h-4 w-4" /> : <Globe className="h-4 w-4" />}
                                             </div>

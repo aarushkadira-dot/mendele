@@ -121,15 +121,15 @@ function LayerRow({ layer, index, icon: Icon, stats, duration, onToggle }: Layer
   const statusIcon = {
     pending: <Clock className="h-3.5 w-3.5 text-muted-foreground" />,
     running: <Loader2 className="h-3.5 w-3.5 text-primary animate-spin" />,
-    complete: <CheckCircle2 className="h-3.5 w-3.5 text-green-500" />,
-    error: <AlertCircle className="h-3.5 w-3.5 text-red-500" />,
+    complete: <CheckCircle2 className="h-3.5 w-3.5 text-blue-400" />,
+    error: <AlertCircle className="h-3.5 w-3.5 text-blue-400" />,
   }
   
   const rowStyles = {
     pending: 'opacity-50',
     running: 'border-primary/50 bg-primary/5',
-    complete: 'border-green-500/30 bg-green-500/5',
-    error: 'border-red-500/30 bg-red-500/5',
+    complete: 'border-blue-400/30 bg-blue-400/5',
+    error: 'border-blue-400/30 bg-blue-400/5',
   }
   
   return (
@@ -151,16 +151,16 @@ function LayerRow({ layer, index, icon: Icon, stats, duration, onToggle }: Layer
         <div className={cn(
           'p-1.5 rounded-md',
           status === 'running' && 'bg-primary/10',
-          status === 'complete' && 'bg-green-500/10',
+          status === 'complete' && 'bg-blue-400/10',
           status === 'pending' && 'bg-muted',
-          status === 'error' && 'bg-red-500/10'
+          status === 'error' && 'bg-blue-400/10'
         )}>
           <Icon className={cn(
             'h-4 w-4',
             status === 'running' && 'text-primary',
-            status === 'complete' && 'text-green-500',
+            status === 'complete' && 'text-blue-400',
             status === 'pending' && 'text-muted-foreground',
-            status === 'error' && 'text-red-500'
+            status === 'error' && 'text-blue-400'
           )} />
         </div>
         
@@ -174,9 +174,9 @@ function LayerRow({ layer, index, icon: Icon, stats, duration, onToggle }: Layer
         {stats && (
           <span className={cn(
             'text-xs px-2 py-0.5 rounded-full',
-            status === 'complete' && 'bg-green-500/10 text-green-600',
+            status === 'complete' && 'bg-blue-400/10 text-blue-400',
             status === 'running' && 'bg-primary/10 text-primary',
-            status === 'error' && 'bg-red-500/10 text-red-600'
+            status === 'error' && 'bg-blue-400/10 text-blue-400'
           )}>
             {stats}
           </span>
@@ -267,21 +267,21 @@ function LayerItems({ items, layerId }: LayerItemsProps) {
             key={`${item.id}-${index}`}
             className={cn(
               'flex items-center gap-2 p-2 rounded text-xs',
-              item.status === 'success' && 'bg-green-500/5 border border-green-500/20',
+              item.status === 'success' && 'bg-blue-400/5 border border-blue-400/20',
               item.status === 'running' && 'bg-primary/5 border border-primary/20',
-              item.status === 'failed' && 'bg-red-500/5 border border-red-500/20'
+              item.status === 'failed' && 'bg-blue-400/5 border border-blue-400/20'
             )}
           >
-            {item.status === 'success' && <CheckCircle2 className="h-3 w-3 text-green-500 shrink-0" />}
+            {item.status === 'success' && <CheckCircle2 className="h-3 w-3 text-blue-400 shrink-0" />}
             {item.status === 'running' && <Loader2 className="h-3 w-3 text-primary animate-spin shrink-0" />}
-            {item.status === 'failed' && <AlertCircle className="h-3 w-3 text-red-500 shrink-0" />}
+            {item.status === 'failed' && <AlertCircle className="h-3 w-3 text-blue-400 shrink-0" />}
             <span className="flex-1 truncate font-medium">{item.label}</span>
             {item.confidence !== undefined && (
               <span className={cn(
                 'text-[10px] px-1.5 py-0.5 rounded',
-                item.confidence >= 0.8 && 'bg-green-500/10 text-green-600',
-                item.confidence >= 0.6 && item.confidence < 0.8 && 'bg-yellow-500/10 text-yellow-600',
-                item.confidence < 0.6 && 'bg-red-500/10 text-red-600'
+                item.confidence >= 0.8 && 'bg-blue-400/10 text-blue-400',
+                item.confidence >= 0.6 && item.confidence < 0.8 && 'bg-blue-400/10 text-blue-400',
+                item.confidence < 0.6 && 'bg-blue-400/10 text-blue-400'
               )}>
                 {Math.round(item.confidence * 100)}%
               </span>
@@ -307,16 +307,16 @@ function LayerItems({ items, layerId }: LayerItemsProps) {
           animate={{ opacity: 1, scale: 1 }}
           className={cn(
             'relative text-xs px-2 py-1 rounded-full border overflow-hidden',
-            item.status === 'success' && 'border-green-500/30 bg-green-500/5 text-green-600',
+            item.status === 'success' && 'border-blue-400/30 bg-blue-400/5 text-blue-400',
             item.status === 'running' && 'border-primary/30 bg-primary/5 text-primary',
-            item.status === 'failed' && 'border-red-500/30 bg-red-500/5 text-red-600',
+            item.status === 'failed' && 'border-blue-400/30 bg-blue-400/5 text-blue-400',
             item.status === 'pending' && 'border-border bg-muted text-muted-foreground'
           )}
         >
           {/* Scanning shimmer */}
           {item.status === 'running' && (
             <motion.div
-              className="absolute inset-0 bg-gradient-to-r from-transparent via-primary/10 to-transparent"
+              className="absolute inset-0    "
               animate={{ x: ['-100%', '100%'] }}
               transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
             />

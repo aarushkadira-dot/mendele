@@ -28,7 +28,7 @@ interface ConnectionCardProps {
 export function ConnectionCard({ connection, onConnect, onMessage }: ConnectionCardProps) {
   const statusConfig = {
     connected: { label: "Connected", color: "bg-secondary/10 text-secondary", icon: Check },
-    pending: { label: "Pending", color: "bg-amber-500/10 text-amber-500", icon: Clock },
+    pending: { label: "Pending", color: "bg-blue-400/10 text-blue-400", icon: Clock },
     suggested: { label: "Suggested", color: "bg-primary/10 text-primary", icon: Sparkles },
   }
 

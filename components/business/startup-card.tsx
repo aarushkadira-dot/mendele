@@ -10,10 +10,10 @@ import type { Project } from "@/lib/projects"
 
 function GradeBadge({ grade }: { grade: string }) {
   const config = {
-    A: { bg: "bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border-emerald-500/20", label: "Investor Ready" },
-    B: { bg: "bg-blue-500/10 text-blue-700 dark:text-blue-400 border-blue-500/20", label: "Fundable" },
-    C: { bg: "bg-amber-500/10 text-amber-700 dark:text-amber-400 border-amber-500/20", label: "Early Stage" },
-    D: { bg: "bg-orange-500/10 text-orange-700 dark:text-orange-400 border-orange-500/20", label: "Idea Phase" },
+    A: { bg: "bg-blue-400/10 text-blue-400 dark:text-blue-400 border-blue-400/20", label: "Investor Ready" },
+    B: { bg: "bg-blue-400/10 text-blue-400 dark:text-blue-400 border-blue-400/20", label: "Fundable" },
+    C: { bg: "bg-blue-400/10 text-blue-400 dark:text-blue-400 border-blue-400/20", label: "Early Stage" },
+    D: { bg: "bg-blue-400/10 text-blue-400 dark:text-blue-400 border-blue-400/20", label: "Idea Phase" },
   }[grade] ?? { bg: "bg-muted/50 text-muted-foreground border-transparent", label: grade }
 
   return (

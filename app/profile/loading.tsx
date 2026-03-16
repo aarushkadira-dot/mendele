@@ -6,7 +6,7 @@ export default function ProfileLoading() {
     <div className="space-y-6 container mx-auto px-4 sm:px-6 max-w-7xl py-6">
       {/* Profile Header Skeleton */}
       <Card className="border-border overflow-hidden">
-        <div className="h-32 bg-gradient-to-r from-primary/20 via-secondary/20 to-primary/10" />
+        <div className="h-32    " />
         <CardContent className="relative pb-6">
           <div className="flex flex-col sm:flex-row sm:items-end gap-4 -mt-16">
             <Skeleton className="h-32 w-32 rounded-full" />

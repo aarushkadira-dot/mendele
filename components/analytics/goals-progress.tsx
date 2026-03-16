@@ -68,8 +68,8 @@ export function GoalsProgress() {
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case "completed": return <CheckCircle2 className="h-4 w-4 text-green-500 mt-0.5 flex-shrink-0" />
-      case "in_progress": return <Clock className="h-4 w-4 text-blue-500 mt-0.5 flex-shrink-0" />
+      case "completed": return <CheckCircle2 className="h-4 w-4 text-blue-400 mt-0.5 flex-shrink-0" />
+      case "in_progress": return <Clock className="h-4 w-4 text-blue-400 mt-0.5 flex-shrink-0" />
       default: return <Circle className="h-4 w-4 text-muted-foreground mt-0.5 flex-shrink-0" />
     }
   }
@@ -97,12 +97,12 @@ export function GoalsProgress() {
               <div className="font-semibold text-foreground">{progress.pending}</div>
               <div className="text-muted-foreground">Pending</div>
             </div>
-            <div className="rounded-lg bg-blue-500/10 p-2">
-              <div className="font-semibold text-blue-600">{progress.inProgress}</div>
+            <div className="rounded-lg bg-blue-400/10 p-2">
+              <div className="font-semibold text-blue-400">{progress.inProgress}</div>
               <div className="text-muted-foreground">In Progress</div>
             </div>
-            <div className="rounded-lg bg-green-500/10 p-2">
-              <div className="font-semibold text-green-600">{progress.completed}</div>
+            <div className="rounded-lg bg-blue-400/10 p-2">
+              <div className="font-semibold text-blue-400">{progress.completed}</div>
               <div className="text-muted-foreground">Completed</div>
             </div>
           </div>

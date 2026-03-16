@@ -29,31 +29,31 @@ interface ExtracurricularsSectionProps {
 
 const typeConfig: Record<string, { color: string; icon: React.ElementType; gradient: string }> = {
   Research: { 
-    color: "bg-violet-500/10 text-violet-600 dark:text-violet-400 border-violet-500/20", 
+    color: "bg-blue-400/10 text-blue-400 dark:text-blue-400 border-blue-400/20", 
     icon: FlaskConical,
-    gradient: "from-violet-500/5 to-transparent"
+    gradient: " "
   },
   Leadership: { 
-    color: "bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/20", 
+    color: "bg-blue-400/10 text-blue-400 dark:text-blue-400 border-blue-400/20", 
     icon: Crown,
-    gradient: "from-amber-500/5 to-transparent"
+    gradient: " "
   },
   Technical: { 
-    color: "bg-blue-500/10 text-blue-600 dark:text-blue-400 border-blue-500/20", 
+    color: "bg-blue-400/10 text-blue-400 dark:text-blue-400 border-blue-400/20", 
     icon: Wrench,
-    gradient: "from-blue-500/5 to-transparent"
+    gradient: " "
   },
   Volunteer: { 
-    color: "bg-rose-500/10 text-rose-600 dark:text-rose-400 border-rose-500/20", 
+    color: "bg-blue-400/10 text-blue-400 dark:text-blue-400 border-blue-400/20", 
     icon: Heart,
-    gradient: "from-rose-500/5 to-transparent"
+    gradient: " "
   },
 }
 
 const defaultTypeConfig = {
   color: "bg-muted text-muted-foreground border-border",
   icon: Calendar,
-  gradient: "from-muted/50 to-transparent"
+  gradient: " "
 }
 
 function isCurrentActivity(endDate: string): boolean {
@@ -85,7 +85,7 @@ function ActivityCard({ activity, onEdit, onDelete, isDeleting }: ActivityCardPr
       onClick={() => hasDescription && setIsExpanded(!isExpanded)}
     >
       {/* Gradient accent based on type */}
-      <div className={`absolute inset-0 bg-gradient-to-r ${config.gradient} pointer-events-none`} />
+      <div className={`absolute inset-0  ${config.gradient} pointer-events-none`} />
       
       <div className="relative p-4">
         <div className="flex gap-4">
@@ -119,7 +119,7 @@ function ActivityCard({ activity, onEdit, onDelete, isDeleting }: ActivityCardPr
                 <div className="flex items-center gap-2 flex-wrap">
                   <h4 className="font-semibold text-foreground">{activity.title}</h4>
                   {isCurrent && (
-                    <Badge className="bg-green-500/10 text-green-600 dark:text-green-400 border-green-500/20 text-xs px-2 py-0">
+                    <Badge className="bg-blue-400/10 text-blue-400 dark:text-blue-400 border-blue-400/20 text-xs px-2 py-0">
                       Current
                     </Badge>
                   )}

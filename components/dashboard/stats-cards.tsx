@@ -41,16 +41,16 @@ export function StatsCards({ statsData }: StatsCardsProps) {
       value: statsData.searchAppearances.value,
       change: statsData.searchAppearances.change,
       icon: Search,
-      color: "text-amber-500",
-      bgColor: "bg-amber-500/10",
+      color: "text-blue-400",
+      bgColor: "bg-blue-400/10",
     },
     {
       title: "Projects",
       value: statsData.projects.value,
       change: statsData.projects.change,
       icon: FolderKanban,
-      color: "text-rose-500",
-      bgColor: "bg-rose-500/10",
+      color: "text-blue-400",
+      bgColor: "bg-blue-400/10",
     },
   ]
 

@@ -25,9 +25,9 @@ const difficultyLevels = [
 ]
 
 const deadlineStatuses = [
-  { value: "urgent", label: "Urgent", icon: <Zap className="h-3 w-3" />, color: "text-red-500" },
-  { value: "soon", label: "Closing Soon", icon: <Clock className="h-3 w-3" />, color: "text-amber-500" },
-  { value: "flexible", label: "Flexible", icon: <Calendar className="h-3 w-3" />, color: "text-emerald-500" },
+  { value: "urgent", label: "Urgent", icon: <Zap className="h-3 w-3" />, color: "text-blue-400" },
+  { value: "soon", label: "Closing Soon", icon: <Clock className="h-3 w-3" />, color: "text-blue-400" },
+  { value: "flexible", label: "Flexible", icon: <Calendar className="h-3 w-3" />, color: "text-blue-400" },
   { value: "expired", label: "Expired", icon: <XCircle className="h-3 w-3" />, color: "text-slate-400" },
 ]
 

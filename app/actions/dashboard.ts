@@ -1,6 +1,6 @@
 "use server"
 
-import { createClient, getCurrentUser } from "@/lib/supabase/server"
+import { createClient, getCurrentUser, isDev } from "@/lib/supabase/server"
 import type { User, Opportunity, UserOpportunity } from "@/lib/types"
 import { getAnalyticsSummary } from "./analytics"
 
@@ -18,9 +18,38 @@ export async function getDashboardData() {
     .eq("id", authUser.id)
     .single()
 
+
   const user = userData as User | null
 
   if (userError || !user) {
+    if (isDev() || userError?.message === 'Supabase not configured') {
+      // Return mock data for dev if supabase is missing or user not found
+      return {
+        user: {
+          id: authUser.id,
+          name: (authUser as any).user_metadata?.full_name || authUser.email?.split('@')[0] || "User",
+          email: authUser.email || "",
+          avatar: (authUser as any).user_metadata?.avatar_url || null,
+          headline: "High School Student",
+          bio: "",
+          skills: [],
+          interests: [],
+          connections: 12,
+          completedProjects: 2,
+          profileViews: 45,
+          searchAppearances: 8,
+          profileCompleteness: 65,
+        },
+        dailyDigest: {
+          unreadMessages: 3,
+          newOpportunities: 12,
+          pendingConnections: 4,
+        },
+        stats: stats || {},
+        spotlightOpportunity: null,
+        recentActivities: [],
+      } as any
+    }
     return null
   }
 

@@ -60,7 +60,7 @@ export function WelcomeModal() {
                         }}
                     >
                         {/* Glowing border effect */}
-                        <div className="absolute -inset-[1px] rounded-2xl bg-gradient-to-r from-primary/50 via-secondary/50 to-primary/50 blur-sm opacity-75" />
+                        <div className="absolute -inset-[1px] rounded-2xl     blur-sm opacity-75" />
 
                         <div className="relative bg-background/95 backdrop-blur-xl rounded-2xl border border-border/50 p-8 shadow-2xl">
                             {/* Header icon */}
@@ -70,14 +70,14 @@ export function WelcomeModal() {
                                 animate={{ scale: 1 }}
                                 transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
                             >
-                                <div className="p-4 rounded-full bg-gradient-to-br from-primary/20 to-secondary/20 border border-primary/30">
+                                <div className="p-4 rounded-full    border border-primary/30">
                                     <Sparkles className="w-8 h-8 text-primary" />
                                 </div>
                             </motion.div>
 
                             {/* Title */}
                             <motion.h2
-                                className="text-2xl font-bold text-center mb-4 bg-gradient-to-r from-foreground to-foreground/80 bg-clip-text"
+                                className="text-2xl font-bold text-center mb-4    bg-clip-text"
                                 initial={{ opacity: 0, y: 10 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ delay: 0.3 }}
@@ -129,7 +129,7 @@ export function WelcomeModal() {
                             >
                                 <button
                                     onClick={handleContinue}
-                                    className="w-full group flex items-center justify-center gap-2 py-4 px-6 rounded-xl bg-gradient-to-r from-primary to-primary/80 text-primary-foreground font-semibold text-lg shadow-lg shadow-primary/25 hover:shadow-xl hover:shadow-primary/30 hover:scale-[1.02] active:scale-[0.98] transition-all duration-200"
+                                    className="w-full group flex items-center justify-center gap-2 py-4 px-6 rounded-xl    text-primary-foreground font-semibold text-lg shadow-lg shadow-primary/25 hover:shadow-xl hover:shadow-primary/30 hover:scale-[1.02] active:scale-[0.98] transition-all duration-200"
                                 >
                                     Continue to Networkly
                                     <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />

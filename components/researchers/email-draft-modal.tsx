@@ -75,8 +75,8 @@ export function EmailDraftModal({
       <DialogContent className="sm:max-w-xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2 text-xl">
-            <div className="p-2 rounded-lg bg-violet-500/10">
-              <Mail className="h-5 w-5 text-violet-500" />
+            <div className="p-2 rounded-lg bg-blue-400/10">
+              <Mail className="h-5 w-5 text-blue-400" />
             </div>
             Draft Email to {profile.name}
           </DialogTitle>
@@ -92,7 +92,7 @@ export function EmailDraftModal({
               animate={{ opacity: 1 }}
               className="flex flex-col items-center justify-center py-10 gap-3"
             >
-              <Loader2 className="h-8 w-8 text-violet-500 animate-spin" />
+              <Loader2 className="h-8 w-8 text-blue-400 animate-spin" />
               <p className="text-sm text-muted-foreground">Drafting personalized email…</p>
               <div className="w-full space-y-2 mt-2">
                 {[1, 2, 3].map((i) => (
@@ -137,7 +137,7 @@ export function EmailDraftModal({
 
                 {/* Tips */}
                 {profile.contact_strategy && (
-                  <div className="flex items-start gap-2 rounded-lg bg-blue-500/8 border border-blue-500/15 px-3 py-2.5 text-xs text-blue-700 dark:text-blue-300">
+                  <div className="flex items-start gap-2 rounded-lg bg-blue-400/8 border border-blue-400/15 px-3 py-2.5 text-xs text-blue-400 dark:text-blue-300">
                     <Info className="h-3.5 w-3.5 mt-0.5 shrink-0" />
                     <span>
                       <span className="font-semibold">Tip: </span>

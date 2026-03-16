@@ -18,21 +18,21 @@ const insightTypeBadge: Record<
   eligibility_boost: {
     label: "You Qualify ✓",
     className:
-      "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20",
+      "bg-blue-400/10 text-blue-400 dark:text-blue-400 border-blue-400/20",
   },
   strategy_tip: {
     label: "Strategy Tip",
-    className: "bg-blue-500/10 text-blue-600 dark:text-blue-400 border-blue-500/20",
+    className: "bg-blue-400/10 text-blue-400 dark:text-blue-400 border-blue-400/20",
   },
   strong_match: {
     label: "Strong Match ✦",
     className:
-      "bg-violet-500/10 text-violet-600 dark:text-violet-400 border-violet-500/20",
+      "bg-blue-400/10 text-blue-400 dark:text-blue-400 border-blue-400/20",
   },
   stretch_goal: {
     label: "Level Up →",
     className:
-      "bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/20",
+      "bg-blue-400/10 text-blue-400 dark:text-blue-400 border-blue-400/20",
   },
 }
 
@@ -82,10 +82,10 @@ export function AIInsightCard({ opportunity }: AIInsightCardProps) {
   // Loading skeleton
   if (loading) {
     return (
-      <div className="rounded-xl border border-amber-500/20 bg-amber-500/5 p-4 space-y-2.5 animate-pulse">
+      <div className="rounded-xl border border-blue-400/20 bg-blue-400/5 p-4 space-y-2.5 animate-pulse">
         <div className="flex items-center gap-2">
-          <div className="h-6 w-6 rounded-lg bg-amber-500/15" />
-          <div className="h-4 w-24 rounded bg-amber-500/15" />
+          <div className="h-6 w-6 rounded-lg bg-blue-400/15" />
+          <div className="h-4 w-24 rounded bg-blue-400/15" />
           <div className="h-4 w-16 rounded-full bg-muted/50 ml-auto" />
         </div>
         <div className="h-4 w-3/4 rounded bg-muted/40" />
@@ -106,14 +106,14 @@ export function AIInsightCard({ opportunity }: AIInsightCardProps) {
         initial={{ opacity: 0, y: 8 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.3, ease: "easeOut" }}
-        className="rounded-xl border border-amber-500/25 bg-gradient-to-br from-amber-500/8 via-orange-500/5 to-transparent p-4 space-y-2.5"
+        className="rounded-xl border border-blue-400/25     p-4 space-y-2.5"
       >
         {/* Header */}
         <div className="flex items-center gap-2">
-          <div className="p-1.5 rounded-lg bg-amber-500/15 shrink-0">
-            <Lightbulb className="h-3.5 w-3.5 text-amber-600 dark:text-amber-400" />
+          <div className="p-1.5 rounded-lg bg-blue-400/15 shrink-0">
+            <Lightbulb className="h-3.5 w-3.5 text-blue-400 dark:text-blue-400" />
           </div>
-          <span className="text-xs font-semibold text-amber-700 dark:text-amber-300 uppercase tracking-wide">
+          <span className="text-xs font-semibold text-blue-400 dark:text-amber-300 uppercase tracking-wide">
             AI Insight
           </span>
           <Badge

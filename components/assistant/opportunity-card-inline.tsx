@@ -47,17 +47,17 @@ interface OpportunityCardInlineProps {
 function UrgencyBadge({ urgency, daysLeft }: { urgency: 'urgent' | 'soon' | 'upcoming'; daysLeft?: number | null }) {
   const config = {
     urgent: {
-      className: 'bg-red-500/15 text-red-600 border-red-500/30',
+      className: 'bg-blue-400/15 text-blue-400 border-blue-400/30',
       icon: Clock,
       label: daysLeft !== null && daysLeft !== undefined ? `${daysLeft} days left` : 'Due soon',
     },
     soon: {
-      className: 'bg-amber-500/15 text-amber-600 border-amber-500/30',
+      className: 'bg-blue-400/15 text-blue-400 border-blue-400/30',
       icon: Clock,
       label: daysLeft !== null && daysLeft !== undefined ? `${daysLeft} days left` : 'Coming up',
     },
     upcoming: {
-      className: 'bg-blue-500/15 text-blue-600 border-blue-500/30',
+      className: 'bg-blue-400/15 text-blue-400 border-blue-400/30',
       icon: Calendar,
       label: 'Upcoming',
     },
@@ -183,22 +183,22 @@ export function OpportunityCardInline({
 
       {/* Match Reasons - why this opportunity fits the user */}
       {opportunity.matchReasons && opportunity.matchReasons.length > 0 && (
-        <div className="mt-3 p-2.5 rounded-lg bg-green-500/5 border border-green-500/20">
+        <div className="mt-3 p-2.5 rounded-lg bg-blue-400/5 border border-blue-400/20">
           <div className="flex items-center gap-1.5 mb-1.5">
-            <CheckCircle2 className="h-3 w-3 text-green-600" />
-            <span className="text-[10px] font-semibold text-green-700 uppercase tracking-wide">
+            <CheckCircle2 className="h-3 w-3 text-blue-400" />
+            <span className="text-[10px] font-semibold text-blue-400 uppercase tracking-wide">
               Why it matches you
             </span>
             {opportunity.matchScore !== undefined && opportunity.matchScore > 0 && (
-              <span className="ml-auto text-[10px] font-medium text-green-600">
+              <span className="ml-auto text-[10px] font-medium text-blue-400">
                 {opportunity.matchScore}% match
               </span>
             )}
           </div>
           <ul className="space-y-0.5">
             {opportunity.matchReasons.slice(0, 3).map((reason, i) => (
-              <li key={i} className="text-[11px] text-green-700 flex items-start gap-1.5">
-                <span className="text-green-500 mt-0.5">•</span>
+              <li key={i} className="text-[11px] text-blue-400 flex items-start gap-1.5">
+                <span className="text-blue-400 mt-0.5">•</span>
                 {reason}
               </li>
             ))}
@@ -247,7 +247,7 @@ export function OpportunityCardInline({
             size="sm"
             className={cn(
               'h-8 text-xs px-3',
-              isBookmarked && 'bg-amber-500/10 text-amber-600 border-amber-500/30'
+              isBookmarked && 'bg-blue-400/10 text-blue-400 border-blue-400/30'
             )}
             onClick={(e) => { e.stopPropagation(); handleBookmark() }}
             disabled={isBookmarking}

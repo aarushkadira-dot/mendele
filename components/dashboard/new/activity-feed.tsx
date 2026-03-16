@@ -40,10 +40,10 @@ export function ActivityFeed({ activities = [] }: ActivityFeedProps) {
                 <div className="relative flex flex-col items-center">
                   <div className={`
                     w-8 h-8 rounded-full flex items-center justify-center shrink-0 z-10 border-2 border-background
-                    ${activity.type === 'application' ? 'bg-blue-500/20 text-blue-500' : ''}
-                    ${activity.type === 'connection' ? 'bg-emerald-500/20 text-emerald-500' : ''}
-                    ${activity.type === 'profile' ? 'bg-amber-500/20 text-amber-500' : ''}
-                    ${activity.type === 'opportunity' ? 'bg-purple-500/20 text-purple-500' : ''}
+                    ${activity.type === 'application' ? 'bg-blue-400/20 text-blue-400' : ''}
+                    ${activity.type === 'connection' ? 'bg-blue-400/20 text-blue-400' : ''}
+                    ${activity.type === 'profile' ? 'bg-blue-400/20 text-blue-400' : ''}
+                    ${activity.type === 'opportunity' ? 'bg-blue-400/20 text-blue-400' : ''}
                   `}>
                     {activity.type === 'application' && <Briefcase className="w-4 h-4" />}
                     {activity.type === 'connection' && <UserPlus className="w-4 h-4" />}

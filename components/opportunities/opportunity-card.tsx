@@ -44,11 +44,11 @@ interface OpportunityCardProps {
 }
 
 const statusColors: Record<string, string> = {
-  interested: "bg-blue-500/10 text-blue-600 border-blue-200",
-  applied: "bg-green-500/10 text-green-600 border-green-200",
-  interviewing: "bg-purple-500/10 text-purple-600 border-purple-200",
-  rejected: "bg-red-500/10 text-red-600 border-red-200",
-  offer: "bg-amber-500/10 text-amber-600 border-amber-200",
+  interested: "bg-blue-400/10 text-blue-400 border-blue-200",
+  applied: "bg-blue-400/10 text-blue-400 border-green-200",
+  interviewing: "bg-blue-400/10 text-blue-400 border-purple-200",
+  rejected: "bg-blue-400/10 text-blue-400 border-red-200",
+  offer: "bg-blue-400/10 text-blue-400 border-amber-200",
   dismissed: "bg-gray-500/10 text-gray-600 border-gray-200",
 }
 
@@ -128,13 +128,13 @@ export function OpportunityCard({
               style={{ background: getTypeGradientStyle(opportunity.type) }}
             >
               <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-10" />
-              <div className="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-card to-transparent" />
+              <div className="absolute bottom-0 left-0 right-0 h-16   " />
             </div>
 
             <div className="absolute top-3 left-3 right-3 flex justify-between items-start z-10">
               <div className="flex gap-2">
                 {isExpired && (
-                  <Badge className="text-xs font-medium shadow-lg bg-amber-500/90 hover:bg-amber-500 text-white border-0">
+                  <Badge className="text-xs font-medium shadow-lg bg-blue-400/90 hover:bg-blue-400/10 text-white border-0">
                     May be closed
                   </Badge>
                 )}
@@ -146,7 +146,7 @@ export function OpportunityCard({
               </div>
 
               {hasPrizes && (
-                <Badge className="bg-amber-500/90 hover:bg-amber-500 text-white shadow-lg gap-1">
+                <Badge className="bg-blue-400/90 hover:bg-blue-400/10 text-white shadow-lg gap-1">
                   <Trophy className="h-3 w-3" />
                   Prizes
                 </Badge>
@@ -163,7 +163,7 @@ export function OpportunityCard({
                     alt={opportunity.company}
                     className="object-cover"
                   />
-                  <AvatarFallback className="rounded-lg text-base font-bold bg-gradient-to-br from-muted to-muted/50 text-muted-foreground">
+                  <AvatarFallback className="rounded-lg text-base font-bold    text-muted-foreground">
                     {opportunity.company[0]}
                   </AvatarFallback>
                 </Avatar>
@@ -218,7 +218,7 @@ export function OpportunityCard({
                 <p className="text-sm text-muted-foreground mt-1 flex items-center gap-1.5">
                   <span className="truncate">{opportunity.company}</span>
                   {opportunity.remote && (
-                    <Badge variant="secondary" className="text-[10px] px-1.5 py-0 h-4 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-0">
+                    <Badge variant="secondary" className="text-[10px] px-1.5 py-0 h-4 bg-blue-400/10 text-blue-400 dark:text-blue-400 border-0">
                       <Globe className="h-2.5 w-2.5 mr-0.5" />
                       Remote
                     </Badge>
@@ -236,7 +236,7 @@ export function OpportunityCard({
                   </Badge>
                 )}
                 {isFree && (
-                  <Badge variant="secondary" className="text-xs px-2 py-0.5 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-medium">
+                  <Badge variant="secondary" className="text-xs px-2 py-0.5 bg-blue-400/10 text-blue-400 dark:text-blue-400 font-medium">
                     Free
                   </Badge>
                 )}
@@ -298,7 +298,7 @@ export function OpportunityCard({
               {isExpired ? (
                 <Button
                   size="sm"
-                  className="flex-1 h-9 text-xs font-medium shadow-sm gap-1.5 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white"
+                  className="flex-1 h-9 text-xs font-medium shadow-sm gap-1.5    hover: hover: text-white"
                   onClick={(e) => {
                     e.stopPropagation()
                     setProfessorModalOpen(true)

@@ -170,7 +170,7 @@ export function InlineDiscovery({ isActive, query, onComplete, onNewOpportunity 
                     {/* Status Icon */}
                     <div className={cn(
                         "flex items-center justify-center p-1.5 rounded-full shrink-0 transition-colors duration-500",
-                        isComplete ? "bg-emerald-500/20 text-emerald-400" : "bg-primary/20 text-primary"
+                        isComplete ? "bg-blue-400/20 text-blue-400" : "bg-primary/20 text-primary"
                     )}>
                         {isRunning && <Loader2 className="h-4 w-4 animate-spin" />}
                         {isComplete && <CheckCircle2 className="h-4 w-4" />}
@@ -202,8 +202,8 @@ export function InlineDiscovery({ isActive, query, onComplete, onNewOpportunity 
 
                     {/* Completion Badge */}
                     {state.foundCount > 0 && (
-                        <div className="hidden sm:flex shrink-0 items-center justify-center min-w-[24px] h-6 px-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20">
-                            <span className="text-[10px] font-bold text-emerald-500">
+                        <div className="hidden sm:flex shrink-0 items-center justify-center min-w-[24px] h-6 px-1.5 rounded-full bg-blue-400/10 border border-blue-400/20">
+                            <span className="text-[10px] font-bold text-blue-400">
                                 {state.foundCount}
                             </span>
                         </div>

@@ -44,26 +44,39 @@ type TimelineItem = {
 
 export function ProfileTimeline({ achievements, extracurriculars }: ProfileTimelineProps) {
   const items: TimelineItem[] = useMemo(() => {
-    const achievementItems: TimelineItem[] = achievements.map(a => ({
-      id: `ach-${a.id}`,
-      type: 'achievement',
-      title: a.title,
-      date: new Date(a.date),
-      dateLabel: format(new Date(a.date), "MMM yyyy"),
-      icon: a.icon,
-      category: 'Achievement'
-    }))
+    const safeFormat = (dateStr: string | undefined, formatStr: string) => {
+      if (!dateStr) return "N/A"
+      const d = new Date(dateStr)
+      if (isNaN(d.getTime())) return dateStr || "N/A"
+      return format(d, formatStr)
+    }
 
-    const activityItems: TimelineItem[] = extracurriculars.map(e => ({
-      id: `ext-${e.id}`,
-      type: 'extracurricular',
-      title: e.title,
-      subtitle: e.organization,
-      date: new Date(e.startDate),
-      dateLabel: `${format(new Date(e.startDate), "MMM yyyy")} - ${e.endDate === 'Present' ? 'Present' : format(new Date(e.endDate), "MMM yyyy")}`,
-      description: e.description || undefined,
-      category: e.type
-    }))
+    const achievementItems: TimelineItem[] = achievements.map(a => {
+      const d = new Date(a.date)
+      return {
+        id: `ach-${a.id}`,
+        type: 'achievement',
+        title: a.title,
+        date: isNaN(d.getTime()) ? new Date() : d,
+        dateLabel: safeFormat(a.date, "MMM yyyy"),
+        icon: a.icon,
+        category: 'Achievement'
+      }
+    })
+
+    const activityItems: TimelineItem[] = extracurriculars.map(e => {
+      const d = new Date(e.startDate)
+      return {
+        id: `ext-${e.id}`,
+        type: 'extracurricular',
+        title: e.title,
+        subtitle: e.organization,
+        date: isNaN(d.getTime()) ? new Date() : d,
+        dateLabel: `${safeFormat(e.startDate, "MMM yyyy")} - ${e.endDate === 'Present' ? 'Present' : safeFormat(e.endDate, "MMM yyyy")}`,
+        description: e.description || undefined,
+        category: e.type
+      }
+    })
 
     return [...achievementItems, ...activityItems].sort((a, b) => b.date.getTime() - a.date.getTime())
   }, [achievements, extracurriculars])
@@ -120,7 +133,7 @@ export function ProfileTimeline({ achievements, extracurriculars }: ProfileTimel
               )}
 
               {item.type === 'achievement' && (
-                <div className="flex items-center gap-2 mt-1 text-sm text-amber-500 font-medium">
+                <div className="flex items-center gap-2 mt-1 text-sm text-blue-400 font-medium">
                   <Trophy className="h-4 w-4" />
                   Achievement Unlocked
                 </div>

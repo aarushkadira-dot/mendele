@@ -47,7 +47,7 @@ export function ProjectCard({ project, isOwner = false, onLike, onEdit, onDelete
   const statusColors: Record<string, string> = {
     "In Progress": "bg-primary/10 text-primary",
     Completed: "bg-secondary/10 text-secondary",
-    Planning: "bg-amber-500/10 text-amber-500",
+    Planning: "bg-blue-400/10 text-blue-400",
     "On Hold": "bg-muted text-muted-foreground",
   }
 
@@ -92,7 +92,7 @@ export function ProjectCard({ project, isOwner = false, onLike, onEdit, onDelete
           </div>
           {project.lookingFor.length > 0 && (
             <div className="absolute top-3 right-3">
-              <Badge className="bg-rose-500 text-white border-0 gap-1">
+              <Badge className="bg-blue-400/10 text-white border-0 gap-1">
                 <Users className="h-3 w-3" />
                 Looking for help
               </Badge>

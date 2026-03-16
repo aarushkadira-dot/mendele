@@ -66,7 +66,7 @@ export async function generateInsights(): Promise<Insight[]> {
       title: "Skill Gap Identified",
       description: `Adding '${missingSkills[0]}' could increase your match rate for target roles.`,
       action: "Add Skill",
-      color: "text-amber-500 bg-amber-500/10",
+      color: "text-blue-400 bg-blue-400/10",
     })
   }
 
@@ -106,7 +106,7 @@ export async function generateInsights(): Promise<Insight[]> {
         description:
           "You haven't applied to any opportunities this week. Stay active to increase your chances!",
         action: "Browse Opportunities",
-        color: "text-rose-500 bg-rose-500/10",
+        color: "text-blue-400 bg-blue-400/10",
       })
     }
   }
@@ -136,7 +136,7 @@ export async function generateInsights(): Promise<Insight[]> {
       title: "Set Your Goal",
       description: "Define your career goal to get personalized opportunity recommendations.",
       action: "Set Goal",
-      color: "text-amber-500 bg-amber-500/10",
+      color: "text-blue-400 bg-blue-400/10",
     })
   }
 

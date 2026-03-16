@@ -52,8 +52,8 @@ export function GoalDashboard() {
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case "completed": return <CheckCircle2 className="h-3 w-3 text-green-500" />
-      case "in_progress": return <Clock className="h-3 w-3 text-blue-500" />
+      case "completed": return <CheckCircle2 className="h-3 w-3 text-blue-400" />
+      case "in_progress": return <Clock className="h-3 w-3 text-blue-400" />
       default: return <Circle className="h-3 w-3 text-gray-400" />
     }
   }

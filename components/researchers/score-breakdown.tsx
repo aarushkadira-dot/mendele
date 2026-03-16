@@ -21,9 +21,9 @@ const DIMENSIONS = [
 ] as const
 
 function barColor(score: number) {
-  if (score >= 75) return "bg-emerald-500"
-  if (score >= 50) return "bg-blue-500"
-  return "bg-amber-500"
+  if (score >= 75) return "bg-blue-400/10"
+  if (score >= 50) return "bg-blue-400/10"
+  return "bg-blue-400/10"
 }
 
 export function ScoreBreakdown({ scores }: ScoreBreakdownProps) {

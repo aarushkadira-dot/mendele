@@ -123,7 +123,7 @@ export function ProfileHeader({ user: dbUser, userProfile }: ProfileHeaderProps)
   return (
     <>
       <Card className="border-border overflow-hidden">
-        <div className="h-32 bg-gradient-to-r from-primary/20 via-secondary/20 to-primary/10" />
+        <div className="h-32    " />
         <CardContent className="relative pb-6">
           <div className="flex flex-col sm:flex-row sm:items-end gap-4 -mt-16">
             <Avatar className="h-32 w-32 border-4 border-card">

@@ -19,7 +19,7 @@ export function AIAssistantPreview() {
   const [input, setInput] = useState("")
 
   return (
-    <GlassCard className="border-border bg-gradient-to-br from-primary/5 to-secondary/5">
+    <GlassCard className="border-border   ">
       <CardHeader className="pb-2">
         <CardTitle className="flex items-center gap-2 text-lg font-semibold">
           <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary">

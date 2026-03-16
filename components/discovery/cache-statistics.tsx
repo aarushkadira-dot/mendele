@@ -51,18 +51,18 @@ export function CacheStatistics() {
 
     const getStatusIcon = (status: string) => {
         switch (status) {
-            case "success": return <CheckCircle2 className="h-4 w-4 text-green-600" />
+            case "success": return <CheckCircle2 className="h-4 w-4 text-blue-400" />
             case "failed": return <XCircle className="h-4 w-4 text-destructive" />
-            case "expired": return <Clock className="h-4 w-4 text-orange-500" />
+            case "expired": return <Clock className="h-4 w-4 text-blue-400" />
             default: return <div className="h-4 w-4 rounded-full bg-muted" />
         }
     }
 
     const getStatusColor = (status: string) => {
         switch (status) {
-            case "success": return "text-green-600"
+            case "success": return "text-blue-400"
             case "failed": return "text-destructive"
-            case "expired": return "text-orange-500"
+            case "expired": return "text-blue-400"
             case "blocked": return "text-gray-500"
             case "invalid": return "text-gray-400"
             default: return "text-muted-foreground"
@@ -142,11 +142,11 @@ export function CacheStatistics() {
                     </div>
                     <div className="rounded-lg border p-4">
                         <p className="text-sm text-muted-foreground mb-1">Success Rate</p>
-                        <p className="text-2xl font-bold text-green-600">{successRate}%</p>
+                        <p className="text-2xl font-bold text-blue-400">{successRate}%</p>
                     </div>
                     <div className="rounded-lg border p-4">
                         <p className="text-sm text-muted-foreground mb-1">Pending Rechecks</p>
-                        <p className="text-2xl font-bold text-orange-500">
+                        <p className="text-2xl font-bold text-blue-400">
                             {stats.pending_rechecks.toLocaleString()}
                         </p>
                     </div>
@@ -176,7 +176,7 @@ export function CacheStatistics() {
                                                 <div
                                                     className={`h-full ${
                                                         status === "success"
-                                                            ? "bg-green-600"
+                                                            ? "bg-blue-400/10"
                                                             : status === "failed"
                                                             ? "bg-destructive"
                                                             : "bg-muted-foreground"

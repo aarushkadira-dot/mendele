@@ -240,7 +240,7 @@ export function ResearchersClient({ studentProfile }: ResearchersClientProps) {
 
         {/* Search button */}
         <Button
-          className="w-full gap-2 bg-gradient-to-r from-violet-500 to-indigo-500 hover:from-violet-600 hover:to-indigo-600 text-white"
+          className="w-full gap-2    hover: hover: text-white"
           onClick={handleSearch}
           disabled={loading || !topic.trim()}
         >

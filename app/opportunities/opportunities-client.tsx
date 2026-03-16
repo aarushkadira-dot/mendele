@@ -11,6 +11,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Search, Sparkles, Bookmark, Send, Filter, Loader2, Globe, X, UserCheck, Users, AlertCircle, MapPin, Wifi, Building2, GraduationCap, ChevronDown, Clock, Archive } from "lucide-react"
 import { OpportunityList } from "@/components/opportunities/opportunity-list"
+import { ModernOpportunityCard } from "@/components/opportunities/modern-opportunity-card"
 import { ExpandedOpportunityCard } from "@/components/opportunities/expanded-opportunity-card"
 import { DiscoveryTriggerCard } from "@/components/opportunities/discovery-trigger-card"
 import type { LiveOpportunity } from "@/components/discovery/live-opportunity-card"
@@ -523,515 +524,200 @@ export default function OpportunitiesClient({ initialHighlightId }: Opportunitie
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        className="space-y-8 container mx-auto px-4 sm:px-6 max-w-7xl py-8"
+        className="min-h-screen bg-transparent"
       >
-        <motion.div
-          initial={{ opacity: 0, y: -10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ type: "spring", stiffness: 300, damping: 30 }}
-        >
-          <GlassCard
-            variant="compact"
-            className="p-4 sm:p-5 flex flex-col gap-5 sticky top-4 z-40 shadow-sm backdrop-blur-xl"
-          >
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-5">
-              <div className="space-y-1">
-                <h1 className="text-2xl font-bold text-foreground tracking-tight">Opportunities</h1>
-                <div className="text-muted-foreground text-sm flex items-center gap-2">
-                  {isSearching ? (
-                    <>
-                      <motion.span
-                        animate={{ rotate: 360 }}
-                        transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-                        className="inline-flex text-primary"
-                      >
-                        <Loader2 className="h-3.5 w-3.5" />
-                      </motion.span>
-                      <span>Searching...</span>
-                    </>
-                  ) : searchResults !== null && searchQuery ? (
-                    hasExactMatches ? (
-                      <span>{filteredOpportunities.length} result{filteredOpportunities.length !== 1 ? "s" : ""} for &ldquo;{searchQueryDisplay}&rdquo;</span>
-                    ) : relatedResults.length > 0 ? (
-                      <span>{relatedResults.length} related result{relatedResults.length !== 1 ? "s" : ""} for &ldquo;{searchQueryDisplay}&rdquo;</span>
-                    ) : (
-                      <span>No results for &ldquo;{searchQueryDisplay}&rdquo;</span>
-                    )
-                  ) : personalized ? (
-                    personalizedLoading ? (
-                      <span>Finding your best matches...</span>
-                    ) : (
-                      <span>{filteredOpportunities.length} opportunities matched to your profile</span>
-                    )
-                  ) : (
-                    <span>
-                      Showing {filteredOpportunities.length}{totalCount > filteredOpportunities.length ? ` of ${totalCount}` : ""} opportunities
-                      {locationFilter !== "all" && <span className="text-blue-500 ml-1">· {LOCATION_TYPES.find(l => l.value === locationFilter)?.label}</span>}
-                      {gradeFilter !== "all" && <span className="text-emerald-500 ml-1">· {GRADE_LEVELS.find(g => g.value === gradeFilter)?.label}</span>}
-                    </span>
-                  )}
-                </div>
-              </div>
-
-              <div className="flex items-center gap-3 w-full md:w-auto">
-                {/* Personalization Toggle */}
-                <Button
-                  variant={personalized ? "default" : "outline"}
-                  size="sm"
-                  onClick={() => {
-                    if (!userProfileId) {
-                      // No profile — redirect to profile page to set up interests
-                      router.push("/profile")
-                      return
-                    }
-                    if (personalized) {
-                      setPersonalized(false)
-                    } else {
-                      setPersonalized(true)
-                    }
-                  }}
-                  className={cn(
-                    "gap-2 shrink-0 h-10 transition-all",
-                    personalized
-                      ? "bg-primary text-primary-foreground shadow-md shadow-primary/20"
-                      : "hover:border-primary/40"
-                  )}
-                >
-                  {personalized ? (
-                    <UserCheck className="h-4 w-4" />
-                  ) : (
-                    <Users className="h-4 w-4" />
-                  )}
-                  {personalized ? "For You" : "For You"}
-                </Button>
-
-                <div className="relative flex-1 md:w-80 group">
-                  <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground group-focus-within:text-primary transition-colors" />
-                  <Input
-                    placeholder="Search opportunities..."
-                    value={searchQuery}
-                    onChange={(e) => handleSearchChange(e.target.value)}
-                    className="pl-10 h-10 bg-muted/50 border-border/50 focus:bg-background focus:border-primary/20 transition-all rounded-lg"
-                  />
-                  {searchQuery && (
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      className="absolute right-1 top-1/2 -translate-y-1/2 h-8 w-8 hover:bg-background/50"
-                      onClick={() => handleSearchChange("")}
-                    >
-                      <X className="h-3.5 w-3.5" />
-                    </Button>
-                  )}
-                </div>
-              </div>
+        {/* --- 1. HERO & SEARCH SECTION --- */}
+        <section className="relative pt-12 pb-20 overflow-hidden">
+          <div className="container mx-auto px-4 sm:px-6 max-w-7xl relative z-10">
+            <div className="flex flex-col items-center text-center space-y-4 mb-12">
+              <motion.div
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-xs font-bold text-primary uppercase tracking-widest"
+              >
+                <Sparkles className="h-3 w-3" />
+                Discovery Engine 2.0
+              </motion.div>
+              <h1 className="text-4xl md:text-6xl font-black text-foreground tracking-tight max-w-3xl leading-[1.1]">
+                Your next <span className="text-primary">major milestone</span> starts here.
+              </h1>
+              <p className="text-lg text-muted-foreground max-w-2xl">
+                Explore personalized research positions, internships, and high-impact programs matched to your unique profile and goals.
+              </p>
             </div>
-          </GlassCard>
 
-          {/* Category (type) filter pills */}
-          <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none mask-fade-right">
-            {CATEGORIES.map((cat) => {
-              const value = cat === "All" ? "all" : cat.toLowerCase()
-              const isActive = typeFilter.toLowerCase() === value
+            {/* Floating Search Dock */}
+            <div className="max-w-3xl mx-auto -mb-10 relative z-50">
+              <GlassCard variant="hero" className="p-2 shadow-2xl border-white/20">
+                <div className="flex items-center gap-2">
+                  <div className="relative flex-1 group">
+                    <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground group-focus-within:text-primary transition-colors" />
+                    <Input
+                      placeholder="Role, skill, or achievement..."
+                      value={searchQuery}
+                      onChange={(e) => handleSearchChange(e.target.value)}
+                      className="pl-12 h-14 bg-transparent border-0 focus:ring-0 text-lg placeholder:text-muted-foreground/50"
+                    />
+                  </div>
+                  <Button
+                    variant={personalized ? "default" : "outline"}
+                    className={cn(
+                      "h-14 px-6 rounded-xl gap-2 font-bold transition-all",
+                      personalized && "shadow-lg shadow-primary/20"
+                    )}
+                    onClick={() => setPersonalized(!personalized)}
+                  >
+                    {personalized ? <UserCheck className="h-5 w-5" /> : <Users className="h-5 w-5" />}
+                    {personalized ? "Matched for You" : "All Results"}
+                  </Button>
+                </div>
+              </GlassCard>
+            </div>
+          </div>
 
-              return (
+          {/* Background Decorative Elements */}
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full -z-10 pointer-events-none">
+            <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[60%] bg-primary/5 blur-[120px] rounded-full" />
+            <div className="absolute bottom-[10%] right-[-5%] w-[30%] h-[50%] bg-blue-400/5 blur-[120px] rounded-full" />
+          </div>
+        </section>
+
+        {/* --- 2. BENTO HIGHLIGHTS --- */}
+        <section className="container mx-auto px-4 sm:px-6 max-w-7xl pb-12">
+          <div className="flex items-center justify-between mb-8">
+            <div className="flex items-center gap-2">
+              <div className="h-8 w-1 bg-primary rounded-full" />
+              <h2 className="text-2xl font-bold tracking-tight">Featured Matches</h2>
+            </div>
+            <div className="flex items-center gap-2">
+              <Button variant="ghost" size="sm" className="font-bold text-primary">View All Interests</Button>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-3 gap-6 auto-rows-[380px]">
+            {filteredOpportunities.slice(0, 3).map((opp, idx) => (
+              <div key={opp.id} className={cn(
+                "md:col-span-2 lg:col-span-1",
+                idx === 0 && "md:col-span-4 lg:col-span-2"
+              )}>
+                  <ModernOpportunityCard
+                    opportunity={opp}
+                    isSelected={selectedOpportunity?.id === opp.id}
+                    onSelect={handleSelectOpportunity}
+                    onToggleSave={(_, id) => handleToggleSave(id)}
+                  />
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* --- 3. FILTER & DISCOVERY BAR --- */}
+        <section className="sticky top-4 z-40 container mx-auto px-4 sm:px-6 max-w-7xl py-4 pointer-events-none">
+          <div className="pointer-events-auto">
+            <GlassCard variant="compact" className="p-1 px-2 flex items-center gap-2 overflow-x-auto scrollbar-none shadow-xl border-white/10">
+              <div className="flex items-center gap-1.5 border-r border-white/10 pr-2 mr-2">
+                <Filter className="h-4 w-4 text-muted-foreground ml-2" />
+                <span className="text-xs font-bold text-muted-foreground uppercase tracking-tight">Filters</span>
+              </div>
+              
+              {CATEGORIES.map((cat) => (
                 <button
                   key={cat}
-                  onClick={() => handleTypeFilterChange(value)}
+                  onClick={() => handleTypeFilterChange(cat === "All" ? "all" : cat.toLowerCase())}
                   className={cn(
-                    "px-4 py-1.5 rounded-full text-sm font-medium transition-all whitespace-nowrap border",
-                    isActive
-                      ? "bg-primary text-primary-foreground border-primary shadow-sm"
-                      : "bg-background/50 text-muted-foreground border-border hover:bg-accent hover:text-accent-foreground"
+                    "px-4 py-1.5 rounded-full text-xs font-bold transition-all whitespace-nowrap border",
+                    typeFilter.toLowerCase() === (cat === "All" ? "all" : cat.toLowerCase())
+                      ? "bg-primary text-primary-foreground border-primary shadow-lg shadow-primary/20"
+                      : "bg-white/5 text-muted-foreground border-white/5 hover:bg-white/10"
                   )}
                 >
                   {cat}
                 </button>
-              )
-            })}
+              ))}
+              
+              <div className="h-6 w-px bg-white/10 mx-2" />
+              
+              {LOCATION_TYPES.map(({ value, label, icon: Icon }) => (
+                <button
+                  key={value}
+                  onClick={() => handleLocationFilterChange(value)}
+                  className={cn(
+                    "flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold transition-all whitespace-nowrap border",
+                    locationFilter === value
+                      ? "bg-blue-400 text-white border-blue-400 shadow-lg shadow-blue-400/20"
+                      : "bg-white/5 text-muted-foreground border-white/5 hover:bg-white/10"
+                  )}
+                >
+                  <Icon className="h-3.5 w-3.5" />
+                  {label}
+                </button>
+              ))}
+            </GlassCard>
+          </div>
+        </section>
+
+        {/* --- 4. MAIN FEED --- */}
+        <section className="container mx-auto px-4 sm:px-6 max-w-7xl py-12 space-y-12">
+          {/* Active Discoveries Trigger */}
+          <DiscoveryTriggerCard
+            initialQuery={searchQuery}
+            onComplete={handleDiscoveryComplete}
+            onImport={handleDiscoveryImport}
+            personalizedEnabled={personalizedDiscovery}
+            onPersonalizedChange={setPersonalizedDiscovery}
+            userProfileId={userProfileId}
+            existingOpportunityIds={existingOpportunityIds}
+            existingOpportunityTitles={existingOpportunityTitles}
+          />
+
+          {/* Main Content Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+            <AnimatePresence mode="popLayout">
+              {filteredOpportunities.slice(3).map((opp, idx) => (
+                <motion.div
+                  key={opp.id}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: idx * 0.05 }}
+                >
+                  <ModernOpportunityCard
+                    opportunity={opp}
+                    isSelected={selectedOpportunity?.id === opp.id}
+                    onSelect={handleSelectOpportunity}
+                    onToggleSave={(_, id) => handleToggleSave(id)}
+                  />
+                </motion.div>
+              ))}
+            </AnimatePresence>
           </div>
 
-          {/* Status + Location type + Grade level filter row */}
-          <div className="flex items-center gap-2 flex-wrap pt-0.5">
-            {/* Status filter */}
-            <div className="flex items-center gap-1.5">
-              <span className="text-xs text-muted-foreground font-medium shrink-0">Status:</span>
-              <div className="flex items-center gap-1">
-                {([
-                  { value: "current" as const, label: "Current", icon: Clock },
-                  { value: "past" as const, label: "Past", icon: Archive },
-                ]).map(({ value, label, icon: Icon }) => {
-                  const isActive = statusFilter === value
-                  return (
-                    <button
-                      key={value}
-                      onClick={() => setStatusFilter(value)}
-                      className={cn(
-                        "flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium transition-all whitespace-nowrap border",
-                        isActive
-                          ? "bg-purple-500/15 text-purple-600 dark:text-purple-400 border-purple-500/30 shadow-sm"
-                          : "bg-background/50 text-muted-foreground border-border hover:bg-accent hover:text-accent-foreground"
-                      )}
-                    >
-                      <Icon className="h-3 w-3" />
-                      {label}
-                    </button>
-                  )
-                })}
-              </div>
-            </div>
-
-            {/* Divider */}
-            <div className="h-4 w-px bg-border hidden sm:block" />
-
-            {/* Location filter */}
-            <div className="flex items-center gap-1.5">
-              <span className="text-xs text-muted-foreground font-medium shrink-0">Format:</span>
-              <div className="flex items-center gap-1 overflow-x-auto scrollbar-none">
-                {LOCATION_TYPES.map(({ value, label, icon: Icon }) => {
-                  const isActive = locationFilter === value
-                  return (
-                    <button
-                      key={value}
-                      onClick={() => handleLocationFilterChange(value)}
-                      className={cn(
-                        "flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium transition-all whitespace-nowrap border",
-                        isActive
-                          ? "bg-blue-500/15 text-blue-600 dark:text-blue-400 border-blue-500/30 shadow-sm"
-                          : "bg-background/50 text-muted-foreground border-border hover:bg-accent hover:text-accent-foreground"
-                      )}
-                    >
-                      <Icon className="h-3 w-3" />
-                      {label}
-                    </button>
-                  )
-                })}
-              </div>
-            </div>
-
-            {/* Divider */}
-            <div className="h-4 w-px bg-border hidden sm:block" />
-
-            {/* Grade filter */}
-            <div className="flex items-center gap-1.5">
-              <span className="text-xs text-muted-foreground font-medium shrink-0">Grade:</span>
-              <div className="flex items-center gap-1 overflow-x-auto scrollbar-none">
-                {GRADE_LEVELS.map(({ value, label }) => {
-                  const isActive = gradeFilter === value
-                  return (
-                    <button
-                      key={value}
-                      onClick={() => handleGradeFilterChange(value)}
-                      className={cn(
-                        "flex items-center gap-1 px-3 py-1 rounded-full text-xs font-medium transition-all whitespace-nowrap border",
-                        isActive
-                          ? "bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border-emerald-500/30 shadow-sm"
-                          : "bg-background/50 text-muted-foreground border-border hover:bg-accent hover:text-accent-foreground"
-                      )}
-                    >
-                      {value !== "all" && <GraduationCap className="h-3 w-3" />}
-                      {label}
-                    </button>
-                  )
-                })}
-              </div>
-            </div>
-
-            {/* Clear all filters button — shown when any filter is active */}
-            {(locationFilter !== "all" || gradeFilter !== "all" || statusFilter !== "current") && (
-              <button
-                onClick={() => {
-                  setLocationFilter("all")
-                  setGradeFilter("all")
-                  setStatusFilter("current")
-                  if (searchQuery.trim()) performSearch(searchQuery, typeFilter, "all", "all")
-                }}
-                className="flex items-center gap-1 px-2.5 py-1 rounded-full text-xs text-muted-foreground border border-dashed border-border hover:text-foreground hover:border-border/80 transition-all"
-              >
-                <X className="h-3 w-3" />
-                Clear filters
-              </button>
-            )}
-          </div>
-        </motion.div>
-
-        <AnimatePresence mode="wait">
-          {discoveryStatus?.triggered && (
-            <motion.div
-              initial={{ opacity: 0, y: -10, height: 0 }}
-              animate={{ opacity: 1, y: 0, height: "auto" }}
-              exit={{ opacity: 0, y: -10, height: 0 }}
-              className="flex items-center gap-3 px-4 py-3 rounded-xl bg-gradient-to-r from-primary/10 to-primary/5 border border-primary/20 text-sm overflow-hidden"
-            >
-              <motion.div animate={{ rotate: [0, 360] }} transition={{ duration: 2, repeat: Infinity, ease: "linear" }}>
-                <Globe className="h-5 w-5 text-primary" />
-              </motion.div>
-              <div className="flex-1">
-                {discoveryStatus.newFound > 0 ? (
-                  <span>
-                    Searched the web and found <strong className="text-primary">{discoveryStatus.newFound}</strong> new{" "}
-                    {discoveryStatus.newFound === 1 ? "opportunity" : "opportunities"}!
-                  </span>
-                ) : (
-                  <span>Searched the web but no new opportunities matched your query.</span>
-                )}
-              </div>
+          {/* Infinite Load Mock */}
+          {hasMore && (
+            <div className="flex justify-center pt-12">
               <Button
-                variant="ghost"
-                size="icon"
-                className="h-7 w-7 shrink-0"
-                onClick={() => setDiscoveryStatus(null)}
+                variant="outline"
+                size="lg"
+                onClick={loadMore}
+                disabled={loadingMore}
+                className="h-14 px-12 rounded-2xl border-2 font-black gap-2 hover:bg-primary hover:text-white transition-all group"
               >
-                <X className="h-4 w-4" />
+                {loadingMore ? <Loader2 className="h-5 w-5 animate-spin" /> : <ChevronDown className="h-5 w-5 group-hover:translate-y-1 transition-transform" />}
+                Discover More
               </Button>
-            </motion.div>
-          )}
-        </AnimatePresence>
-
-        <div className="min-w-0 mt-6">
-          {hasMounted ? (
-            <Tabs value={activeTab} onValueChange={setActiveTab}>
-              <div className="flex items-center justify-between mb-6">
-                <TabsList className="bg-muted/30 p-1 h-10 border border-border/40 backdrop-blur-sm">
-                  <TabsTrigger
-                    value="all"
-                    className="gap-2 px-4 data-[state=active]:bg-background data-[state=active]:shadow-sm"
-                  >
-                    <Sparkles className="h-4 w-4" />
-                    All <span className="opacity-60 text-xs ml-0.5">({filteredOpportunities.length})</span>
-                  </TabsTrigger>
-                  <TabsTrigger
-                    value="saved"
-                    className="gap-2 px-4 data-[state=active]:bg-background data-[state=active]:shadow-sm"
-                  >
-                    <Bookmark className="h-4 w-4" />
-                    Saved <span className="opacity-60 text-xs ml-0.5">({savedOpportunities.length})</span>
-                  </TabsTrigger>
-                  <TabsTrigger
-                    value="applied"
-                    className="gap-2 px-4 data-[state=active]:bg-background data-[state=active]:shadow-sm"
-                  >
-                    <Send className="h-4 w-4" />
-                    Applied <span className="opacity-60 text-xs ml-0.5">(3)</span>
-                  </TabsTrigger>
-                </TabsList>
-              </div>
-
-              <TabsContent value="all" className="space-y-8 mt-0">
-                <DiscoveryTriggerCard
-                  initialQuery={searchQuery}
-                  onComplete={handleDiscoveryComplete}
-                  onImport={handleDiscoveryImport}
-                  personalizedEnabled={personalizedDiscovery}
-                  onPersonalizedChange={setPersonalizedDiscovery}
-                  userProfileId={userProfileId}
-                  existingOpportunityIds={existingOpportunityIds}
-                  existingOpportunityTitles={existingOpportunityTitles}
-                  compact={true}
-                />
-
-                {/* Personalization info banner */}
-                <AnimatePresence>
-                  {personalized && !profileComplete && !personalizedLoading && (
-                    <motion.div
-                      initial={{ opacity: 0, y: -10, height: 0 }}
-                      animate={{ opacity: 1, y: 0, height: "auto" }}
-                      exit={{ opacity: 0, y: -10, height: 0 }}
-                      className="flex items-center gap-3 px-4 py-3 rounded-xl bg-amber-500/10 border border-amber-500/20 text-sm"
-                    >
-                      <UserCheck className="h-5 w-5 text-amber-500 shrink-0" />
-                      <div className="flex-1">
-                        <span className="font-medium">Complete your profile to get personalized opportunities.</span>
-                        <span className="text-muted-foreground ml-1">
-                          Add your interests, career goals, and academic strengths in your profile settings.
-                        </span>
-                      </div>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        className="shrink-0 text-xs"
-                        onClick={() => setPersonalized(false)}
-                      >
-                        Show all
-                      </Button>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-
-                {/* Loading state for personalized */}
-                {personalized && personalizedLoading && (
-                  <div className="flex items-center justify-center py-8 gap-3">
-                    <Loader2 className="h-5 w-5 text-primary animate-spin" />
-                    <span className="text-sm text-muted-foreground">Matching opportunities to your profile...</span>
-                  </div>
-                )}
-
-                {/* "No exact matches" banner — shown when search found related but not exact */}
-                <AnimatePresence>
-                  {searchResults !== null && !hasExactMatches && relatedResults.length > 0 && !isSearching && (
-                    <motion.div
-                      initial={{ opacity: 0, y: -10, height: 0 }}
-                      animate={{ opacity: 1, y: 0, height: "auto" }}
-                      exit={{ opacity: 0, y: -10, height: 0 }}
-                      className="flex items-start gap-3 px-4 py-3 rounded-xl bg-amber-500/10 border border-amber-500/20 text-sm mb-4"
-                    >
-                      <AlertCircle className="h-5 w-5 text-amber-500 shrink-0 mt-0.5" />
-                      <div className="flex-1">
-                        <span className="font-medium text-foreground">
-                          No exact matches found for &ldquo;{searchQueryDisplay}&rdquo;.
-                        </span>
-                        <span className="text-muted-foreground ml-1">
-                          Here are some related opportunities we found for you:
-                        </span>
-                      </div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-
-                {/* Skip rendering the list while personalized results are loading — spinner above handles that */}
-                {!(personalized && personalizedLoading) && (
-                  <AnimatePresence mode="wait">
-                    {filteredOpportunities.length === 0 ? (
-                      personalized && profileComplete ? (
-                        <motion.div
-                          key="no-personalized"
-                          initial={{ opacity: 0 }}
-                          animate={{ opacity: 1 }}
-                          exit={{ opacity: 0 }}
-                          className="flex flex-col items-center justify-center py-16 text-center"
-                        >
-                          <div className="rounded-full bg-muted p-4 mb-4">
-                            <UserCheck className="h-8 w-8 text-muted-foreground" />
-                          </div>
-                          <h3 className="text-lg font-medium text-foreground mb-1">No matching opportunities</h3>
-                          <p className="text-sm text-muted-foreground max-w-sm mb-4">
-                            None of the current opportunities match your profile well enough. Try broadening your interests or switching to all opportunities.
-                          </p>
-                          <Button variant="outline" size="sm" onClick={() => setPersonalized(false)}>
-                            <Users className="h-4 w-4 mr-2" />
-                            Show all opportunities
-                          </Button>
-                        </motion.div>
-                      ) : statusFilter === "past" ? (
-                        <motion.div
-                          key="no-past"
-                          initial={{ opacity: 0 }}
-                          animate={{ opacity: 1 }}
-                          exit={{ opacity: 0 }}
-                          className="flex flex-col items-center justify-center py-16 text-center"
-                        >
-                          <div className="rounded-full bg-muted p-4 mb-4">
-                            <Archive className="h-8 w-8 text-muted-foreground" />
-                          </div>
-                          <h3 className="text-lg font-medium text-foreground mb-1">No past opportunities</h3>
-                          <p className="text-sm text-muted-foreground max-w-sm">
-                            Opportunities with passed deadlines will appear here.
-                          </p>
-                        </motion.div>
-                      ) : searchQuery || typeFilter !== "all" ? (
-                        <motion.div
-                          key="no-results"
-                          initial={{ opacity: 0 }}
-                          animate={{ opacity: 1 }}
-                          exit={{ opacity: 0 }}
-                          className="flex flex-col items-center justify-center py-12 text-center"
-                        >
-                          <div className="rounded-full bg-muted p-4 mb-4">
-                            <Search className="h-8 w-8 text-muted-foreground" />
-                          </div>
-                          <h3 className="text-lg font-medium text-foreground mb-1">No results found</h3>
-                          <p className="text-sm text-muted-foreground max-w-sm">
-                            No opportunities match &ldquo;{searchQuery}&rdquo;. Try a different search or use the discovery tool above to search the web.
-                          </p>
-                        </motion.div>
-                      ) : (
-                        <motion.div key="empty" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
-                          <EmptyState type="all" />
-                        </motion.div>
-                      )
-                    ) : (
-                      <motion.div key="list" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
-                        <OpportunityList
-                          opportunities={filteredOpportunities}
-                          onToggleSave={handleToggleSave}
-                          onSelect={handleSelectOpportunity}
-                          selectedId={selectedOpportunity?.id}
-                        />
-                        {hasMore && !searchResults && !personalized && (
-                          <div className="flex justify-center pt-8 pb-4">
-                            <Button
-                              variant="outline"
-                              size="lg"
-                              onClick={loadMore}
-                              disabled={loadingMore}
-                              className="gap-2 px-8"
-                            >
-                              {loadingMore ? (
-                                <>
-                                  <Loader2 className="h-4 w-4 animate-spin" />
-                                  Loading...
-                                </>
-                              ) : (
-                                `Load more opportunities`
-                              )}
-                            </Button>
-                          </div>
-                        )}
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                )}
-              </TabsContent>
-
-              <TabsContent value="saved" className="mt-0">
-                <AnimatePresence mode="wait">
-                  {savedOpportunities.length === 0 ? (
-                    <motion.div key="empty" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
-                      <EmptyState type="saved" />
-                    </motion.div>
-                  ) : (
-                    <motion.div key="list" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
-                      <OpportunityList
-                        opportunities={savedOpportunities}
-                        onToggleSave={handleToggleSave}
-                        onSelect={handleSelectOpportunity}
-                        selectedId={selectedOpportunity?.id}
-                      />
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </TabsContent>
-
-              <TabsContent value="applied" className="mt-0">
-                <EmptyState type="applied" />
-              </TabsContent>
-            </Tabs>
-          ) : (
-            <div className="space-y-6">
-              <div className="h-10 w-full max-w-md bg-muted animate-pulse rounded-lg" />
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
-                  <div key={i} className="h-72 w-full bg-muted animate-pulse rounded-xl" />
-                ))}
-              </div>
             </div>
           )}
-        </div>
+        </section>
 
+        {/* Selection Details Drawer */}
         <AnimatePresence>
           {selectedOpportunity && (
             <ExpandedOpportunityCard
-              key={selectedOpportunity.id}
               opportunity={selectedOpportunity}
               onClose={() => setSelectedOpportunity(null)}
               onToggleSave={handleToggleSave}
-              status={statuses[selectedOpportunity.id]}
-              onStatusChange={(status) => handleStatusChange(selectedOpportunity.id, status)}
             />
-
           )}
         </AnimatePresence>
-
       </motion.div>
     </LayoutGroup>
   )

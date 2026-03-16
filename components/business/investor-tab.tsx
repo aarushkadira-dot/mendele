@@ -224,7 +224,7 @@ export function InvestorTab({ studentProfile }: InvestorTabProps) {
         </div>
 
         <Button
-          className="w-full gap-2 bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white"
+          className="w-full gap-2    hover: hover: text-white"
           onClick={handleSearch}
           disabled={loading || !topic.trim()}
         >
@@ -383,7 +383,7 @@ export function InvestorTab({ studentProfile }: InvestorTabProps) {
                 >
                   <div className="rounded-xl border border-border/50 bg-card p-4 space-y-2">
                     <div className="flex items-start gap-3">
-                      <div className="h-9 w-9 rounded-xl bg-emerald-500/10 flex items-center justify-center shrink-0 font-bold text-emerald-600 text-base">
+                      <div className="h-9 w-9 rounded-xl bg-blue-400/10 flex items-center justify-center shrink-0 font-bold text-blue-400 text-base">
                         {(p.name || "?").charAt(0)}
                       </div>
                       <div className="flex-1 min-w-0">

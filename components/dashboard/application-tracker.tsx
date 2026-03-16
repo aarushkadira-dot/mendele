@@ -9,9 +9,9 @@ import { Button } from "@/components/ui/button"
 
 const statusConfig: Record<string, { color: string; icon: React.ElementType; bgColor: string }> = {
   "Interview Scheduled": { color: "text-secondary", icon: CheckCircle2, bgColor: "bg-secondary/10" },
-  "Under Review": { color: "text-amber-500", icon: Clock, bgColor: "bg-amber-500/10" },
+  "Under Review": { color: "text-blue-400", icon: Clock, bgColor: "bg-blue-400/10" },
   Applied: { color: "text-primary", icon: Send, bgColor: "bg-primary/10" },
-  Accepted: { color: "text-emerald-500", icon: FileCheck, bgColor: "bg-emerald-500/10" },
+  Accepted: { color: "text-blue-400", icon: FileCheck, bgColor: "bg-blue-400/10" },
 }
 
 export async function ApplicationTracker() {

@@ -175,9 +175,26 @@ export async function getOpportunities(filters?: {
     .order("deadline", { ascending: true })
     .range(offset, offset + pageSize - 1)
 
-  const opportunities = data as Opportunity[] | null
+  let opportunities = data as Opportunity[] | null
 
-  if (error) throw new Error(error.message)
+  if (error || !opportunities || opportunities.length === 0) {
+    if (process.env.NODE_ENV === 'development' || error?.message === 'Supabase not configured') {
+      const { opportunities: mockOpps } = await import("@/lib/mock-data")
+      // Map mock data to DB-like format if needed, but it seems mapped logic handles both
+      // Just return them as is, the mapping below handles it
+      return {
+        opportunities: (mockOpps as any[]).map(o => ({
+          ...o,
+          is_active: true,
+          is_expired: false,
+          posted_date: new Date().toISOString(),
+          deadline: o.deadline, // keep original
+        })),
+        totalCount: mockOpps.length,
+      }
+    }
+    if (error) throw new Error(error.message)
+  }
 
   let userOpportunities: Record<string, { match_score: number; match_reasons: unknown; status: string }> =
     {}

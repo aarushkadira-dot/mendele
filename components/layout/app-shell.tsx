@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import { Header } from "@/components/header"
-import { Sidebar } from "@/components/sidebar"
+import Sidebar from "@/components/ui/sidebar-component"
 import { WelcomeModal } from "@/components/ui/welcome-modal"
 import type React from "react"
 
@@ -27,7 +27,7 @@ export function AppShell({ children }: AppShellProps) {
       <div
         className="flex-1 flex flex-col overflow-hidden transition-all duration-300"
         style={{
-          marginLeft: isSidebarCollapsed ? "80px" : "256px",
+          marginLeft: isSidebarCollapsed ? "144px" : "328px",
         }}
       >
         <Header />

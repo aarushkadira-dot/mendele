@@ -183,7 +183,7 @@ export function AIToolsSidebar({ onToolClick, onLoadSession }: AIToolsSidebarPro
                 onClick={() => handleToolClick(tool.prompt)}
               >
                 <motion.div 
-                  className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-blue-500/10 text-blue-600 dark:text-blue-400"
+                  className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-blue-400/10 text-blue-400 dark:text-blue-400"
                   whileHover={{ scale: 1.05 }}
                   transition={{ duration: 0.2, ease: PREMIUM_EASE }}
                 >

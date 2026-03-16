@@ -38,7 +38,7 @@ export function AnalyticsSummary({ statsData }: AnalyticsSummaryProps) {
       change: statsData.connections.change,
       trend: statsData.connections.trend,
       icon: Users,
-      color: "text-amber-500 bg-amber-500/10",
+      color: "text-blue-400 bg-blue-400/10",
     },
     {
       label: "Applications Sent",
@@ -46,7 +46,7 @@ export function AnalyticsSummary({ statsData }: AnalyticsSummaryProps) {
       change: statsData.applications.change,
       trend: statsData.applications.trend,
       icon: Briefcase,
-      color: "text-rose-500 bg-rose-500/10",
+      color: "text-blue-400 bg-blue-400/10",
     },
     {
       label: "Projects Completed",
@@ -54,7 +54,7 @@ export function AnalyticsSummary({ statsData }: AnalyticsSummaryProps) {
       change: statsData.projects.change,
       trend: statsData.projects.trend,
       icon: Target,
-      color: "text-emerald-500 bg-emerald-500/10",
+      color: "text-blue-400 bg-blue-400/10",
     },
     {
       label: "AI Match Rate",
@@ -62,7 +62,7 @@ export function AnalyticsSummary({ statsData }: AnalyticsSummaryProps) {
       change: "+5%",
       trend: "up",
       icon: Sparkles,
-      color: "text-violet-500 bg-violet-500/10",
+      color: "text-blue-400 bg-blue-400/10",
     },
   ]
 

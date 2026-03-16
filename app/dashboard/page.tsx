@@ -1,12 +1,6 @@
 export const dynamic = "force-dynamic"
 
-import { BentoGrid, BentoItem } from "@/components/dashboard/new/bento-grid"
-import { HeroSection } from "@/components/dashboard/new/hero-section"
-import { StatsWidget } from "@/components/dashboard/new/stats-widget"
-import { QuickActionsWidget } from "@/components/dashboard/new/quick-actions"
-import { ActivityFeed } from "@/components/dashboard/new/activity-feed"
-import { OpportunitySpotlight } from "@/components/dashboard/new/opportunity-spotlight"
-import { MomentumScoreWidget } from "@/components/dashboard/momentum-score-widget"
+import { SalesDashboard } from "@/components/ui/live-sales-dashboard"
 import { getDashboardData } from "@/app/actions/dashboard"
 import { redirect } from "next/navigation"
 import { ensureUserRecord } from "@/app/actions/user"
@@ -38,55 +32,13 @@ export default async function DashboardPage() {
     }
   }
 
-  // Extend analytics stats with mock trend data until implemented in backend
-  const extendedStats = {
-    profileViews: data.stats.profileViews.value,
-    networkGrowth: data.stats.connections.value,
-    searchAppearances: data.stats.searchAppearances.value,
-    viewsTrend: 15,
-    growthTrend: 8,
-    searchTrend: -2,
-    sparklineData: data.stats.sparklineData
-  }
-
   return (
-    <div className="space-y-6 container mx-auto px-4 sm:px-6 max-w-7xl py-6">
-      <BentoGrid>
-        {/* Hero Section - Top Left Priority */}
-        <BentoItem colSpan={{ md: 4, lg: 8 }} className="min-h-[300px]">
-          <HeroSection
-            user={data.user}
-            dailyDigest={data.dailyDigest}
-          />
-        </BentoItem>
-
-        {/* Quick Actions & Stats - Top Right Split */}
-        <BentoItem colSpan={{ md: 2, lg: 4 }} className="min-h-[300px] bg-background border-0 shadow-none hover:shadow-none hover:border-0">
-          <div className="grid grid-rows-2 h-full gap-6">
-            <div className="bg-card rounded-xl border border-border/50 overflow-hidden shadow-sm hover:shadow-md transition-shadow">
-              <QuickActionsWidget />
-            </div>
-            <div className="bg-card rounded-xl border border-border/50 overflow-hidden shadow-sm hover:shadow-md transition-shadow">
-              <StatsWidget stats={extendedStats} />
-            </div>
-          </div>
-        </BentoItem>
-
-        {/* Opportunity Spotlight - Middle Full Width */}
-        <BentoItem colSpan={{ md: 6, lg: 12 }} className="min-h-[250px] bg-card/50">
-          <OpportunitySpotlight opportunity={data.spotlightOpportunity} />
-        </BentoItem>
-
-        {/* Activity Feed - Bottom Left */}
-        <BentoItem colSpan={{ md: 3, lg: 8 }} className="min-h-[400px]">
-          <ActivityFeed activities={data.recentActivities} />
-        </BentoItem>
-
-        {/* Momentum Score - Bottom Right */}
-        <BentoItem colSpan={{ md: 3, lg: 4 }} className="min-h-[400px] bg-card/50">
-          <MomentumScoreWidget />
-        </BentoItem>
-      </BentoGrid>
+    <div className="container mx-auto px-4 sm:px-6 max-w-7xl py-10">
+      <SalesDashboard 
+        user={data.user} 
+        stats={data.user} // The data.user object in my mock has profileViews etc. 
+        activities={data.recentActivities} 
+      />
     </div>
   )
 }

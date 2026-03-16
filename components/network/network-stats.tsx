@@ -58,7 +58,7 @@ export function NetworkStats() {
       value: stats.pendingRequests.toString(),
       change: "",
       icon: UserPlus,
-      color: "text-amber-500 bg-amber-500/10",
+      color: "text-blue-400 bg-blue-400/10",
     },
     {
       label: "Unread Messages",
@@ -72,7 +72,7 @@ export function NetworkStats() {
       value: stats.profileViews.toString(),
       change: "",
       icon: TrendingUp,
-      color: "text-rose-500 bg-rose-500/10",
+      color: "text-blue-400 bg-blue-400/10",
     },
   ]
 

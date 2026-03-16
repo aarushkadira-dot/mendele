@@ -67,7 +67,7 @@ export function ShareProfileDialog({ open, onOpenChange, userName }: ShareProfil
             />
             <Button onClick={handleCopy} variant="outline" size="icon">
               {copied ? (
-                <Check className="h-4 w-4 text-green-500" />
+                <Check className="h-4 w-4 text-blue-400" />
               ) : (
                 <Copy className="h-4 w-4" />
               )}

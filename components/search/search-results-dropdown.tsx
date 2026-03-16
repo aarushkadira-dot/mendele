@@ -252,7 +252,7 @@ export function SearchResultsDropdown({
                             onClick={() => handleSelect({ type: 'project', data: project, id: project.id, group: 'projects' })}
                           >
                             <div className="flex items-start gap-3">
-                              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-blue-500/10 text-blue-500">
+                              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-blue-400/10 text-blue-400">
                                 <FolderOpen className="h-5 w-5" />
                               </div>
                               <div className="flex-1 min-w-0">
@@ -286,7 +286,7 @@ export function SearchResultsDropdown({
                             onClick={() => handleSelect({ type: 'opportunity', data: opp, id: opp.id, group: 'opportunities' })}
                           >
                             <div className="flex items-start gap-3">
-                              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-purple-500/10 text-purple-500 overflow-hidden">
+                              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-blue-400/10 text-blue-400 overflow-hidden">
                                 {opp.logo ? (
                                   <img src={opp.logo} alt={opp.company} className="h-full w-full object-cover" />
                                 ) : (
@@ -323,7 +323,7 @@ export function SearchResultsDropdown({
                             onClick={() => handleSelect({ type: 'event', data: event, id: event.id, group: 'events' })}
                           >
                             <div className="flex items-start gap-3">
-                              <div className="flex h-10 w-10 shrink-0 flex-col items-center justify-center rounded-lg bg-orange-500/10 text-orange-600 font-bold leading-none border border-orange-500/20">
+                              <div className="flex h-10 w-10 shrink-0 flex-col items-center justify-center rounded-lg bg-blue-400/10 text-blue-400 font-bold leading-none border border-blue-400/20">
                                 <span className="text-[9px] uppercase">{new Date(event.date).toLocaleString('default', { month: 'short' })}</span>
                                 <span className="text-sm">{new Date(event.date).getDate()}</span>
                               </div>
@@ -333,7 +333,7 @@ export function SearchResultsDropdown({
                                   <MapPin className="h-3 w-3" />
                                   <span className="truncate">{event.location}</span>
                                 </div>
-                                <Badge variant="outline" className="mt-1 text-[10px] h-4 px-1 border-orange-500/20 text-orange-600 bg-orange-500/5">
+                                <Badge variant="outline" className="mt-1 text-[10px] h-4 px-1 border-blue-400/20 text-blue-400 bg-blue-400/5">
                                   {event.eventType}
                                 </Badge>
                               </div>

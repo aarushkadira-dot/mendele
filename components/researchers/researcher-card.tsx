@@ -34,11 +34,11 @@ interface ResearcherCardProps {
 const TIER_LABELS: Record<string, { label: string; className: string }> = {
   phd_professor: {
     label: "PhD Professor",
-    className: "bg-violet-500/10 text-violet-700 dark:text-violet-300 border-violet-500/20",
+    className: "bg-blue-400/10 text-blue-400 dark:text-violet-300 border-blue-400/20",
   },
   postdoc: {
     label: "Postdoc",
-    className: "bg-blue-500/10 text-blue-700 dark:text-blue-300 border-blue-500/20",
+    className: "bg-blue-400/10 text-blue-400 dark:text-blue-300 border-blue-400/20",
   },
   grad_student: {
     label: "Grad Student",
@@ -46,28 +46,28 @@ const TIER_LABELS: Record<string, { label: string; className: string }> = {
   },
   partner_vc: {
     label: "Partner VC",
-    className: "bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 border-emerald-500/20",
+    className: "bg-blue-400/10 text-blue-400 dark:text-emerald-300 border-blue-400/20",
   },
   angel_investor: {
     label: "Angel Investor",
-    className: "bg-amber-500/10 text-amber-700 dark:text-amber-300 border-amber-500/20",
+    className: "bg-blue-400/10 text-blue-400 dark:text-amber-300 border-blue-400/20",
   },
   accelerator: {
     label: "Accelerator",
-    className: "bg-orange-500/10 text-orange-700 dark:text-orange-300 border-orange-500/20",
+    className: "bg-blue-400/10 text-blue-400 dark:text-orange-300 border-blue-400/20",
   },
 }
 
 function matchColor(score: number) {
-  if (score >= 80) return "text-emerald-600 dark:text-emerald-400"
-  if (score >= 65) return "text-blue-600 dark:text-blue-400"
-  return "text-amber-600 dark:text-amber-400"
+  if (score >= 80) return "text-blue-400 dark:text-blue-400"
+  if (score >= 65) return "text-blue-400 dark:text-blue-400"
+  return "text-blue-400 dark:text-blue-400"
 }
 
 function matchBgColor(score: number) {
-  if (score >= 80) return "bg-emerald-500/10"
-  if (score >= 65) return "bg-blue-500/10"
-  return "bg-amber-500/10"
+  if (score >= 80) return "bg-blue-400/10"
+  if (score >= 65) return "bg-blue-400/10"
+  return "bg-blue-400/10"
 }
 
 type FeedbackVote = "up" | "down" | "skip" | null
@@ -186,7 +186,7 @@ export function ResearcherCard({
                 title="Copy profile"
               >
                 {shareCopied ? (
-                  <Check className="h-3.5 w-3.5 text-emerald-500" />
+                  <Check className="h-3.5 w-3.5 text-blue-400" />
                 ) : (
                   <Share2 className="h-3.5 w-3.5 text-muted-foreground" />
                 )}
@@ -281,7 +281,7 @@ export function ResearcherCard({
         <div className="border-t border-border/40 px-4 py-3 flex items-center justify-between gap-2">
           <Button
             size="sm"
-            className="gap-1.5 text-xs h-8 bg-gradient-to-r from-violet-500 to-indigo-500 hover:from-violet-600 hover:to-indigo-600 text-white"
+            className="gap-1.5 text-xs h-8    hover: hover: text-white"
             onClick={() => setEmailModalOpen(true)}
           >
             <Mail className="h-3.5 w-3.5" />
@@ -294,7 +294,7 @@ export function ResearcherCard({
             <Button
               variant="ghost"
               size="icon"
-              className={`h-7 w-7 ${vote === "up" ? "text-emerald-500 bg-emerald-500/10" : "text-muted-foreground"}`}
+              className={`h-7 w-7 ${vote === "up" ? "text-blue-400 bg-blue-400/10" : "text-muted-foreground"}`}
               onClick={() => handleVote("up")}
               disabled={vote !== null}
               title="Relevant"
@@ -304,7 +304,7 @@ export function ResearcherCard({
             <Button
               variant="ghost"
               size="icon"
-              className={`h-7 w-7 ${vote === "down" ? "text-red-500 bg-red-500/10" : "text-muted-foreground"}`}
+              className={`h-7 w-7 ${vote === "down" ? "text-blue-400 bg-blue-400/10" : "text-muted-foreground"}`}
               onClick={() => handleVote("down")}
               disabled={vote !== null}
               title="Not relevant"

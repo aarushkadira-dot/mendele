@@ -136,4 +136,67 @@
   body {
     @apply bg-background text-foreground transition-colors duration-500 ease-in-out;
   }
+
+  button,
+  a,
+  input,
+  select,
+  textarea {
+    cursor: pointer;
+  }
+}
+
+@layer utilities {
+  .animate-element {
+    animation: fade-up 0.8s var(--ease-premium) both;
+  }
+  .animate-testimonial {
+    animation: testimonial-in 1.2s var(--ease-premium) both;
+  }
+  .animate-slide-right {
+    animation: slide-right-in 1.4s var(--ease-premium) both;
+  }
+
+  .animate-delay-100 { animation-delay: 100ms; }
+  .animate-delay-200 { animation-delay: 200ms; }
+  .animate-delay-300 { animation-delay: 300ms; }
+  .animate-delay-400 { animation-delay: 400ms; }
+  .animate-delay-500 { animation-delay: 500ms; }
+  .animate-delay-600 { animation-delay: 600ms; }
+  .animate-delay-700 { animation-delay: 700ms; }
+  .animate-delay-800 { animation-delay: 800ms; }
+  .animate-delay-900 { animation-delay: 900ms; }
+}
+
+@keyframes fade-up {
+  0% {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes testimonial-in {
+  0% {
+    opacity: 0;
+    transform: translateX(40px) translateY(10px) rotate(2deg);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0) translateY(0) rotate(0);
+  }
+}
+
+@keyframes slide-right-in {
+  0% {
+    opacity: 0;
+    transform: translateX(60px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }

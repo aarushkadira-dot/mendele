@@ -39,8 +39,8 @@ const INITIAL_DISPLAY_COUNT = 4
 
 const statusConfig: Record<ProfileGoalStatus, { label: string; icon: React.ElementType; color: string }> = {
   pending: { label: "Pending", icon: Circle, color: "bg-gray-500/10 text-gray-600 border-gray-500/20" },
-  in_progress: { label: "In Progress", icon: Clock, color: "bg-blue-500/10 text-blue-600 border-blue-500/20" },
-  completed: { label: "Completed", icon: CheckCircle2, color: "bg-green-500/10 text-green-600 border-green-500/20" },
+  in_progress: { label: "In Progress", icon: Clock, color: "bg-blue-400/10 text-blue-400 border-blue-400/20" },
+  completed: { label: "Completed", icon: CheckCircle2, color: "bg-blue-400/10 text-blue-400 border-blue-400/20" },
 }
 
 export function GoalsTracker() {
@@ -224,14 +224,14 @@ export function GoalsTracker() {
                             onClick={() => handleStatusChange(goal.id, "in_progress")}
                             disabled={goal.status === "in_progress"}
                           >
-                            <Clock className="h-4 w-4 mr-2 text-blue-500" />
+                            <Clock className="h-4 w-4 mr-2 text-blue-400" />
                             In Progress
                           </DropdownMenuItem>
                           <DropdownMenuItem 
                             onClick={() => handleStatusChange(goal.id, "completed")}
                             disabled={goal.status === "completed"}
                           >
-                            <CheckCircle2 className="h-4 w-4 mr-2 text-green-500" />
+                            <CheckCircle2 className="h-4 w-4 mr-2 text-blue-400" />
                             Completed
                           </DropdownMenuItem>
                         </DropdownMenuContent>

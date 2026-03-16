@@ -223,7 +223,7 @@ export function CreateProjectModal({ open, onOpenChange, onCreate }: CreateProje
             />
             <div className="flex flex-wrap gap-1">
               {lookingFor.map((role) => (
-                <Badge key={role} variant="outline" className="gap-1 border-rose-500/30 text-rose-500">
+                <Badge key={role} variant="outline" className="gap-1 border-blue-400/30 text-blue-400">
                   {role}
                   <button onClick={() => setLookingFor(lookingFor.filter((r) => r !== role))}>
                     <X className="h-3 w-3" />

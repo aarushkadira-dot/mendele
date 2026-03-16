@@ -19,7 +19,7 @@ interface ProjectUpdate {
 const updateTypeConfig: Record<string, { icon: React.ElementType; color: string }> = {
   milestone: { icon: Milestone, color: "text-secondary bg-secondary/10" },
   update: { icon: Activity, color: "text-primary bg-primary/10" },
-  feature: { icon: Code, color: "text-amber-500 bg-amber-500/10" },
+  feature: { icon: Code, color: "text-blue-400 bg-blue-400/10" },
 }
 
 export function ProjectUpdatesFeed() {

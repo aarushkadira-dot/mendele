@@ -14,9 +14,11 @@ export async function getAnalyticsSummary() {
     .eq("id", authUser.id)
     .single()
 
-  const user = userData as Partial<User> | null
+  if (userError && userError.message !== 'Supabase not configured') {
+    console.error("[getAnalyticsSummary] User error:", userError)
+  }
 
-  if (userError || !user) return null
+  const user = userData as Partial<User> | null
 
   const { count: applicationsCount } = await supabase
     .from("applications")
@@ -43,17 +45,17 @@ export async function getAnalyticsSummary() {
 
   return {
     profileViews: {
-      value: user.profile_views || 0,
+      value: user?.profile_views || 0,
       change: "+0%",
       trend: "up",
     },
     searchAppearances: {
-      value: user.search_appearances || 0,
+      value: user?.search_appearances || 0,
       change: "+0%",
       trend: "up",
     },
     connections: {
-      value: user.connections || 0,
+      value: user?.connections || 0,
       change: "+0%",
       trend: "up",
     },
@@ -63,7 +65,7 @@ export async function getAnalyticsSummary() {
       trend: "up",
     },
     projects: {
-      value: user.completed_projects || 0,
+      value: user?.completed_projects || 0,
       change: "+0",
       trend: "up",
     },

@@ -36,16 +36,16 @@ const iconMap: Record<string, React.ElementType> = {
 }
 
 const iconColors: Record<string, string> = {
-  trophy: "text-amber-500 bg-amber-500/10",
+  trophy: "text-blue-400 bg-blue-400/10",
   award: "text-primary bg-primary/10",
   star: "text-secondary bg-secondary/10",
 }
 
 const categoryColors: Record<string, string> = {
-  Academic: "bg-blue-500/10 text-blue-600 border-blue-500/20",
-  Athletic: "bg-green-500/10 text-green-600 border-green-500/20",
-  Service: "bg-purple-500/10 text-purple-600 border-purple-500/20",
-  Arts: "bg-pink-500/10 text-pink-600 border-pink-500/20",
+  Academic: "bg-blue-400/10 text-blue-400 border-blue-400/20",
+  Athletic: "bg-blue-400/10 text-blue-400 border-blue-400/20",
+  Service: "bg-blue-400/10 text-blue-400 border-blue-400/20",
+  Arts: "bg-blue-400/10 text-blue-400 border-blue-400/20",
   Other: "bg-gray-500/10 text-gray-600 border-gray-500/20",
 }
 

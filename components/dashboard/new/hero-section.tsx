@@ -22,7 +22,7 @@ export function HeroSection({ user, dailyDigest }: HeroSectionProps) {
   const firstName = user.name.split(" ")[0]
 
   return (
-    <div className="relative overflow-hidden h-full flex flex-col justify-between p-6 bg-gradient-to-br from-primary/10 via-background to-background">
+    <div className="relative overflow-hidden h-full flex flex-col justify-between p-6    ">
       {/* Abstract background decorative elements */}
       <div className="absolute top-0 right-0 w-64 h-64 bg-primary/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
 
@@ -64,11 +64,11 @@ export function HeroSection({ user, dailyDigest }: HeroSectionProps) {
               <div className="text-xs text-muted-foreground font-medium">New Matches</div>
             </div>
             <div className="bg-background/50 backdrop-blur-sm rounded-lg p-3 border border-border/50 text-center hover:bg-background transition-colors">
-              <div className="text-2xl font-bold text-blue-500">{dailyDigest.unreadMessages}</div>
+              <div className="text-2xl font-bold text-blue-400">{dailyDigest.unreadMessages}</div>
               <div className="text-xs text-muted-foreground font-medium">Messages</div>
             </div>
             <div className="bg-background/50 backdrop-blur-sm rounded-lg p-3 border border-border/50 text-center hover:bg-background transition-colors">
-              <div className="text-2xl font-bold text-emerald-500">{dailyDigest.pendingConnections}</div>
+              <div className="text-2xl font-bold text-blue-400">{dailyDigest.pendingConnections}</div>
               <div className="text-xs text-muted-foreground font-medium">Requests</div>
             </div>
           </div>
@@ -77,7 +77,7 @@ export function HeroSection({ user, dailyDigest }: HeroSectionProps) {
 
       <div className="mt-6 pt-4 border-t border-border/50 flex justify-between items-center">
         <div className="flex items-center gap-2 text-sm text-muted-foreground">
-          <Sparkles className="w-4 h-4 text-amber-500" />
+          <Sparkles className="w-4 h-4 text-blue-400" />
           <span>Daily Tip: Update your skills regularly</span>
         </div>
         <Link href="/profile" className="text-xs font-medium text-primary flex items-center gap-1 hover:underline">

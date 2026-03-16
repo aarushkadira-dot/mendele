@@ -3,6 +3,7 @@ import { createServerClient } from "@supabase/ssr"
 
 import type { Database } from "@/lib/database.types"
 import { MOCK_USER, isDev } from "./dev-auth"
+export { MOCK_USER, isDev }
 
 export async function createClient() {
   const cookieStore = await cookies()
@@ -55,14 +56,66 @@ export async function createClient() {
 
 /** Returns a minimal client stub so callers never crash even if Supabase is misconfigured. */
 function createNullSafeClient() {
+  const chain = () => {
+    const obj: any = {
+      select: chain,
+      eq: chain,
+      neq: chain,
+      gt: chain,
+      gte: chain,
+      lt: chain,
+      lte: chain,
+      like: chain,
+      ilike: chain,
+      is: chain,
+      in: chain,
+      contains: chain,
+      containedBy: chain,
+      rangeGt: chain,
+      rangeGte: chain,
+      rangeLt: chain,
+      rangeLte: chain,
+      rangeAdjacent: chain,
+      overlaps: chain,
+      match: chain,
+      not: chain,
+      or: chain,
+      filter: chain,
+      order: chain,
+      limit: chain,
+      range: chain,
+      abortSignal: chain,
+      single: chain,
+      maybeSingle: chain,
+      csv: chain,
+      url: chain,
+      insert: chain,
+      update: chain,
+      upsert: chain,
+      delete: chain,
+      rpc: chain,
+      then: (resolve: any) => resolve({ data: null, error: null, count: 0 }),
+    }
+    // Allow any other property access to also return the chain
+    return new Proxy(obj, {
+      get: (target, prop) => {
+        if (prop in target) return target[prop]
+        if (typeof prop === 'string') return chain
+        return undefined
+      }
+    })
+  }
+
   return {
     auth: {
-      getUser: async () => ({ data: { user: null }, error: null }),
+      getUser: async () => ({ data: { user: isDev() ? MOCK_USER : null }, error: null }),
       getSession: async () => ({ data: { session: null }, error: null }),
+      signInWithPassword: async () => ({ data: { user: null, session: null }, error: null }),
+      signUp: async () => ({ data: { user: null, session: null }, error: null }),
+      signOut: async () => ({ error: null }),
     },
-    from: () => ({
-      select: () => ({ data: null, error: { message: 'Supabase not configured' } }),
-    }),
+    from: () => chain(),
+    rpc: () => chain(),
   } as any
 }
 

@@ -85,11 +85,12 @@ export function Header() {
 
   return (
     <header className="sticky top-0 z-30 flex h-16 items-center gap-4 border-b border-border/50 bg-card/80 backdrop-blur-xl px-6">
-      <div className="relative flex-1 max-w-md search-container">
+      <div className="flex-1" />
+      <div className="relative w-full max-w-md search-container">
         <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground pointer-events-none z-10" />
         <Input
           type="search"
-          placeholder="Search people, opportunities, projects..."
+          placeholder="Search people..."
           value={searchQuery}
           onChange={(e) => handleSearchChange(e.target.value)}
           onFocus={() => {
@@ -115,7 +116,7 @@ export function Header() {
 
       <div className="flex items-center gap-2">
 
-        {hasMounted && (
+        {hasMounted ? (
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" className="relative h-9 w-9 rounded-full">
@@ -133,8 +134,12 @@ export function Header() {
                 </div>
               </DropdownMenuLabel>
               <DropdownMenuSeparator />
-              <DropdownMenuItem>View Profile</DropdownMenuItem>
-              <DropdownMenuItem>Settings</DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <a href="/profile">View Profile</a>
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <a href="/settings">Settings</a>
+              </DropdownMenuItem>
               <DropdownMenuItem>Help & Support</DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem
@@ -148,13 +153,8 @@ export function Header() {
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
-        )}
-        {!hasMounted && (
-          <Button variant="ghost" className="relative h-9 w-9 rounded-full opacity-0">
-            <Avatar className="h-9 w-9">
-              <AvatarFallback>{userInitials}</AvatarFallback>
-            </Avatar>
-          </Button>
+        ) : (
+          <div className="h-9 w-9 rounded-full bg-muted animate-pulse" />
         )}
       </div>
     </header>

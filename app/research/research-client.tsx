@@ -280,7 +280,7 @@ export default function ResearchClient() {
       <GlassCard className="p-6 sm:p-8">
         <div className="flex flex-col sm:flex-row sm:items-center gap-4 mb-6">
           <div className="flex items-center gap-3">
-            <div className="p-2.5 rounded-xl bg-gradient-to-br from-teal-500 to-cyan-600 text-white shadow-lg">
+            <div className="p-2.5 rounded-xl    text-white shadow-lg">
               <FlaskConical className="h-6 w-6" />
             </div>
             <div>
@@ -320,16 +320,16 @@ export default function ResearchClient() {
             <div className="relative">
               <div className="absolute left-4 top-1/2 -translate-y-1/2">
                 {isSearching ? (
-                  <Loader2 className="h-5 w-5 text-teal-500 animate-spin" />
+                  <Loader2 className="h-5 w-5 text-blue-400 animate-spin" />
                 ) : (
-                  <Sparkles className="h-5 w-5 text-teal-500" />
+                  <Sparkles className="h-5 w-5 text-blue-400" />
                 )}
               </div>
               <Input
                 placeholder="Describe your research interests... (e.g., 'I love neuroscience and coding')"
                 value={searchQuery}
                 onChange={(e) => handleSearchChange(e.target.value)}
-                className="pl-12 pr-10 h-12 text-base bg-background/60 border-border/50 focus:border-teal-500/50 focus:ring-teal-500/20"
+                className="pl-12 pr-10 h-12 text-base bg-background/60 border-border/50 focus:border-blue-400/50 focus:ring-teal-500/20"
               />
               {searchQuery && (
                 <button
@@ -354,7 +354,7 @@ export default function ResearchClient() {
                   className={cn(
                     "px-3 py-1.5 rounded-full text-xs font-medium border transition-all duration-200",
                     focusAreaFilter === area
-                      ? "bg-teal-500/10 border-teal-500/30 text-teal-700 dark:text-teal-300"
+                      ? "bg-blue-400/10 border-blue-400/30 text-blue-400 dark:text-teal-300"
                       : "bg-muted/30 border-border/40 text-muted-foreground hover:bg-muted/60 hover:text-foreground"
                   )}
                 >
@@ -375,7 +375,7 @@ export default function ResearchClient() {
                       className={cn(
                         "px-2.5 py-1 rounded-md text-xs font-medium transition-all duration-200",
                         locationFilter === lt.value
-                          ? "bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/30"
+                          ? "bg-blue-400/10 text-blue-400 dark:text-blue-400 border border-blue-400/30"
                           : "text-muted-foreground hover:text-foreground hover:bg-muted/60"
                       )}
                     >
@@ -397,7 +397,7 @@ export default function ResearchClient() {
                       className={cn(
                         "px-2.5 py-1 rounded-md text-xs font-medium transition-all duration-200",
                         gradeFilter === gl.value
-                          ? "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30"
+                          ? "bg-blue-400/10 text-blue-400 dark:text-blue-400 border border-blue-400/30"
                           : "text-muted-foreground hover:text-foreground hover:bg-muted/60"
                       )}
                     >
@@ -414,10 +414,10 @@ export default function ResearchClient() {
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -10 }}
-                className="flex items-center gap-3 px-4 py-3 bg-teal-500/5 border border-teal-500/15 rounded-xl"
+                className="flex items-center gap-3 px-4 py-3 bg-blue-400/5 border border-blue-400/15 rounded-xl"
               >
-                <Loader2 className="h-4 w-4 text-teal-500 animate-spin" />
-                <span className="text-sm text-teal-700 dark:text-teal-300">
+                <Loader2 className="h-4 w-4 text-blue-400 animate-spin" />
+                <span className="text-sm text-blue-400 dark:text-teal-300">
                   AI is analyzing your research interests...
                 </span>
               </motion.div>
@@ -426,7 +426,7 @@ export default function ResearchClient() {
             {/* Search Results Info */}
             {searchResults && !isSearching && (
               <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                <Sparkles className="h-4 w-4 text-teal-500" />
+                <Sparkles className="h-4 w-4 text-blue-400" />
                 <span>
                   Found <strong className="text-foreground">{filteredResults.length}</strong>{" "}
                   matching programs for &quot;{searchQuery}&quot;

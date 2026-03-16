@@ -118,8 +118,8 @@ export function ProfessorOutreachModal({
       <DialogContent className="sm:max-w-2xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2 text-xl">
-            <div className="p-2 rounded-lg bg-amber-500/10">
-              <Users className="h-5 w-5 text-amber-500" />
+            <div className="p-2 rounded-lg bg-blue-400/10">
+              <Users className="h-5 w-5 text-blue-400" />
             </div>
             Find Professors & Email
           </DialogTitle>
@@ -141,7 +141,7 @@ export function ProfessorOutreachModal({
               className="space-y-4"
             >
               <div className="flex items-center gap-2 text-sm font-medium">
-                <BookOpen className="h-4 w-4 text-amber-500" />
+                <BookOpen className="h-4 w-4 text-blue-400" />
                 Tell us about yourself so we can personalize the emails
               </div>
 
@@ -199,10 +199,10 @@ export function ProfessorOutreachModal({
                 />
               </div>
 
-              {error && <p className="text-sm text-red-500">{error}</p>}
+              {error && <p className="text-sm text-blue-400">{error}</p>}
 
               <Button
-                className="w-full gap-2 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white"
+                className="w-full gap-2    hover: hover: text-white"
                 onClick={findProfessors}
                 disabled={!studentName.trim()}
               >
@@ -219,8 +219,8 @@ export function ProfessorOutreachModal({
               animate={{ opacity: 1 }}
               className="flex flex-col items-center justify-center py-10 gap-4"
             >
-              <div className="h-16 w-16 rounded-full bg-amber-500/10 flex items-center justify-center">
-                <Loader2 className="h-8 w-8 text-amber-500 animate-spin" />
+              <div className="h-16 w-16 rounded-full bg-blue-400/10 flex items-center justify-center">
+                <Loader2 className="h-8 w-8 text-blue-400 animate-spin" />
               </div>
               <div className="text-center">
                 <p className="text-sm font-medium">Finding professors at {opportunity?.company}...</p>
@@ -276,7 +276,7 @@ export function ProfessorOutreachModal({
                     <div className="p-4">
                       <div className="flex items-start justify-between gap-3">
                         <div className="flex items-start gap-3 flex-1 min-w-0">
-                          <div className="h-10 w-10 rounded-xl bg-amber-500/10 flex items-center justify-center shrink-0 text-amber-600 dark:text-amber-400 font-bold text-lg">
+                          <div className="h-10 w-10 rounded-xl bg-blue-400/10 flex items-center justify-center shrink-0 text-blue-400 dark:text-blue-400 font-bold text-lg">
                             {prof.name.charAt(0)}
                           </div>
                           <div className="min-w-0">
