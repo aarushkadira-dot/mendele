@@ -148,7 +148,7 @@ export default function OpportunitiesClient({ initialHighlightId }: Opportunitie
         ])
         const mapped = result.opportunities.map(mapOpportunity)
         setOpportunities(mapped)
-        setHasMore(result.hasMore)
+        setHasMore(result.hasMore ?? false)
         setTotalCount(result.totalCount)
         setCurrentPage(1)
         setStatuses(statusMap)
@@ -268,7 +268,7 @@ export default function OpportunitiesClient({ initialHighlightId }: Opportunitie
       if (result.newOpportunitiesFound > 0) {
         const refreshedData = await getOpportunities({ page: 1, pageSize: 50 })
         setOpportunities(refreshedData.opportunities.map(mapOpportunity))
-        setHasMore(refreshedData.hasMore)
+        setHasMore(refreshedData.hasMore ?? false)
         setTotalCount(refreshedData.totalCount)
         setCurrentPage(1)
       }
@@ -294,7 +294,7 @@ export default function OpportunitiesClient({ initialHighlightId }: Opportunitie
         const newOnes = mapped.filter(o => !existingIds.has(o.id))
         return [...prev, ...newOnes]
       })
-      setHasMore(result.hasMore)
+      setHasMore(result.hasMore ?? false)
       setTotalCount(result.totalCount)
       setCurrentPage(nextPage)
     } catch (error) {
