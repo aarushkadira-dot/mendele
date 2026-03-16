@@ -237,7 +237,9 @@ export function useInlineDiscovery(options: UseInlineDiscoveryOptions = {}): Use
 
           case 'complete':
           case 'done':
-            finish()
+            // Delay slightly so the parallel DB fast-search has time to resolve
+            // before we call onComplete (important when backend returns complete quickly)
+            setTimeout(() => finish(), 1500)
             break
 
           case 'error':

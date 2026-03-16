@@ -72,9 +72,16 @@ export async function GET(req: NextRequest) {
                 );
             }
         } catch {
-            console.error(`[Discovery] Cannot reach backend health endpoint`);
+            console.warn(`[Discovery] Backend unreachable — returning empty stream. DB fast-search still runs client-side.`);
+            // Don't surface a scary error — the parallel database fast-search in the
+            // client hook already returns results. Just close the SSE stream cleanly.
             return new NextResponse(
-                sseErrorStream("Cannot connect to discovery service."),
+                new ReadableStream({
+                    start(controller) {
+                        controller.enqueue(sseEvent("complete", { type: "complete", count: 0 }));
+                        controller.close();
+                    },
+                }),
                 { headers: SSE_HEADERS }
             );
         }
