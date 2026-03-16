@@ -4,37 +4,18 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
- Search as SearchIcon,
- Dashboard,
- Task,
- Folder,
- Calendar as CalendarIcon,
- UserMultiple,
- Analytics,
- DocumentAdd,
- Settings as SettingsIcon,
- User as UserIcon,
- ChevronDown as ChevronDownIcon,
- AddLarge,
- Filter,
- Time,
- InProgress,
- CheckmarkOutline,
- Flag,
- Archive,
- View,
- Report,
- StarFilled,
- Group,
- ChartBar,
- FolderOpen,
- Share,
- CloudUpload,
- Security,
- Notification,
- Integration,
-} from "@carbon/icons-react";
-import { Briefcase, MessageSquare } from "lucide-react";
+  Search as SearchIcon,
+  LayoutDashboard as Dashboard,
+  Settings as SettingsIcon,
+  User as UserIcon,
+  ChevronDown as ChevronDownIcon,
+  FileText as Report,
+  Star as StarFilled,
+  Users as Group,
+  FolderOpen,
+  Briefcase,
+  MessageSquare,
+} from "lucide-react";
 import Image from "next/image";
 import { useHasMounted } from "@/hooks/use-has-mounted";
 import { useSupabaseUser } from "@/hooks/use-supabase-user";
@@ -196,7 +177,7 @@ function getSidebarContent(activeSection: string, currentPath: string): SidebarC
  {
  title: "Intelligent Features",
  items: [
- { icon: <StarFilled size={16} className="text-blue-400" />, label: "AI Assistant", href: "/assistant", isActive: currentPath === "/assistant" },
+ { icon: <StarFilled size={16} className="text-blue-400 fill-blue-400" />, label: "AI Assistant", href: "/assistant", isActive: currentPath === "/assistant" },
  ],
  },
  ],
