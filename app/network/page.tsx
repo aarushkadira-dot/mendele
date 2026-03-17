@@ -29,7 +29,6 @@ export default function NetworkPage() {
   useEffect(() => {
     async function fetchConnections() {
       const data = await getConnections()
-      // Transform database data to match Connection interface
       const transformed = data.map((c: Record<string, unknown>) => ({
         id: c.id as string,
         name: c.name as string,
@@ -38,14 +37,13 @@ export default function NetworkPage() {
         mutualConnections: (c.mutualConnections as number) || 0,
         matchReason: (c.matchReason as string) || "",
         status: (c.status as "connected" | "pending" | "suggested") || "suggested",
-        connectedDate: c.connectedDate as string | null
+        connectedDate: c.connectedDate as string | null,
       }))
       setConnections(transformed)
       setLoading(false)
     }
     fetchConnections()
   }, [])
-
 
   const connectedUsers = connections.filter((c) => c.status === "connected")
   const pendingUsers = connections.filter((c) => c.status === "pending")
@@ -55,7 +53,7 @@ export default function NetworkPage() {
     list.filter(
       (c) =>
         c.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        c.headline.toLowerCase().includes(searchQuery.toLowerCase()),
+        c.headline.toLowerCase().includes(searchQuery.toLowerCase())
     )
 
   const handleConnect = (id: string) => {
@@ -63,72 +61,77 @@ export default function NetworkPage() {
   }
 
   return (
-    <div className="space-y-6 container mx-auto px-4 sm:px-6 max-w-7xl py-6">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div>
-          <h1 className="text-2xl font-bold text-foreground">My Network</h1>
-          <p className="text-muted-foreground">Grow your professional connections with AI-powered suggestions</p>
-        </div>
-        <div className="flex items-center gap-2">
-          <div className="relative flex-1 sm:w-72">
-            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-            <Input
-              placeholder="Search connections..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-10"
-            />
+    <div className="page-container">
+      <div className="section-gap">
+        {/* Header */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div className="page-header !mb-0">
+            <h1 className="text-headline text-foreground">Network</h1>
+            <p className="text-body text-muted-foreground">
+              Grow your professional connections with AI-powered suggestions
+            </p>
           </div>
-          <Button variant="outline" className="gap-1 bg-transparent">
-            <SlidersHorizontal className="h-4 w-4" />
-            Filter
-          </Button>
-        </div>
-      </div>
-
-      <NetworkStats />
-
-      <div className="grid gap-6 lg:grid-cols-3">
-        <div className="lg:col-span-2 space-y-6">
-          <Tabs defaultValue="all">
-            <TabsList>
-              <TabsTrigger value="all">All ({connections.length})</TabsTrigger>
-              <TabsTrigger value="connected">Connected ({connectedUsers.length})</TabsTrigger>
-              <TabsTrigger value="pending">Pending ({pendingUsers.length})</TabsTrigger>
-              <TabsTrigger value="suggested">
-                <Sparkles className="h-4 w-4 mr-1" />
-                Suggested ({suggestedUsers.length})
-              </TabsTrigger>
-            </TabsList>
-
-            <TabsContent value="all" className="mt-6 space-y-4">
-              {filteredConnections(connections).map((connection) => (
-                <ConnectionCard key={connection.id} connection={connection} onConnect={handleConnect} />
-              ))}
-            </TabsContent>
-
-            <TabsContent value="connected" className="mt-6 space-y-4">
-              {filteredConnections(connectedUsers).map((connection) => (
-                <ConnectionCard key={connection.id} connection={connection} onConnect={handleConnect} />
-              ))}
-            </TabsContent>
-
-            <TabsContent value="pending" className="mt-6 space-y-4">
-              {filteredConnections(pendingUsers).map((connection) => (
-                <ConnectionCard key={connection.id} connection={connection} onConnect={handleConnect} />
-              ))}
-            </TabsContent>
-
-            <TabsContent value="suggested" className="mt-6 space-y-4">
-              {filteredConnections(suggestedUsers).map((connection) => (
-                <ConnectionCard key={connection.id} connection={connection} onConnect={handleConnect} />
-              ))}
-            </TabsContent>
-          </Tabs>
+          <div className="flex items-center gap-2">
+            <div className="relative flex-1 sm:w-64">
+              <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+              <Input
+                placeholder="Search connections..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="pl-10 h-9 text-body-sm"
+              />
+            </div>
+            <Button variant="outline" size="sm" className="gap-1.5 h-9">
+              <SlidersHorizontal className="h-3.5 w-3.5" />
+              Filter
+            </Button>
+          </div>
         </div>
 
-        <div>
-          <MessagesPanel />
+        <NetworkStats />
+
+        <div className="grid gap-6 lg:grid-cols-3">
+          <div className="lg:col-span-2 space-y-4">
+            <Tabs defaultValue="all">
+              <TabsList>
+                <TabsTrigger value="all" className="text-xs">All ({connections.length})</TabsTrigger>
+                <TabsTrigger value="connected" className="text-xs">Connected ({connectedUsers.length})</TabsTrigger>
+                <TabsTrigger value="pending" className="text-xs">Pending ({pendingUsers.length})</TabsTrigger>
+                <TabsTrigger value="suggested" className="text-xs">
+                  <Sparkles className="h-3.5 w-3.5 mr-1" />
+                  Suggested ({suggestedUsers.length})
+                </TabsTrigger>
+              </TabsList>
+
+              <TabsContent value="all" className="mt-4 space-y-3">
+                {filteredConnections(connections).map((connection) => (
+                  <ConnectionCard key={connection.id} connection={connection} onConnect={handleConnect} />
+                ))}
+              </TabsContent>
+
+              <TabsContent value="connected" className="mt-4 space-y-3">
+                {filteredConnections(connectedUsers).map((connection) => (
+                  <ConnectionCard key={connection.id} connection={connection} onConnect={handleConnect} />
+                ))}
+              </TabsContent>
+
+              <TabsContent value="pending" className="mt-4 space-y-3">
+                {filteredConnections(pendingUsers).map((connection) => (
+                  <ConnectionCard key={connection.id} connection={connection} onConnect={handleConnect} />
+                ))}
+              </TabsContent>
+
+              <TabsContent value="suggested" className="mt-4 space-y-3">
+                {filteredConnections(suggestedUsers).map((connection) => (
+                  <ConnectionCard key={connection.id} connection={connection} onConnect={handleConnect} />
+                ))}
+              </TabsContent>
+            </Tabs>
+          </div>
+
+          <div>
+            <MessagesPanel />
+          </div>
         </div>
       </div>
     </div>

@@ -25,13 +25,14 @@ export function AppShell({ children }: AppShellProps) {
         toggleCollapse={toggleSidebar}
       />
       <div
-        className="flex-1 flex flex-col overflow-hidden transition-all duration-300"
+        className="flex-1 flex flex-col overflow-hidden transition-[margin] duration-300"
         style={{
-          marginLeft: isSidebarCollapsed ? "144px" : "328px",
+          marginLeft: isSidebarCollapsed ? "68px" : "260px",
+          transitionTimingFunction: "cubic-bezier(0.16, 1, 0.3, 1)",
         }}
       >
         <Header />
-        <main className="flex-1 overflow-y-auto">
+        <main className="flex-1 overflow-y-auto scrollbar-thin">
           {children}
         </main>
       </div>

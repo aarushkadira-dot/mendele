@@ -13,8 +13,7 @@ import { StatsCards } from "@/components/profile/stats-cards"
 import { getCurrentUser, getUserAnalytics, getUserProfile } from "@/app/actions/user"
 import { calculateProfileStrength } from "@/app/actions/profile"
 import { getRecommendations } from "@/app/actions/recommendations"
-import { GlassCard } from "@/components/ui/glass-card"
-import { GlassContainer } from "@/components/ui/glass-container"
+import { Card } from "@/components/ui/card"
 
 export default async function ProfilePage() {
   const [user, analytics, recommendations, userProfile] = await Promise.all([
@@ -28,8 +27,8 @@ export default async function ProfilePage() {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
         <div className="text-center">
-          <h2 className="text-xl font-semibold mb-2">User not found</h2>
-          <p className="text-muted-foreground">Please try refreshing the page</p>
+          <h2 className="text-title text-foreground mb-2">User not found</h2>
+          <p className="text-body-sm text-muted-foreground">Please try refreshing the page</p>
         </div>
       </div>
     )
@@ -39,91 +38,62 @@ export default async function ProfilePage() {
   const skillEndorsements = analytics?.skillEndorsements || []
 
   return (
-    <div className="space-y-6 container mx-auto px-4 sm:px-6 max-w-7xl py-6">
-      {/* 1. Header Section */}
-      <GlassContainer delay={0}>
-        <GlassCard variant="hero" glow hover>
+    <div className="page-container">
+      <div className="section-gap">
+        {/* Header */}
+        <Card className="border-border bg-card overflow-hidden">
           <ProfileHeader user={user} userProfile={userProfile} />
-        </GlassCard>
-      </GlassContainer>
+        </Card>
 
-      {/* 2. Bento Grid Layout */}
-      <div className="grid gap-6 lg:grid-cols-3">
-        {/* Left Column (Main Content) - Spans 2 cols */}
-        <div className="lg:col-span-2 space-y-6">
-          {/* About Section */}
-          <GlassContainer delay={0.1}>
-            <GlassCard hover>
+        {/* Bento Grid */}
+        <div className="grid gap-4 lg:grid-cols-3">
+          {/* Main Content */}
+          <div className="lg:col-span-2 space-y-4">
+            <Card className="border-border bg-card">
               <AboutSection bio={user.bio} />
-            </GlassCard>
-          </GlassContainer>
+            </Card>
 
-          {/* Profile Details */}
-          <GlassContainer delay={0.15}>
-            <GlassCard hover>
+            <Card className="border-border bg-card">
               <ProfileDetailsSection userProfile={userProfile} />
-            </GlassCard>
-          </GlassContainer>
+            </Card>
 
-          {/* Unified Timeline (Achievements + Extracurriculars) */}
-          <GlassContainer delay={0.2}>
-            <GlassCard hover>
-              <ProfileTimeline 
-                achievements={user.achievements} 
-                extracurriculars={user.extracurriculars} 
+            <Card className="border-border bg-card">
+              <ProfileTimeline
+                achievements={user.achievements}
+                extracurriculars={user.extracurriculars}
               />
-            </GlassCard>
-          </GlassContainer>
+            </Card>
 
-          {/* Recommendations */}
-          <GlassContainer delay={0.3}>
-            <GlassCard hover>
+            <Card className="border-border bg-card">
               <RecommendationsSection recommendations={recommendations} />
-            </GlassCard>
-          </GlassContainer>
-        </div>
+            </Card>
+          </div>
 
-        {/* Right Column (Sidebar/Widgets) - Spans 1 col */}
-        <div className="space-y-6">
-          {/* Stats Cards (New high-impact metrics) */}
-          <GlassContainer delay={0.1}>
-            {/* StatsCards has its own cards, so we don't wrap in GlassCard to avoid double borders */}
-            <StatsCards 
-              connections={user.connections} 
-              views={user.profileViews} 
+          {/* Sidebar */}
+          <div className="space-y-4">
+            <StatsCards
+              connections={user.connections}
+              views={user.profileViews}
               strength={profileStrength}
-              growth={12} // Mock growth
+              growth={12}
             />
-          </GlassContainer>
 
-          {/* Goals Tracker */}
-          <GlassContainer delay={0.2}>
-            <GlassCard hover>
+            <Card className="border-border bg-card">
               <GoalsTracker />
-            </GlassCard>
-          </GlassContainer>
+            </Card>
 
-          {/* Skills Radar Visualization */}
-          <GlassContainer delay={0.25}>
-            <GlassCard hover>
+            <Card className="border-border bg-card">
               <SkillsRadar skills={user.skills} endorsements={skillEndorsements} />
-            </GlassCard>
-          </GlassContainer>
+            </Card>
 
-          {/* Skills List (Tags) */}
-          <GlassContainer delay={0.3}>
-            <GlassCard hover>
-              <SkillsSection 
-                skills={user.skills} 
-                interests={user.interests} 
-                skillEndorsements={skillEndorsements} 
+            <Card className="border-border bg-card">
+              <SkillsSection
+                skills={user.skills}
+                interests={user.interests}
+                skillEndorsements={skillEndorsements}
               />
-            </GlassCard>
-          </GlassContainer>
+            </Card>
 
-          {/* Sidebar Links (using simplified ProfileSidebar) */}
-          <GlassContainer delay={0.35}>
-            {/* ProfileSidebar has cards inside, so we don't need GlassCard */}
             <ProfileSidebar
               showStrength={false}
               profileStrength={profileStrength}
@@ -131,7 +101,7 @@ export default async function ProfilePage() {
               githubUrl={user.githubUrl}
               portfolioUrl={user.portfolioUrl}
             />
-          </GlassContainer>
+          </div>
         </div>
       </div>
     </div>

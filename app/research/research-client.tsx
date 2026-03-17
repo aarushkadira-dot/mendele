@@ -4,7 +4,7 @@ import { useState, useMemo, useEffect, useCallback } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { cn } from "@/lib/utils"
 import { Input } from "@/components/ui/input"
-import { GlassCard } from "@/components/ui/glass-card"
+import { Card } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
@@ -275,17 +275,18 @@ export default function ResearchClient() {
   if (!hasMounted) return null
 
   return (
-    <div className="mx-auto max-w-[1400px] px-4 sm:px-6 lg:px-8 py-6 space-y-6">
+    <div className="page-container">
+      <div className="section-gap">
       {/* Header */}
-      <GlassCard className="p-6 sm:p-8">
+      <Card className="border-border bg-card p-6">
         <div className="flex flex-col sm:flex-row sm:items-center gap-4 mb-6">
           <div className="flex items-center gap-3">
-            <div className="p-2.5 rounded-xl    text-white shadow-lg">
-              <FlaskConical className="h-6 w-6" />
+            <div className="h-10 w-10 rounded-lg bg-primary/8 flex items-center justify-center">
+              <FlaskConical className="h-5 w-5 text-primary" />
             </div>
             <div>
-              <h1 className="text-2xl font-bold tracking-tight">Research Labs</h1>
-              <p className="text-sm text-muted-foreground">
+              <h1 className="text-headline text-foreground">Research Labs</h1>
+              <p className="text-body text-muted-foreground">
                 AI-powered lab finder for high school students
               </p>
             </div>
@@ -329,7 +330,7 @@ export default function ResearchClient() {
                 placeholder="Describe your research interests... (e.g., 'I love neuroscience and coding')"
                 value={searchQuery}
                 onChange={(e) => handleSearchChange(e.target.value)}
-                className="pl-12 pr-10 h-12 text-base bg-background/60 border-border/50 focus:border-blue-400/50 focus:ring-teal-500/20"
+                className="pl-12 pr-10 h-11 text-sm border-border focus:border-primary/50 focus:ring-primary/20"
               />
               {searchQuery && (
                 <button
@@ -508,7 +509,7 @@ export default function ResearchClient() {
             />
           </TabsContent>
         </Tabs>
-      </GlassCard>
+      </Card>
 
       {/* Expanded Card Modal */}
       <AnimatePresence>
@@ -531,6 +532,7 @@ export default function ResearchClient() {
         onOpenChange={setEmailModalOpen}
         opportunity={emailTarget}
       />
+    </div>
     </div>
   )
 }

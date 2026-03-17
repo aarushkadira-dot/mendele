@@ -501,17 +501,18 @@ export function BusinessClient({
   ]
 
   return (
-    <div className="container mx-auto px-4 sm:px-6 max-w-7xl py-8 space-y-8">
+    <div className="page-container">
+      <div className="section-gap">
       {/* Page header */}
-      <div className="space-y-1">
-        <h1 className="text-3xl font-bold tracking-tight">Business Hub</h1>
-        <p className="text-muted-foreground">
+      <div className="page-header">
+        <h1 className="text-headline text-foreground">Business Hub</h1>
+        <p className="text-body text-muted-foreground">
           Build your startup profile, get AI investor feedback, and connect with VCs and angels.
         </p>
       </div>
 
       {/* Tab navigation */}
-      <div className="flex items-center gap-1 border-b border-border/40">
+      <div className="flex items-center gap-1 border-b border-border">
         {tabs.map((tab) => {
           const Icon = tab.icon
           return (
@@ -566,6 +567,7 @@ export function BusinessClient({
           )}
         </motion.div>
       </AnimatePresence>
+    </div>
     </div>
   )
 }

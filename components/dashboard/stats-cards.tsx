@@ -1,4 +1,3 @@
-import { GlassCard } from "@/components/ui/glass-card"
 import { Card, CardContent } from "@/components/ui/card"
 import { Users, Eye, Search, FolderKanban } from "lucide-react"
 
@@ -58,20 +57,20 @@ export function StatsCards({ statsData }: StatsCardsProps) {
   return (
     <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
       {statsArr.map((stat) => (
-        <GlassCard key={stat.title} className="border-border">
-          <CardContent className="p-6">
+        <Card key={stat.title} className="border-border bg-card">
+          <CardContent className="p-5">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-muted-foreground">{stat.title}</p>
-                <p className="mt-1 text-2xl font-bold text-foreground">{stat.value.toLocaleString()}</p>
-                <p className="mt-1 text-xs text-secondary">{stat.change} this month</p>
+                <p className="text-label-sm text-muted-foreground">{stat.title}</p>
+                <p className="mt-1.5 text-2xl font-bold text-foreground tabular-nums">{stat.value.toLocaleString()}</p>
+                <p className="mt-1 text-caption text-muted-foreground">{stat.change} this month</p>
               </div>
-              <div className={`rounded-full p-3 ${stat.bgColor}`}>
-                <stat.icon className={`h-5 w-5 ${stat.color}`} />
+              <div className={`rounded-lg p-2.5 ${stat.bgColor}`}>
+                <stat.icon className={`h-4 w-4 ${stat.color}`} />
               </div>
             </div>
           </CardContent>
-        </GlassCard>
+        </Card>
       ))}
     </div>
   )

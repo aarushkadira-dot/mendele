@@ -1,7 +1,7 @@
 "use client"
 
 import { Mentor } from "@/app/actions/mentors"
-import { GlassCard } from "@/components/ui/glass-card"
+import { Card } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Building2, Mail, ExternalLink, GraduationCap, MapPin, Bookmark, Sparkles } from "lucide-react"
@@ -20,7 +20,7 @@ export function MentorCard({ mentor, onSave, isSaved = false }: MentorCardProps)
 
   return (
     <>
-    <GlassCard className="flex flex-col h-full hover:border-primary/50 transition-colors">
+    <Card className="flex flex-col h-full hover:border-primary/50 transition-colors">
       <div className="flex justify-between items-start mb-4">
         <div className="flex gap-4">
           <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
@@ -103,7 +103,7 @@ export function MentorCard({ mentor, onSave, isSaved = false }: MentorCardProps)
           </Button>
         )}
       </div>
-    </GlassCard>
+    </Card>
 
     <EmailTemplateModal 
       mentorId={mentor.id}

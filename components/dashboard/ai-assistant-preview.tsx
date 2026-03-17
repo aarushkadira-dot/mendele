@@ -1,8 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { GlassCard } from "@/components/ui/glass-card"
-import { CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Sparkles, Send, ArrowRight } from "lucide-react"
@@ -19,7 +18,7 @@ export function AIAssistantPreview() {
   const [input, setInput] = useState("")
 
   return (
-    <GlassCard className="border-border   ">
+    <Card className="border-border bg-card">
       <CardHeader className="pb-2">
         <CardTitle className="flex items-center gap-2 text-lg font-semibold">
           <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary">
@@ -60,6 +59,6 @@ export function AIAssistantPreview() {
           </Button>
         </Link>
       </CardContent>
-    </GlassCard>
+    </Card>
   )
 }

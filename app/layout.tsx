@@ -1,12 +1,21 @@
 import type React from "react"
 import type { Metadata } from "next"
-import { Inter, Plus_Jakarta_Sans } from "next/font/google"
+import { Manrope, JetBrains_Mono } from "next/font/google"
 import { Toaster } from "sonner"
 import "./globals.css"
 import { ThemeProvider } from "@/components/theme-provider"
 
-const _inter = Inter({ subsets: ["latin"] })
-const _plusJakartaSans = Plus_Jakarta_Sans({ subsets: ["latin"] })
+const manrope = Manrope({
+  subsets: ["latin"],
+  variable: "--font-sans",
+  display: "swap",
+})
+
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ["latin"],
+  variable: "--font-mono",
+  display: "swap",
+})
 
 export const metadata: Metadata = {
   title: "Networkly",
@@ -43,22 +52,24 @@ export default async function RootLayout({
           }}
         />
       </head>
-      <body className={`font-sans antialiased`}>
-        <div className="fixed inset-0 -z-0    ">
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))]   " />
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_left,_var(--tw-gradient-stops))]   " />
-        </div>
-
+      <body className={`${manrope.variable} ${jetbrainsMono.variable} font-sans antialiased`}>
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
           enableSystem
           disableTransitionOnChange={false}
         >
-          <div className="relative z-10">
+          <div className="relative">
             {children}
           </div>
-          <Toaster position="top-center" />
+          <Toaster
+            position="top-center"
+            toastOptions={{
+              classNames: {
+                toast: "font-sans",
+              },
+            }}
+          />
         </ThemeProvider>
       </body>
     </html>

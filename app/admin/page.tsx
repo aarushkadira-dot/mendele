@@ -1,7 +1,6 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { GlassCard } from "@/components/ui/glass-card"
 import { CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -177,7 +176,7 @@ export default function AdminPanel() {
 
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
         {/* System Status */}
-        <GlassCard>
+        <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">System Status</CardTitle>
             <Button variant="ghost" size="icon" onClick={loadStats} disabled={loading.stats}>
@@ -220,10 +219,10 @@ export default function AdminPanel() {
               </div>
             )}
           </CardContent>
-        </GlassCard>
+        </Card>
 
         {/* GitHub Status */}
-        <GlassCard>
+        <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">GitHub</CardTitle>
             <div className="flex gap-1">
@@ -259,10 +258,10 @@ export default function AdminPanel() {
               </div>
             )}
           </CardContent>
-        </GlassCard>
+        </Card>
 
         {/* Tests */}
-        <GlassCard>
+        <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Tests</CardTitle>
             <Button variant="ghost" size="icon" onClick={runTests} disabled={loading.tests}>
@@ -295,12 +294,12 @@ export default function AdminPanel() {
               </div>
             )}
           </CardContent>
-        </GlassCard>
+        </Card>
       </div>
 
       <div className="grid gap-6 md:grid-cols-2">
         {/* Recent Errors */}
-        <GlassCard className="md:col-span-1">
+        <Card className="md:col-span-1">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <AlertCircle className="h-5 w-5" />
@@ -324,10 +323,10 @@ export default function AdminPanel() {
               <div className="text-sm text-muted-foreground text-center py-4">No recent errors</div>
             )}
           </CardContent>
-        </GlassCard>
+        </Card>
 
         {/* Configuration */}
-        <GlassCard className="md:col-span-1">
+        <Card className="md:col-span-1">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Settings className="h-5 w-5" />
@@ -351,11 +350,11 @@ export default function AdminPanel() {
               ))}
             </div>
           </CardContent>
-        </GlassCard>
+        </Card>
       </div>
 
       {/* Users */}
-      <GlassCard>
+      <Card>
         <CardHeader className="flex flex-row items-center justify-between">
           <CardTitle className="flex items-center gap-2">
             <Users className="h-5 w-5" />
@@ -401,10 +400,10 @@ export default function AdminPanel() {
             )}
           </div>
         </CardContent>
-      </GlassCard>
+      </Card>
 
       {/* AI Query Diagnostics */}
-      <GlassCard>
+      <Card>
         <CardHeader className="flex flex-row items-center justify-between">
           <CardTitle className="flex items-center gap-2">
             <Activity className="h-5 w-5" />
@@ -499,7 +498,7 @@ export default function AdminPanel() {
             </div>
           )}
         </CardContent>
-      </GlassCard>
+      </Card>
     </div>
   )
 }

@@ -19,11 +19,12 @@ export function GlassCard({
   return (
     <div
       className={cn(
-        "rounded-xl border border-white/20 bg-white/10 backdrop-blur-md shadow-xl transition-all duration-300",
-        variant === "hero" && "bg-white/20 border-white/30",
-        variant === "muted" && "bg-white/5 border-white/10",
-        hover && "hover:bg-white/15 hover:border-white/40 hover:scale-[1.01]",
-        glow && "after:absolute after:inset-0 after:-z-10 after:bg-primary/20 after:blur-3xl after:opacity-50",
+        "rounded-lg border border-border bg-card transition-all duration-200",
+        variant === "hero" && "border-border/80",
+        variant === "muted" && "bg-muted/50 border-border/60",
+        variant === "compact" && "p-0",
+        hover && "hover:border-border/80 hover:shadow-sm",
+        glow && "shadow-sm",
         "relative overflow-hidden",
         className
       )}

@@ -1,7 +1,6 @@
 "use client"
 
 import { useEffect, useState, useTransition } from "react"
-import { GlassCard } from "@/components/ui/glass-card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -200,38 +199,36 @@ export default function SettingsPage() {
  }
 
  return (
- <div className="flex min-h-[calc(100vh-80px)] items-center justify-center p-4 sm:p-8 relative z-10 w-full overflow-hidden">
+ <div className="page-container max-w-5xl">
  <motion.div
- initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 18 }}
+ initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 8 }}
  animate={{ opacity: 1, y: 0 }}
  transition={{
- duration: 0.45,
+ duration: 0.3,
  ease: shouldReduceMotion ? "linear" : [0.16, 1, 0.3, 1],
  }}
- className="group w-full max-w-5xl rounded-3xl overflow-hidden border border-border/60 bg-card/85 p-6 backdrop-blur-3xl sm:p-12 relative shadow-2xl"
+ className="w-full"
  aria-labelledby="glass-account-title"
  >
 
- <div className="mb-10 flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
- <div>
- <div className="inline-flex items-center gap-2 rounded-full border border-border/60 bg-white/5 px-3 py-1 text-xs uppercase tracking-[0.28em] text-muted-foreground">
- Account Settings
- </div>
+ <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+ <div className="page-header !mb-0">
+ <span className="text-label text-muted-foreground">Account Settings</span>
  <h1
  id="glass-account-title"
- className="mt-3 text-2xl font-semibold text-foreground sm:text-3xl"
+ className="text-headline text-foreground"
  >
- Manage your Networkly profile
+ Manage your profile
  </h1>
- <p className="mt-2 text-sm text-muted-foreground max-w-lg">
- Update personal details, control notifications, and manage your discovery preferences in one place.
+ <p className="text-body text-muted-foreground max-w-lg">
+ Update personal details, control notifications, and manage your discovery preferences.
  </p>
  </div>
  
  <Button
  onClick={handleSave}
  disabled={isPending}
- className="rounded-full bg-primary px-6 py-5 text-primary-foreground shadow-[0_20px_60px_-30px_rgba(59,130,246,0.75)] transition-transform duration-300 hover:-translate-y-1"
+ className="h-9 px-5"
  >
  {isPending ? (
  <Loader2 className="h-4 w-4 mr-2 animate-spin" />
@@ -242,12 +239,12 @@ export default function SettingsPage() {
  </Button>
  </div>
 
- <div className="grid gap-8 lg:grid-cols-[2fr_3fr]">
- <div className="space-y-6">
+ <div className="grid gap-6 lg:grid-cols-[2fr_3fr]">
+ <div className="space-y-4">
  
- <div className="rounded-2xl border border-border/60 bg-background/45 p-6 backdrop-blur">
- <h2 className="text-sm font-medium text-foreground">Profile Overview</h2>
- <p className="mb-4 text-xs text-muted-foreground">
+ <div className="rounded-lg border border-border bg-card p-5">
+ <h2 className="text-body-sm font-semibold text-foreground">Profile Overview</h2>
+ <p className="mb-4 text-caption text-muted-foreground">
  Your primary identity on Networkly.
  </p>
  
@@ -274,7 +271,7 @@ export default function SettingsPage() {
  <Input
  value={formData.name}
  onChange={(e) => handleChange("name", e.target.value)}
- className="h-8 text-sm bg-black/10 dark:bg-white/5 border-border/50"
+ className="h-8 text-sm border-border bg-card"
  />
  </div>
  <div className="space-y-1">
@@ -283,15 +280,15 @@ export default function SettingsPage() {
  value={formData.headline}
  onChange={(e) => handleChange("headline", e.target.value)}
  placeholder="e.g. AI Researcher"
- className="h-8 text-sm bg-black/10 dark:bg-white/5 border-border/50"
+ className="h-8 text-sm border-border bg-card"
  />
  </div>
  </div>
  </div>
 
- <div className="rounded-2xl border border-border/60 bg-background/45 p-6 backdrop-blur">
- <h2 className="text-sm font-medium text-foreground">Discovery Engine</h2>
- <p className="mb-4 text-xs text-muted-foreground">
+ <div className="rounded-lg border border-border bg-card p-5">
+ <h2 className="text-body-sm font-semibold text-foreground">Discovery Engine</h2>
+ <p className="mb-4 text-caption text-muted-foreground">
  Manage your batch discovery opportunities.
  </p>
  <div className="space-y-6">
@@ -302,15 +299,15 @@ export default function SettingsPage() {
  </div>
  </div>
 
- <div className="rounded-2xl border border-border/60 bg-background/45 p-6 backdrop-blur">
- <h2 className="text-sm font-medium text-foreground">Appearance</h2>
- <p className="mb-4 text-xs text-muted-foreground">
+ <div className="rounded-lg border border-border bg-card p-5">
+ <h2 className="text-body-sm font-semibold text-foreground">Appearance</h2>
+ <p className="mb-4 text-caption text-muted-foreground">
  Customize your Networkly experience.
  </p>
  <div className="flex items-center justify-between">
  <Label className="text-sm text-muted-foreground">Theme</Label>
  <Select value={theme} onValueChange={setTheme}>
- <SelectTrigger className="w-[120px] h-8 text-xs bg-black/10 dark:bg-white/5 border-border/50 rounded-lg outline-none focus:ring-0">
+ <SelectTrigger className="w-[120px] h-8 text-xs border-border bg-card rounded-md outline-none focus:ring-0">
  <SelectValue placeholder="Theme" />
  </SelectTrigger>
  <SelectContent>
@@ -322,23 +319,23 @@ export default function SettingsPage() {
  </div>
  </div>
 
- <div className="rounded-2xl border border-destructive/30 bg-background/45 p-6 backdrop-blur">
- <h2 className="text-sm font-medium text-destructive">Danger Zone</h2>
- <p className="mb-4 text-xs text-muted-foreground">
+ <div className="rounded-lg border border-destructive/30 bg-card p-5">
+ <h2 className="text-body-sm font-semibold text-destructive">Danger Zone</h2>
+ <p className="mb-4 text-caption text-muted-foreground">
  Irreversible account actions.
  </p>
- <Button variant="destructive" className="w-full rounded-full text-xs h-9">
+ <Button variant="destructive" className="w-full text-xs h-9">
  Delete Account
  </Button>
  </div>
  
  </div>
 
- <div className="space-y-6">
- <div className="rounded-2xl border border-border/60 bg-background/45 p-6 backdrop-blur">
- <h2 className="text-sm font-medium text-foreground">Professional Details</h2>
- <p className="mb-4 text-xs text-muted-foreground">
- Expanded details used for Networkly matching and discovery.
+ <div className="space-y-4">
+ <div className="rounded-lg border border-border bg-card p-5">
+ <h2 className="text-body-sm font-semibold text-foreground">Professional Details</h2>
+ <p className="mb-4 text-caption text-muted-foreground">
+ Expanded details used for matching and discovery.
  </p>
 
  <div className="space-y-4">
@@ -349,7 +346,7 @@ export default function SettingsPage() {
  value={formData.location}
  onChange={(e) => handleChange("location", e.target.value)}
  placeholder="City, Country"
- className="h-8 text-sm bg-black/10 dark:bg-white/5 border-border/50"
+ className="h-8 text-sm border-border bg-card"
  />
  </div>
  <div className="space-y-1">
@@ -358,7 +355,7 @@ export default function SettingsPage() {
  value={formData.university}
  onChange={(e) => handleChange("university", e.target.value)}
  placeholder="University name"
- className="h-8 text-sm bg-black/10 dark:bg-white/5 border-border/50"
+ className="h-8 text-sm border-border bg-card"
  />
  </div>
  </div>
@@ -371,7 +368,7 @@ export default function SettingsPage() {
  onChange={(e) => handleChange("graduationYear", e.target.value)}
  type="number"
  placeholder="YYYY"
- className="h-8 text-sm bg-black/10 dark:bg-white/5 border-border/50"
+ className="h-8 text-sm border-border bg-card"
  />
  </div>
  <div className="space-y-1">
@@ -380,7 +377,7 @@ export default function SettingsPage() {
  value={formData.skills}
  onChange={(e) => handleChange("skills", e.target.value)}
  placeholder="React, AI (comma separated)"
- className="h-8 text-sm bg-black/10 dark:bg-white/5 border-border/50"
+ className="h-8 text-sm border-border bg-card"
  />
  </div>
  </div>
@@ -391,7 +388,7 @@ export default function SettingsPage() {
  value={formData.interests}
  onChange={(e) => handleChange("interests", e.target.value)}
  placeholder="Startups, Open Source"
- className="h-8 text-sm bg-black/10 dark:bg-white/5 border-border/50"
+ className="h-8 text-sm border-border bg-card"
  />
  </div>
 
@@ -402,7 +399,7 @@ export default function SettingsPage() {
  onChange={(e) => handleChange("bio", e.target.value)}
  placeholder="Tell us about yourself..."
  rows={3}
- className="text-sm resize-none bg-black/10 dark:bg-white/5 border-border/50"
+ className="text-sm resize-none border-border bg-card"
  />
  </div>
  </div>
@@ -415,7 +412,7 @@ export default function SettingsPage() {
  value={formData.linkedinUrl}
  onChange={(e) => handleChange("linkedinUrl", e.target.value)}
  placeholder="LinkedIn URL"
- className="h-8 text-sm bg-black/10 dark:bg-white/5 border-border/50"
+ className="h-8 text-sm border-border bg-card"
  />
  </div>
  <div className="space-y-1">
@@ -423,7 +420,7 @@ export default function SettingsPage() {
  value={formData.githubUrl}
  onChange={(e) => handleChange("githubUrl", e.target.value)}
  placeholder="GitHub URL"
- className="h-8 text-sm bg-black/10 dark:bg-white/5 border-border/50"
+ className="h-8 text-sm border-border bg-card"
  />
  </div>
  <div className="space-y-1">
@@ -431,16 +428,16 @@ export default function SettingsPage() {
  value={formData.portfolioUrl}
  onChange={(e) => handleChange("portfolioUrl", e.target.value)}
  placeholder="Portfolio / Main Website"
- className="h-8 text-sm bg-black/10 dark:bg-white/5 border-border/50"
+ className="h-8 text-sm border-border bg-card"
  />
  </div>
  </div>
  </div>
  </div>
 
- <div className="rounded-2xl border border-border/60 bg-background/45 p-6 backdrop-blur">
- <h2 className="text-sm font-medium text-foreground">Preferences</h2>
- <p className="mb-4 text-xs text-muted-foreground">
+ <div className="rounded-lg border border-border bg-card p-5">
+ <h2 className="text-body-sm font-semibold text-foreground">Preferences</h2>
+ <p className="mb-4 text-caption text-muted-foreground">
  Control your notifications and AI features.
  </p>
  
@@ -499,3 +496,4 @@ export default function SettingsPage() {
  </div>
  )
 }
+

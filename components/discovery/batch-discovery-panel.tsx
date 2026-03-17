@@ -1,8 +1,8 @@
 "use client"
 
 import { useState } from "react"
+import { Card } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { GlassCard } from "@/components/ui/glass-card"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
@@ -141,7 +141,7 @@ export function BatchDiscoveryPanel({ onComplete }: BatchDiscoveryPanelProps) {
  const isAllSelected = selectedSources.includes("all")
 
  return (
- <GlassCard className="p-6">
+ <Card className="p-6">
  <div className="space-y-6">
  <div>
  <h3 className="text-lg font-semibold mb-2">Batch Discovery</h3>
@@ -274,6 +274,6 @@ export function BatchDiscoveryPanel({ onComplete }: BatchDiscoveryPanelProps) {
  </div>
  )}
  </div>
- </GlassCard>
+ </Card>
  )
 }

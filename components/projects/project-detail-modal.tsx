@@ -21,7 +21,6 @@ import {
 } from "lucide-react"
 import Image from "next/image"
 import { type Project, PROJECT_CATEGORIES } from "@/lib/projects"
-import { GlassCard } from "@/components/ui/glass-card"
 
 interface ProjectDetailModalProps {
   project: Project | null
@@ -132,7 +131,7 @@ export function ProjectDetailModal({ project, open, onOpenChange }: ProjectDetai
             </div>
           )}
 
-          <GlassCard className="border-border">
+          <Card className="border-border">
             <CardHeader className="pb-2">
               <CardTitle className="text-base">Team ({project.collaborators.length})</CardTitle>
             </CardHeader>
@@ -150,10 +149,10 @@ export function ProjectDetailModal({ project, open, onOpenChange }: ProjectDetai
                 </div>
               ))}
             </CardContent>
-          </GlassCard>
+          </Card>
 
           {project.lookingFor.length > 0 && (
-            <GlassCard className="border-border bg-blue-400/5">
+            <Card className="border-border bg-blue-400/5">
               <CardHeader className="pb-2">
                 <CardTitle className="text-base flex items-center gap-2">
                   <Users className="h-5 w-5 text-blue-400" />
@@ -173,7 +172,7 @@ export function ProjectDetailModal({ project, open, onOpenChange }: ProjectDetai
                   Request to Join
                 </Button>
               </CardContent>
-            </GlassCard>
+            </Card>
           )}
 
           <div className="flex gap-3">

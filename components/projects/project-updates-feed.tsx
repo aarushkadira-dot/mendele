@@ -1,7 +1,6 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { GlassCard } from "@/components/ui/glass-card"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Activity, Milestone, Sparkles, Code, Loader2, FolderOpen } from "lucide-react"
@@ -36,27 +35,27 @@ export function ProjectUpdatesFeed() {
 
   if (loading) {
     return (
-      <GlassCard className="border-border">
+      <Card className="border-border">
         <CardContent className="flex items-center justify-center py-8">
           <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
         </CardContent>
-      </GlassCard>
+      </Card>
     )
   }
 
   if (error) {
     return (
-      <GlassCard className="border-border">
+      <Card className="border-border">
         <CardContent className="py-8 text-center text-muted-foreground">
           <p>Could not load updates.</p>
         </CardContent>
-      </GlassCard>
+      </Card>
     )
   }
 
   if (projectUpdates.length === 0) {
     return (
-      <GlassCard className="border-border">
+      <Card className="border-border">
         <CardHeader className="pb-2">
           <CardTitle className="flex items-center gap-2 text-lg font-semibold">
             <Activity className="h-5 w-5 text-primary" />
@@ -72,12 +71,12 @@ export function ProjectUpdatesFeed() {
             <p className="text-xs text-muted-foreground">Create a project to see updates here</p>
           </div>
         </CardContent>
-      </GlassCard>
+      </Card>
     )
   }
 
   return (
-    <GlassCard className="border-border">
+    <Card className="border-border">
       <CardHeader className="pb-2">
         <CardTitle className="flex items-center gap-2 text-lg font-semibold">
           <Activity className="h-5 w-5 text-primary" />
@@ -113,6 +112,6 @@ export function ProjectUpdatesFeed() {
           </p>
         </div>
       </CardContent>
-    </GlassCard>
+    </Card>
   )
 }
