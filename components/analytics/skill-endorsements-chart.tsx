@@ -1,6 +1,5 @@
 "use client"
 
-import { GlassCard } from "@/components/ui/glass-card"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from "recharts"
 
@@ -18,7 +17,7 @@ const colors = [
 
 export function SkillEndorsementsChart({ data = [] }: SkillEndorsementsChartProps) {
   return (
-    <GlassCard className="border-border">
+    <Card className="border-border">
       <CardHeader className="pb-2">
         <CardTitle className="text-lg font-semibold">Skill Endorsements</CardTitle>
         <p className="text-sm text-muted-foreground">Top 5 skills</p>
@@ -53,7 +52,7 @@ export function SkillEndorsementsChart({ data = [] }: SkillEndorsementsChartProp
           </ResponsiveContainer>
         </div>
       </CardContent>
-    </GlassCard>
+    </Card>
   )
 }
 

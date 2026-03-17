@@ -1,5 +1,4 @@
-import { GlassCard } from "@/components/ui/glass-card"
-import { CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { UserPlus, Sparkles } from "lucide-react"
@@ -9,7 +8,7 @@ export async function SuggestedConnections() {
   const suggestedConnections = await getSuggestedConnections()
 
   return (
-    <GlassCard className="border-border">
+    <Card className="border-border bg-card">
       <CardHeader className="pb-2">
         <CardTitle className="flex items-center gap-2 text-lg font-semibold">
           <Sparkles className="h-5 w-5 text-primary" />
@@ -35,7 +34,7 @@ export async function SuggestedConnections() {
           </div>
         ))}
       </CardContent>
-    </GlassCard>
+    </Card>
   )
 }
 

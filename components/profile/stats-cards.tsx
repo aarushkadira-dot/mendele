@@ -1,7 +1,7 @@
 "use client"
 
 import { Card, CardContent } from "@/components/ui/card"
-import { Users, Eye, TrendingUp, Zap } from "lucide-react"
+import { Users, Eye, TrendingUp, Zap, ArrowUpRight } from "lucide-react"
 
 interface StatsCardsProps {
   connections: number
@@ -12,48 +12,52 @@ interface StatsCardsProps {
 
 export function StatsCards({ connections, views, strength, growth = 0 }: StatsCardsProps) {
   return (
-    <div className="grid grid-cols-2 gap-4 h-full">
-      <Card className="bg-primary/5 border-primary/10 overflow-hidden relative">
-        <CardContent className="p-4 flex flex-col justify-between h-full">
+    <div className="grid grid-cols-2 gap-3">
+      <Card className="border-border bg-card">
+        <CardContent className="p-4 flex flex-col justify-between h-full gap-3">
           <div className="flex justify-between items-start">
-            <Users className="h-5 w-5 text-primary" />
+            <div className="h-8 w-8 rounded-lg bg-primary/8 flex items-center justify-center">
+              <Users className="h-4 w-4 text-primary" />
+            </div>
             {growth > 0 && (
-              <span className="text-[10px] bg-blue-400/10 text-blue-400 px-1.5 py-0.5 rounded-full flex items-center gap-0.5">
-                <TrendingUp className="h-3 w-3" />
+              <span className="inline-flex items-center gap-0.5 text-xs font-semibold text-success">
+                <ArrowUpRight className="h-3 w-3" />
                 +{growth}%
               </span>
             )}
           </div>
           <div>
-            <div className="text-2xl font-bold">{connections}</div>
-            <div className="text-xs text-muted-foreground">Connections</div>
+            <div className="text-xl font-bold tabular-nums">{connections}</div>
+            <div className="text-caption text-muted-foreground">Connections</div>
           </div>
         </CardContent>
       </Card>
 
-      <Card className="bg-secondary/5 border-secondary/10 overflow-hidden relative">
-        <CardContent className="p-4 flex flex-col justify-between h-full">
-          <Eye className="h-5 w-5 text-secondary-foreground" />
+      <Card className="border-border bg-card">
+        <CardContent className="p-4 flex flex-col justify-between h-full gap-3">
+          <div className="h-8 w-8 rounded-lg bg-primary/8 flex items-center justify-center">
+            <Eye className="h-4 w-4 text-primary" />
+          </div>
           <div>
-            <div className="text-2xl font-bold">{views}</div>
-            <div className="text-xs text-muted-foreground">Profile Views</div>
+            <div className="text-xl font-bold tabular-nums">{views}</div>
+            <div className="text-caption text-muted-foreground">Profile Views</div>
           </div>
         </CardContent>
       </Card>
 
-      <Card className="col-span-2    border-blue-400/20">
+      <Card className="col-span-2 border-border bg-card">
         <CardContent className="p-4 flex items-center justify-between">
           <div className="flex flex-col">
-            <span className="text-xs font-medium text-muted-foreground uppercase tracking-wider">Profile Strength</span>
-            <div className="flex items-baseline gap-2">
-              <span className="text-3xl font-bold bg-clip-text text-transparent   ">
+            <span className="text-label-sm text-muted-foreground">Profile Strength</span>
+            <div className="flex items-baseline gap-2 mt-1">
+              <span className="text-2xl font-bold tabular-nums text-foreground">
                 {strength}%
               </span>
-              <span className="text-xs text-muted-foreground">Keep it up!</span>
+              <span className="text-caption text-muted-foreground">Keep it up!</span>
             </div>
           </div>
-          <div className="h-10 w-10 rounded-full    flex items-center justify-center shadow-lg shadow-blue-400/20">
-            <Zap className="h-5 w-5 text-white" />
+          <div className="h-10 w-10 rounded-lg bg-primary/8 flex items-center justify-center">
+            <Zap className="h-5 w-5 text-primary" />
           </div>
         </CardContent>
       </Card>

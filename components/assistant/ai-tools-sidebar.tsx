@@ -2,9 +2,9 @@
 
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
+import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
-import { GlassCard } from '@/components/ui/glass-card'
 import { 
   FileText, 
   Mail, 
@@ -89,7 +89,7 @@ export function AIToolsSidebar({ onToolClick, onLoadSession }: AIToolsSidebarPro
           <User className="h-5 w-5" />
           Your Data
         </h3>
-        <GlassCard variant="sidebar" className="flex flex-col flex-1 overflow-hidden">
+        <Card className="flex flex-col flex-1 overflow-hidden border-border bg-card">
           {dataTools.map((tool, index) => (
             <div key={tool.label} className="flex-1">
               <Button 
@@ -112,7 +112,7 @@ export function AIToolsSidebar({ onToolClick, onLoadSession }: AIToolsSidebarPro
               {index < dataTools.length - 1 && <Separator />}
             </div>
           ))}
-        </GlassCard>
+        </Card>
       </motion.div>
 
       {/* Saved Chat */}
@@ -121,7 +121,7 @@ export function AIToolsSidebar({ onToolClick, onLoadSession }: AIToolsSidebarPro
           <History className="h-5 w-5" />
           Saved Chat
         </h3>
-        <GlassCard variant="sidebar" className="p-4">
+        <Card className="p-4 border-border bg-card">
           {isLoading ? (
             <div className="flex items-center justify-center py-8">
               <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
@@ -168,13 +168,13 @@ export function AIToolsSidebar({ onToolClick, onLoadSession }: AIToolsSidebarPro
               <p className="text-base">No saved chats</p>
             </div>
           )}
-        </GlassCard>
+        </Card>
       </motion.div>
 
       {/* AI Tools */}
       <motion.div className="mt-6 flex-none" variants={fadeInUpVariants}>
         <h3 className="text-lg font-bold px-2 mb-3">AI Tools</h3>
-        <GlassCard variant="sidebar" className="flex flex-col overflow-hidden">
+        <Card className="flex flex-col overflow-hidden border-border bg-card">
           {aiTools.map((tool, index) => (
             <div key={tool.label} className="flex-1">
               <Button 
@@ -197,7 +197,7 @@ export function AIToolsSidebar({ onToolClick, onLoadSession }: AIToolsSidebarPro
               {index < aiTools.length - 1 && <Separator />}
             </div>
           ))}
-        </GlassCard>
+        </Card>
       </motion.div>
     </motion.div>
   )

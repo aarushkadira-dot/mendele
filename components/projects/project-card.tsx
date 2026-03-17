@@ -1,7 +1,6 @@
 "use client"
 
 import { useState } from "react"
-import { GlassCard } from "@/components/ui/glass-card"
 import { Card, CardContent, CardFooter } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -63,7 +62,7 @@ export function ProjectCard({ project, isOwner = false, onLike, onEdit, onDelete
 
   return (
     <>
-      <GlassCard className="border-border overflow-hidden">
+      <Card className="border-border overflow-hidden">
         <div className="relative aspect-video overflow-hidden cursor-pointer" onClick={() => onViewDetails?.(project)}>
           <Image
             src={project.image || "/placeholder.svg"}
@@ -238,7 +237,7 @@ export function ProjectCard({ project, isOwner = false, onLike, onEdit, onDelete
             )}
           </div>
         </CardFooter>
-      </GlassCard>
+      </Card>
 
       <AlertDialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
         <AlertDialogContent>

@@ -1,6 +1,5 @@
 import type React from "react"
-import { GlassCard } from "@/components/ui/glass-card"
-import { CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { ArrowRight, CheckCircle2, Clock, Send, FileCheck } from "lucide-react"
 import { getApplications } from "@/app/actions/applications"
@@ -18,7 +17,7 @@ export async function ApplicationTracker() {
   const applications = await getApplications()
 
   return (
-    <GlassCard className="border-border">
+    <Card className="border-border bg-card">
       <CardHeader className="flex flex-row items-center justify-between pb-2">
         <CardTitle className="text-lg font-semibold">Application Tracker</CardTitle>
         <Link href="/opportunities">
@@ -51,7 +50,7 @@ export async function ApplicationTracker() {
           )
         })}
       </CardContent>
-    </GlassCard>
+    </Card>
   )
 }
 

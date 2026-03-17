@@ -5,7 +5,8 @@ import { useRouter } from "next/navigation"
 import { motion, AnimatePresence, LayoutGroup } from "framer-motion"
 import { cn } from "@/lib/utils"
 import { Input } from "@/components/ui/input"
-import { GlassCard } from "@/components/ui/glass-card"
+import { Card } from "@/components/ui/card"
+import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
@@ -508,12 +509,10 @@ export default function OpportunitiesClient({ initialHighlightId }: Opportunitie
 
   if (loading) {
     return (
-      <div className="space-y-6 container mx-auto px-4 sm:px-6 max-w-7xl">
-        <div className="flex flex-col items-center justify-center min-h-[400px] gap-4">
-          <motion.div animate={{ rotate: 360 }} transition={{ duration: 1, repeat: Infinity, ease: "linear" }}>
-            <Loader2 className="h-8 w-8 text-primary" />
-          </motion.div>
-          <p className="text-sm text-muted-foreground animate-pulse">Loading opportunities...</p>
+      <div className="page-container">
+        <div className="flex flex-col items-center justify-center min-h-[400px] gap-3">
+          <Loader2 className="h-6 w-6 text-muted-foreground animate-spin" />
+          <p className="text-body-sm text-muted-foreground">Loading opportunities...</p>
         </div>
       </div>
     )
@@ -527,74 +526,63 @@ export default function OpportunitiesClient({ initialHighlightId }: Opportunitie
         className="min-h-screen bg-transparent"
       >
         {/* --- 1. HERO & SEARCH SECTION --- */}
-        <section className="relative pt-12 pb-20 overflow-hidden">
-          <div className="container mx-auto px-4 sm:px-6 max-w-7xl relative z-10">
-            <div className="flex flex-col items-center text-center space-y-4 mb-12">
-              <motion.div
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-xs font-bold text-primary uppercase tracking-widest"
-              >
+        <section className="pt-8 pb-12">
+          <div className="page-container !py-0">
+            <div className="flex flex-col items-center text-center space-y-3 mb-10">
+              <Badge variant="outline" className="border-primary/20 text-primary text-label-sm gap-1.5 px-3 py-1">
                 <Sparkles className="h-3 w-3" />
-                Discovery Engine 2.0
-              </motion.div>
-              <h1 className="text-4xl md:text-6xl font-black text-foreground tracking-tight max-w-3xl leading-[1.1]">
-                Your next <span className="text-primary">major milestone</span> starts here.
+                Discovery Engine
+              </Badge>
+              <h1 className="text-display text-foreground max-w-2xl">
+                Your next <span className="text-primary">opportunity</span> starts here.
               </h1>
-              <p className="text-lg text-muted-foreground max-w-2xl">
-                Explore personalized research positions, internships, and high-impact programs matched to your unique profile and goals.
+              <p className="text-body text-muted-foreground max-w-xl">
+                Explore personalized research positions, internships, and programs matched to your profile.
               </p>
             </div>
 
-            {/* Floating Search Dock */}
-            <div className="max-w-3xl mx-auto -mb-10 relative z-50">
-              <GlassCard variant="hero" className="p-2 shadow-2xl border-white/20">
+            {/* Search Bar */}
+            <div className="max-w-2xl mx-auto">
+              <Card className="border-border bg-card p-1.5">
                 <div className="flex items-center gap-2">
                   <div className="relative flex-1 group">
-                    <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground group-focus-within:text-primary transition-colors" />
+                    <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground group-focus-within:text-primary transition-colors" />
                     <Input
                       placeholder="Role, skill, or achievement..."
                       value={searchQuery}
                       onChange={(e) => handleSearchChange(e.target.value)}
-                      className="pl-12 h-14 bg-transparent border-0 focus:ring-0 text-lg placeholder:text-muted-foreground/50"
+                      className="pl-10 h-11 bg-transparent border-0 focus:ring-0 text-sm"
                     />
                   </div>
                   <Button
                     variant={personalized ? "default" : "outline"}
                     className={cn(
-                      "h-14 px-6 rounded-xl gap-2 font-bold transition-all",
-                      personalized && "shadow-lg shadow-primary/20"
+                      "h-9 px-4 gap-2 text-xs font-semibold",
                     )}
                     onClick={() => setPersonalized(!personalized)}
                   >
-                    {personalized ? <UserCheck className="h-5 w-5" /> : <Users className="h-5 w-5" />}
-                    {personalized ? "Matched for You" : "All Results"}
+                    {personalized ? <UserCheck className="h-4 w-4" /> : <Users className="h-4 w-4" />}
+                    {personalized ? "For You" : "All"}
                   </Button>
                 </div>
-              </GlassCard>
+              </Card>
             </div>
-          </div>
-
-          {/* Background Decorative Elements */}
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full -z-10 pointer-events-none">
-            <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[60%] bg-primary/5 blur-[120px] rounded-full" />
-            <div className="absolute bottom-[10%] right-[-5%] w-[30%] h-[50%] bg-blue-400/5 blur-[120px] rounded-full" />
           </div>
         </section>
 
         {/* --- 2. BENTO HIGHLIGHTS --- */}
-        <section className="container mx-auto px-4 sm:px-6 max-w-7xl pb-12">
-          <div className="flex items-center justify-between mb-8">
+        <section className="page-container !pt-0 pb-8">
+          <div className="flex items-center justify-between mb-6">
             <div className="flex items-center gap-2">
-              <div className="h-8 w-1 bg-primary rounded-full" />
-              <h2 className="text-2xl font-bold tracking-tight">Featured Matches</h2>
+              <div className="h-6 w-0.5 bg-primary rounded-full" />
+              <h2 className="text-title">Featured Matches</h2>
             </div>
             <div className="flex items-center gap-2">
-              <Button variant="ghost" size="sm" className="font-bold text-primary">View All Interests</Button>
+              <Button variant="ghost" size="sm" className="text-primary text-caption font-semibold">View All</Button>
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-3 gap-6 auto-rows-[380px]">
+          <div className="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-3 gap-4 auto-rows-[360px]">
             {filteredOpportunities.slice(0, 3).map((opp, idx) => (
               <div key={opp.id} className={cn(
                 "md:col-span-2 lg:col-span-1",
@@ -612,12 +600,12 @@ export default function OpportunitiesClient({ initialHighlightId }: Opportunitie
         </section>
 
         {/* --- 3. FILTER & DISCOVERY BAR --- */}
-        <section className="sticky top-4 z-40 container mx-auto px-4 sm:px-6 max-w-7xl py-4 pointer-events-none">
+        <section className="sticky top-14 z-40 page-container !py-3 pointer-events-none">
           <div className="pointer-events-auto">
-            <GlassCard variant="compact" className="p-1 px-2 flex items-center gap-2 overflow-x-auto scrollbar-none shadow-xl border-white/10">
-              <div className="flex items-center gap-1.5 border-r border-white/10 pr-2 mr-2">
-                <Filter className="h-4 w-4 text-muted-foreground ml-2" />
-                <span className="text-xs font-bold text-muted-foreground uppercase tracking-tight">Filters</span>
+            <Card className="border-border bg-card/95 backdrop-blur-sm p-1.5 px-3 flex items-center gap-2 overflow-x-auto scrollbar-none">
+              <div className="flex items-center gap-1.5 border-r border-border pr-2 mr-1">
+                <Filter className="h-3.5 w-3.5 text-muted-foreground ml-1" />
+                <span className="text-label-sm text-muted-foreground">Filters</span>
               </div>
               
               {CATEGORIES.map((cat) => (
@@ -625,39 +613,39 @@ export default function OpportunitiesClient({ initialHighlightId }: Opportunitie
                   key={cat}
                   onClick={() => handleTypeFilterChange(cat === "All" ? "all" : cat.toLowerCase())}
                   className={cn(
-                    "px-4 py-1.5 rounded-full text-xs font-bold transition-all whitespace-nowrap border",
+                    "px-3 py-1 rounded-md text-xs font-medium transition-all whitespace-nowrap border",
                     typeFilter.toLowerCase() === (cat === "All" ? "all" : cat.toLowerCase())
-                      ? "bg-primary text-primary-foreground border-primary shadow-lg shadow-primary/20"
-                      : "bg-white/5 text-muted-foreground border-white/5 hover:bg-white/10"
+                      ? "bg-primary text-primary-foreground border-primary"
+                      : "bg-transparent text-muted-foreground border-border hover:bg-accent"
                   )}
                 >
                   {cat}
                 </button>
               ))}
               
-              <div className="h-6 w-px bg-white/10 mx-2" />
+              <div className="h-5 w-px bg-border mx-1" />
               
               {LOCATION_TYPES.map(({ value, label, icon: Icon }) => (
                 <button
                   key={value}
                   onClick={() => handleLocationFilterChange(value)}
                   className={cn(
-                    "flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold transition-all whitespace-nowrap border",
+                    "flex items-center gap-1 px-3 py-1 rounded-md text-xs font-medium transition-all whitespace-nowrap border",
                     locationFilter === value
-                      ? "bg-blue-400 text-white border-blue-400 shadow-lg shadow-blue-400/20"
-                      : "bg-white/5 text-muted-foreground border-white/5 hover:bg-white/10"
+                      ? "bg-primary text-primary-foreground border-primary"
+                      : "bg-transparent text-muted-foreground border-border hover:bg-accent"
                   )}
                 >
                   <Icon className="h-3.5 w-3.5" />
                   {label}
                 </button>
               ))}
-            </GlassCard>
+            </Card>
           </div>
         </section>
 
         {/* --- 4. MAIN FEED --- */}
-        <section className="container mx-auto px-4 sm:px-6 max-w-7xl py-12 space-y-12">
+        <section className="page-container !pt-4 space-y-8">
           {/* Active Discoveries Trigger */}
           <DiscoveryTriggerCard
             initialQuery={searchQuery}
@@ -671,7 +659,7 @@ export default function OpportunitiesClient({ initialHighlightId }: Opportunitie
           />
 
           {/* Main Content Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
             <AnimatePresence mode="popLayout">
               {filteredOpportunities.slice(3).map((opp, idx) => (
                 <motion.div
@@ -693,16 +681,15 @@ export default function OpportunitiesClient({ initialHighlightId }: Opportunitie
 
           {/* Infinite Load Mock */}
           {hasMore && (
-            <div className="flex justify-center pt-12">
+            <div className="flex justify-center pt-6">
               <Button
                 variant="outline"
-                size="lg"
                 onClick={loadMore}
                 disabled={loadingMore}
-                className="h-14 px-12 rounded-2xl border-2 font-black gap-2 hover:bg-primary hover:text-white transition-all group"
+                className="h-9 px-6 gap-2 text-sm font-medium"
               >
-                {loadingMore ? <Loader2 className="h-5 w-5 animate-spin" /> : <ChevronDown className="h-5 w-5 group-hover:translate-y-1 transition-transform" />}
-                Discover More
+                {loadingMore ? <Loader2 className="h-4 w-4 animate-spin" /> : <ChevronDown className="h-4 w-4" />}
+                Load More
               </Button>
             </div>
           )}

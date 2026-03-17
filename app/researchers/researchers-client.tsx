@@ -157,11 +157,12 @@ export function ResearchersClient({ studentProfile }: ResearchersClientProps) {
   }
 
   return (
-    <div className="container mx-auto px-4 sm:px-6 max-w-7xl py-8 space-y-8">
+    <div className="page-container">
+      <div className="section-gap">
       {/* Page header */}
-      <div className="space-y-1">
-        <h1 className="text-3xl font-bold tracking-tight">Find Researchers</h1>
-        <p className="text-muted-foreground">
+      <div className="page-header">
+        <h1 className="text-headline text-foreground">Find Researchers</h1>
+        <p className="text-body text-muted-foreground">
           Discover academic researchers and professors to reach out to — scored by collaboration likelihood.
           Looking for investors? Visit the <a href="/business" className="underline underline-offset-2 hover:text-foreground transition-colors">Business Hub</a>.
         </p>
@@ -455,6 +456,7 @@ export function ResearchersClient({ studentProfile }: ResearchersClientProps) {
           )}
         </div>
       )}
+    </div>
     </div>
   )
 }
