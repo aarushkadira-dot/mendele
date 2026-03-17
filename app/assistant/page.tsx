@@ -1,12 +1,11 @@
 'use client'
 
-import { useRef } from 'react'
-import RuixenMoonChat from '@/components/ui/ruixen-moon-chat'
+import { ChatInterface } from '@/components/assistant/chat-interface'
 
 export default function AssistantPage() {
   return (
     <div className="h-full flex flex-col min-w-0">
-      <RuixenMoonChat />
+      <ChatInterface />
     </div>
   )
 }

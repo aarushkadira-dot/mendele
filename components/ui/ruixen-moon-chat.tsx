@@ -207,7 +207,7 @@ export default function RuixenMoonChat() {
  adjustHeight();
  }}
  onKeyDown={handleKeyDown}
- placeholder="Type your request... (Demo only)"
+ placeholder="Ask me anything about your career..."
  className={cn(
  "w-full px-4 py-3 resize-none border-none",
  "bg-transparent text-foreground text-sm",
