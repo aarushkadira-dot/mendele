@@ -1,7 +1,7 @@
 "use client"
 
 import { Card, CardContent } from "@/components/ui/card"
-import { Users, Eye, TrendingUp, Zap, ArrowUpRight } from "lucide-react"
+import { Users, Eye, TrendingUp, Zap, ArrowUpRight } from "@/components/ui/icons"
 
 interface StatsCardsProps {
   connections: number
@@ -19,12 +19,6 @@ export function StatsCards({ connections, views, strength, growth = 0 }: StatsCa
             <div className="h-8 w-8 rounded-lg bg-primary/8 flex items-center justify-center">
               <Users className="h-4 w-4 text-primary" />
             </div>
-            {growth > 0 && (
-              <span className="inline-flex items-center gap-0.5 text-xs font-semibold text-success">
-                <ArrowUpRight className="h-3 w-3" />
-                +{growth}%
-              </span>
-            )}
           </div>
           <div>
             <div className="text-xl font-bold tabular-nums">{connections}</div>

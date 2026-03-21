@@ -15,7 +15,7 @@ import {
   X,
   UserCheck,
   Download
-} from "lucide-react"
+} from "@/components/ui/icons"
 import { cn } from "@/lib/utils"
 import { useDiscoveryLayers } from "@/hooks/use-discovery-layers"
 import { LiveOpportunityCard, type LiveOpportunity } from "@/components/discovery/live-opportunity-card"

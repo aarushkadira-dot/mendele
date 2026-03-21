@@ -29,7 +29,7 @@ import {
   Search,
   Users,
   type LucideIcon
-} from "lucide-react"
+} from "@/components/ui/icons"
 import { useUrlValidator } from "@/hooks/use-url-validator"
 import { SimilarOpportunities } from "@/components/opportunities/similar-opportunities"
 import { QuickViewSummary } from "@/components/opportunities/quick-view-summary"

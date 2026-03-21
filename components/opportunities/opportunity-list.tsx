@@ -3,7 +3,7 @@
 import { useState } from "react"
 import { motion, AnimatePresence, LayoutGroup } from "framer-motion"
 import { Button } from "@/components/ui/button"
-import { Sparkles, Search, ArrowRight, Globe, TrendingUp, Zap, ChevronDown } from "lucide-react"
+import { Sparkles, Search, ArrowRight, Globe, TrendingUp, Zap, ChevronDown } from "@/components/ui/icons"
 import { OpportunityCard } from "@/components/opportunities/opportunity-card"
 import { InlineDiscovery } from "@/components/discovery/inline-discovery"
 import type { Opportunity } from "@/types/opportunity"

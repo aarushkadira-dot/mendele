@@ -16,7 +16,7 @@ import {
   Sparkles,
   FlaskConical,
   DollarSign,
-} from "lucide-react"
+} from "@/components/ui/icons"
 import type { Opportunity } from "@/types/opportunity"
 import { formatGradeLevels } from "@/types/opportunity"
 import { getCompanyLogoUrl } from "@/lib/company-logo"

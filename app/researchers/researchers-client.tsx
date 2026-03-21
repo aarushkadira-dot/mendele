@@ -14,7 +14,7 @@ import {
   ChevronDown,
   ChevronUp,
   SlidersHorizontal,
-} from "lucide-react"
+} from "@/components/ui/icons"
 import { ResearcherCard } from "@/components/researchers/researcher-card"
 import { getSavedResearchers } from "@/app/actions/researchers"
 import { toast } from "sonner"

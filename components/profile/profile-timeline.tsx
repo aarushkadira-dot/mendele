@@ -4,7 +4,7 @@ import { useMemo } from "react"
 import { motion } from "framer-motion"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Calendar, Trophy, Briefcase, GraduationCap } from "lucide-react"
+import { Calendar, Trophy, Briefcase, GraduationCap } from "@/components/ui/icons"
 import { format, parseISO } from "date-fns"
 
 interface Achievement {
@@ -83,7 +83,7 @@ export function ProfileTimeline({ achievements, extracurriculars }: ProfileTimel
 
   if (items.length === 0) {
     return (
-      <Card className="h-full">
+      <Card className="border-border">
         <CardContent className="flex items-center justify-center h-[300px] text-muted-foreground">
           No timeline activity yet
         </CardContent>
@@ -92,7 +92,7 @@ export function ProfileTimeline({ achievements, extracurriculars }: ProfileTimel
   }
 
   return (
-    <Card className="h-full border-0 shadow-none bg-transparent">
+    <Card className="border-border">
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <Calendar className="h-5 w-5 text-primary" />

@@ -1,6 +1,6 @@
 "use client"
 
-import { Clock, Briefcase, UserPlus, FileText, CheckCircle2 } from "lucide-react"
+import { Clock, Briefcase, UserPlus, FileText, CheckCircle2 } from "@/components/ui/icons"
 import { ScrollArea } from "@/components/ui/scroll-area"
 
 interface ActivityItem {

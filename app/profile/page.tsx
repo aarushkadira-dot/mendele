@@ -41,32 +41,21 @@ export default async function ProfilePage() {
     <div className="page-container">
       <div className="section-gap">
         {/* Header */}
-        <Card className="border-border bg-card overflow-hidden">
+        <div className="overflow-hidden">
           <ProfileHeader user={user} userProfile={userProfile} />
-        </Card>
+        </div>
 
         {/* Bento Grid */}
         <div className="grid gap-4 lg:grid-cols-3">
           {/* Main Content */}
           <div className="lg:col-span-2 space-y-4">
-            <Card className="border-border bg-card">
-              <AboutSection bio={user.bio} />
-            </Card>
-
-            <Card className="border-border bg-card">
-              <ProfileDetailsSection userProfile={userProfile} />
-            </Card>
-
-            <Card className="border-border bg-card">
-              <ProfileTimeline
-                achievements={user.achievements}
-                extracurriculars={user.extracurriculars}
-              />
-            </Card>
-
-            <Card className="border-border bg-card">
-              <RecommendationsSection recommendations={recommendations} />
-            </Card>
+            <AboutSection bio={user.bio} />
+            <ProfileDetailsSection userProfile={userProfile} />
+            <ProfileTimeline
+              achievements={user.achievements}
+              extracurriculars={user.extracurriculars}
+            />
+            <RecommendationsSection recommendations={recommendations} />
           </div>
 
           {/* Sidebar */}
@@ -77,22 +66,13 @@ export default async function ProfilePage() {
               strength={profileStrength}
               growth={12}
             />
-
-            <Card className="border-border bg-card">
-              <GoalsTracker />
-            </Card>
-
-            <Card className="border-border bg-card">
-              <SkillsRadar skills={user.skills} endorsements={skillEndorsements} />
-            </Card>
-
-            <Card className="border-border bg-card">
-              <SkillsSection
-                skills={user.skills}
-                interests={user.interests}
-                skillEndorsements={skillEndorsements}
-              />
-            </Card>
+            <GoalsTracker />
+            <SkillsRadar skills={user.skills} endorsements={skillEndorsements} />
+            <SkillsSection
+              skills={user.skills}
+              interests={user.interests}
+              skillEndorsements={skillEndorsements}
+            />
 
             <ProfileSidebar
               showStrength={false}

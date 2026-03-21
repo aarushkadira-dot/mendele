@@ -1,6 +1,6 @@
 export const dynamic = "force-dynamic"
 
-import { SalesDashboard } from "@/components/ui/live-sales-dashboard"
+import { NetworklyDashboard } from "@/components/dashboard/networkly-dashboard"
 import { getDashboardData } from "@/app/actions/dashboard"
 import { redirect } from "next/navigation"
 import { ensureUserRecord } from "@/app/actions/user"
@@ -32,10 +32,13 @@ export default async function DashboardPage() {
 
   return (
     <div className="page-container">
-      <SalesDashboard
+      <NetworklyDashboard
         user={data.user}
-        stats={data.user}
-        activities={data.recentActivities}
+        stats={data.stats || {}}
+        spotlightOpportunity={data.spotlightOpportunity || null}
+        dailyDigest={data.dailyDigest}
+        recentActivities={data.recentActivities}
+        profileCompleteness={data.user.profileCompleteness}
       />
     </div>
   )

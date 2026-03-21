@@ -18,7 +18,7 @@ import {
   MapPin,
   GraduationCap,
   Inbox,
-} from "lucide-react"
+} from "@/components/ui/icons"
 import { ResearchCard } from "@/components/research/research-card"
 import { ExpandedResearchCard } from "@/components/research/expanded-research-card"
 import { EmailGeneratorModal } from "@/components/research/email-generator-modal"

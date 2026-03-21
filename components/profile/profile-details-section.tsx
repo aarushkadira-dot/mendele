@@ -12,7 +12,7 @@ import {
   BookOpen, 
   Pencil,
   MapPin
-} from "lucide-react"
+} from "@/components/ui/icons"
 import { EditProfileDetailsDialog } from "./edit-profile-details-dialog"
 
 interface ProfileDetailsProps {

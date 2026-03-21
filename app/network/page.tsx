@@ -4,7 +4,7 @@ import { useState, useEffect } from "react"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Search, Sparkles, SlidersHorizontal } from "lucide-react"
+import { Search, Sparkles, SlidersHorizontal } from "@/components/ui/icons"
 import { ConnectionCard } from "@/components/network/connection-card"
 import { MessagesPanel } from "@/components/network/messages-panel"
 import { NetworkStats } from "@/components/network/network-stats"
@@ -92,7 +92,7 @@ export default function NetworkPage() {
 
         <div className="grid gap-6 lg:grid-cols-3">
           <div className="lg:col-span-2 space-y-4">
-            <Tabs defaultValue="all">
+            <Tabs defaultValue="all" id="network-connections-tabs">
               <TabsList>
                 <TabsTrigger value="all" className="text-xs">All ({connections.length})</TabsTrigger>
                 <TabsTrigger value="connected" className="text-xs">Connected ({connectedUsers.length})</TabsTrigger>

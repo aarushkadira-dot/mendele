@@ -1,7 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { UserPlus, Sparkles } from "lucide-react"
+import { UserPlus, Sparkles } from "@/components/ui/icons"
 import { getSuggestedConnections } from "@/app/actions/connections"
 
 export async function SuggestedConnections() {

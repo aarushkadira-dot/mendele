@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Sparkles, ArrowRight, Loader2 } from "lucide-react"
+import { Sparkles, ArrowRight, Loader2 } from "@/components/ui/icons"
 import Link from "next/link"
 import { getCuratedOpportunities } from "@/app/actions/opportunities"
 

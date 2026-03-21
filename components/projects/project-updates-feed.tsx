@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Activity, Milestone, Sparkles, Code, Loader2, FolderOpen } from "lucide-react"
+import { Activity, Milestone, Sparkles, Code, Loader2, FolderOpen } from "@/components/ui/icons"
 import { getMyProjectUpdates } from "@/app/actions/projects"
 import type React from "react"
 

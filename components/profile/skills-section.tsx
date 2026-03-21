@@ -4,7 +4,7 @@ import { useState } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { Plus, TrendingUp, ChevronDown } from "lucide-react"
+import { Plus, TrendingUp, ChevronDown } from "@/components/ui/icons"
 import { EditSkillsDialog } from "./dialogs"
 
 interface SkillsSectionProps {

@@ -49,9 +49,27 @@ export async function getPreferences() {
 
     if (insertError) {
       console.error("[getPreferences]", insertError)
-      throw new Error("Failed to create preferences")
+      // gracefully continue without throwing so page loads
+    } else {
+      preferences = newData
     }
-    preferences = newData
+  }
+
+  // Fallback to safe defaults if DB creation/fetch totally failed
+  if (!preferences) {
+    return {
+      id: "default",
+      notifyOpportunities: true,
+      notifyConnections: true,
+      notifyMessages: true,
+      weeklyDigest: true,
+      publicProfile: true,
+      showActivityStatus: true,
+      showProfileViews: true,
+      aiSuggestions: true,
+      autoIcebreakers: true,
+      careerNudges: true,
+    }
   }
 
   return {

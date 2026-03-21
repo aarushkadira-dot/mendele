@@ -23,7 +23,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog"
-import { Heart, Eye, MessageCircle, Lock, Globe, Users, MoreVertical, Pencil, Trash2, ExternalLink, Sparkles } from "lucide-react"
+import { Heart, Eye, MessageCircle, Lock, Globe, Users, MoreVertical, Pencil, Trash2, ExternalLink, Sparkles } from "@/components/ui/icons"
 import Image from "next/image"
 import { type Project, PROJECT_CATEGORIES } from "@/lib/projects"
 

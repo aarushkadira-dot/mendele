@@ -18,7 +18,7 @@ import {
   Loader2,
   Telescope,
   Search,
-} from "lucide-react"
+} from "@/components/ui/icons"
 import { VitalityScoreWidget } from "@/components/business/vitality-score-widget"
 import { FeedbackPanel } from "@/components/business/feedback-panel"
 import { StartupCard } from "@/components/business/startup-card"

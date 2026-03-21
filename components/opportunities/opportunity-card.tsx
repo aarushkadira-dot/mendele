@@ -19,7 +19,7 @@ import {
   MoreHorizontal,
   Loader2,
   Users,
-} from "lucide-react"
+} from "@/components/ui/icons"
 import { useUrlValidator } from "@/hooks/use-url-validator"
 import type { Opportunity } from "@/types/opportunity"
 import { getTypeGradientStyle, getMatchScoreColor, formatGradeLevels } from "@/types/opportunity"

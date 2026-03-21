@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
-import { ChevronDown, ChevronUp, TrendingUp, Info, Zap } from "lucide-react"
+import { ChevronDown, ChevronUp, TrendingUp, Info, Zap } from "@/components/ui/icons"
 import type { StartupVitalityScore } from "@/lib/business/startup-vitality-score"
 
 // ─── Constants ────────────────────────────────────────────────────────────────

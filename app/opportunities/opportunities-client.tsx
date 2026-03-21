@@ -10,7 +10,7 @@ import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Search, Sparkles, Bookmark, Send, Filter, Loader2, Globe, X, UserCheck, Users, AlertCircle, MapPin, Wifi, Building2, GraduationCap, ChevronDown, Clock, Archive } from "lucide-react"
+import { Search, Sparkles, Bookmark, Send, Filter, Loader2, Globe, X, UserCheck, Users, AlertCircle, MapPin, Wifi, Building2, GraduationCap, ChevronDown, Clock, Archive } from "@/components/ui/icons"
 import { OpportunityList } from "@/components/opportunities/opportunity-list"
 import { ModernOpportunityCard } from "@/components/opportunities/modern-opportunity-card"
 import { ExpandedOpportunityCard } from "@/components/opportunities/expanded-opportunity-card"
@@ -88,6 +88,7 @@ export default function OpportunitiesClient({ initialHighlightId }: Opportunitie
   const router = useRouter()
 
   const discoveredQueriesRef = useRef<Set<string>>(new Set())
+  const hasFetchedPersonalizedRef = useRef(false)
 
   // Memoize the set of already-loaded opportunity IDs and titles so discovery can skip them
   const existingOpportunityIds = useMemo(() => new Set(opportunities.map((o) => o.id)), [opportunities])
@@ -149,7 +150,7 @@ export default function OpportunitiesClient({ initialHighlightId }: Opportunitie
         ])
         const mapped = result.opportunities.map(mapOpportunity)
         setOpportunities(mapped)
-        setHasMore(result.hasMore)
+        setHasMore(result.hasMore ?? false)
         setTotalCount(result.totalCount)
         setCurrentPage(1)
         setStatuses(statusMap)
@@ -194,6 +195,7 @@ export default function OpportunitiesClient({ initialHighlightId }: Opportunitie
   // Fetch personalized opportunities
   const fetchPersonalizedOpportunities = useCallback(async () => {
     setPersonalizedLoading(true)
+    hasFetchedPersonalizedRef.current = true
     try {
       const result = await getPersonalizedOpportunities(20)
       setProfileComplete(result.profileComplete)
@@ -212,10 +214,10 @@ export default function OpportunitiesClient({ initialHighlightId }: Opportunitie
 
   // Refetch personalized when toggled on
   useEffect(() => {
-    if (personalized && personalizedOpportunities.length === 0 && !personalizedLoading) {
+    if (personalized && !hasFetchedPersonalizedRef.current && !personalizedLoading) {
       fetchPersonalizedOpportunities()
     }
-  }, [personalized, personalizedOpportunities.length, personalizedLoading, fetchPersonalizedOpportunities])
+  }, [personalized, personalizedLoading, fetchPersonalizedOpportunities])
 
   const performSearch = useDebouncedCallback(async (query: string, type: string, location: string, grade: string) => {
     const trimmedQuery = query.trim()
@@ -269,7 +271,7 @@ export default function OpportunitiesClient({ initialHighlightId }: Opportunitie
       if (result.newOpportunitiesFound > 0) {
         const refreshedData = await getOpportunities({ page: 1, pageSize: 50 })
         setOpportunities(refreshedData.opportunities.map(mapOpportunity))
-        setHasMore(refreshedData.hasMore)
+        setHasMore(refreshedData.hasMore ?? false)
         setTotalCount(refreshedData.totalCount)
         setCurrentPage(1)
       }
@@ -295,7 +297,7 @@ export default function OpportunitiesClient({ initialHighlightId }: Opportunitie
         const newOnes = mapped.filter(o => !existingIds.has(o.id))
         return [...prev, ...newOnes]
       })
-      setHasMore(result.hasMore)
+      setHasMore(result.hasMore ?? false)
       setTotalCount(result.totalCount)
       setCurrentPage(nextPage)
     } catch (error) {
@@ -523,130 +525,139 @@ export default function OpportunitiesClient({ initialHighlightId }: Opportunitie
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        className="min-h-screen bg-transparent"
+        className="min-h-screen"
       >
-        {/* --- 1. HERO & SEARCH SECTION --- */}
-        <section className="pt-8 pb-12">
-          <div className="page-container !py-0">
-            <div className="flex flex-col items-center text-center space-y-3 mb-10">
-              <Badge variant="outline" className="border-primary/20 text-primary text-label-sm gap-1.5 px-3 py-1">
-                <Sparkles className="h-3 w-3" />
-                Discovery Engine
-              </Badge>
-              <h1 className="text-display text-foreground max-w-2xl">
-                Your next <span className="text-primary">opportunity</span> starts here.
-              </h1>
-              <p className="text-body text-muted-foreground max-w-xl">
-                Explore personalized research positions, internships, and programs matched to your profile.
-              </p>
-            </div>
+        {/* ─── 1. HERO & SEARCH ─── */}
+        <div className="pt-8 pb-16 px-4 sm:px-6 max-w-7xl mx-auto">
+          <div className="flex flex-col items-center text-center gap-4 mb-10">
 
-            {/* Search Bar */}
-            <div className="max-w-2xl mx-auto">
-              <Card className="border-border bg-card p-1.5">
-                <div className="flex items-center gap-2">
-                  <div className="relative flex-1 group">
-                    <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground group-focus-within:text-primary transition-colors" />
-                    <Input
-                      placeholder="Role, skill, or achievement..."
-                      value={searchQuery}
-                      onChange={(e) => handleSearchChange(e.target.value)}
-                      className="pl-10 h-11 bg-transparent border-0 focus:ring-0 text-sm"
-                    />
-                  </div>
-                  <Button
-                    variant={personalized ? "default" : "outline"}
-                    className={cn(
-                      "h-9 px-4 gap-2 text-xs font-semibold",
-                    )}
-                    onClick={() => setPersonalized(!personalized)}
-                  >
-                    {personalized ? <UserCheck className="h-4 w-4" /> : <Users className="h-4 w-4" />}
-                    {personalized ? "For You" : "All"}
-                  </Button>
-                </div>
-              </Card>
-            </div>
-          </div>
-        </section>
-
-        {/* --- 2. BENTO HIGHLIGHTS --- */}
-        <section className="page-container !pt-0 pb-8">
-          <div className="flex items-center justify-between mb-6">
-            <div className="flex items-center gap-2">
-              <div className="h-6 w-0.5 bg-primary rounded-full" />
-              <h2 className="text-title">Featured Matches</h2>
-            </div>
-            <div className="flex items-center gap-2">
-              <Button variant="ghost" size="sm" className="text-primary text-caption font-semibold">View All</Button>
-            </div>
+            <h1 className="text-4xl md:text-5xl font-black tracking-tight max-w-2xl">
+              Your next <span className="text-primary">opportunity</span> starts here.
+            </h1>
+            <p className="text-base text-muted-foreground max-w-lg">
+              Explore personalized research positions, internships, and programs matched to your profile.
+            </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-3 gap-4 auto-rows-[360px]">
-            {filteredOpportunities.slice(0, 3).map((opp, idx) => (
-              <div key={opp.id} className={cn(
-                "md:col-span-2 lg:col-span-1",
-                idx === 0 && "md:col-span-4 lg:col-span-2"
-              )}>
-                  <ModernOpportunityCard
-                    opportunity={opp}
-                    isSelected={selectedOpportunity?.id === opp.id}
-                    onSelect={handleSelectOpportunity}
-                    onToggleSave={(_, id) => handleToggleSave(id)}
-                  />
+          {/* Search Bar */}
+          <div className="max-w-2xl mx-auto">
+            <div className="flex items-center gap-2 rounded-xl border border-border bg-card p-1.5 shadow-sm">
+              <div className="relative flex-1 group">
+                <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground group-focus-within:text-primary transition-colors" />
+                <Input
+                  placeholder="Role, skill, or achievement..."
+                  value={searchQuery}
+                  onChange={(e) => handleSearchChange(e.target.value)}
+                  className="pl-10 h-11 bg-transparent border-0 shadow-none focus-visible:ring-0 text-sm"
+                />
               </div>
-            ))}
+              <Button
+                variant={personalized ? "default" : "outline"}
+                size="sm"
+                className="h-9 px-4 gap-2 rounded-lg font-semibold"
+                onClick={() => setPersonalized(!personalized)}
+              >
+                {personalized ? <UserCheck className="h-4 w-4" /> : <Users className="h-4 w-4" />}
+                {personalized ? "For You" : "All"}
+              </Button>
+            </div>
           </div>
-        </section>
+        </div>
 
-        {/* --- 3. FILTER & DISCOVERY BAR --- */}
-        <section className="sticky top-14 z-40 page-container !py-3 pointer-events-none">
-          <div className="pointer-events-auto">
-            <Card className="border-border bg-card/95 backdrop-blur-sm p-1.5 px-3 flex items-center gap-2 overflow-x-auto scrollbar-none">
-              <div className="flex items-center gap-1.5 border-r border-border pr-2 mr-1">
-                <Filter className="h-3.5 w-3.5 text-muted-foreground ml-1" />
-                <span className="text-label-sm text-muted-foreground">Filters</span>
+        {/* ─── 2. FEATURED MATCHES (BENTO GRID) ─── */}
+        {filteredOpportunities.length > 0 && (
+          <div className="px-4 sm:px-6 max-w-7xl mx-auto pb-10">
+            <div className="flex items-center justify-between mb-5">
+              <div className="flex items-center gap-2">
+                <div className="h-5 w-0.5 bg-primary rounded-full" />
+                <h2 className="text-lg font-bold">Featured Matches</h2>
               </div>
-              
-              {CATEGORIES.map((cat) => (
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {filteredOpportunities.slice(0, 3).map((opp) => (
+                <ModernOpportunityCard
+                  key={opp.id}
+                  opportunity={opp}
+                  isSelected={selectedOpportunity?.id === opp.id}
+                  onSelect={handleSelectOpportunity}
+                  onToggleSave={(_, id) => handleToggleSave(id)}
+                />
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* ─── 3. STICKY FILTER BAR ─── */}
+        <div className="sticky top-14 z-30 px-4 sm:px-6 py-2 max-w-7xl mx-auto pointer-events-none">
+          <div className="pointer-events-auto flex flex-row items-center gap-2 overflow-x-auto scrollbar-none rounded-xl border border-border bg-card/95 backdrop-blur-xl shadow-sm px-3 py-2">
+            {/* Label */}
+            <div className="flex items-center gap-1.5 shrink-0 border-r border-border pr-2 mr-1">
+              <Filter className="h-3.5 w-3.5 text-muted-foreground" />
+              <span className="text-xs text-muted-foreground font-medium whitespace-nowrap">Filters</span>
+            </div>
+
+            {/* Category Pills */}
+            {CATEGORIES.map((cat) => {
+              const val = cat === "All" ? "all" : cat.toLowerCase()
+              const isActive = typeFilter.toLowerCase() === val
+              return (
                 <button
                   key={cat}
-                  onClick={() => handleTypeFilterChange(cat === "All" ? "all" : cat.toLowerCase())}
+                  onClick={() => handleTypeFilterChange(val)}
                   className={cn(
-                    "px-3 py-1 rounded-md text-xs font-medium transition-all whitespace-nowrap border",
-                    typeFilter.toLowerCase() === (cat === "All" ? "all" : cat.toLowerCase())
+                    "shrink-0 px-3 py-1 rounded-md text-xs font-medium transition-all whitespace-nowrap border cursor-pointer",
+                    isActive
                       ? "bg-primary text-primary-foreground border-primary"
-                      : "bg-transparent text-muted-foreground border-border hover:bg-accent"
+                      : "bg-transparent text-muted-foreground border-border hover:bg-accent hover:text-accent-foreground"
                   )}
                 >
                   {cat}
                 </button>
-              ))}
-              
-              <div className="h-5 w-px bg-border mx-1" />
-              
-              {LOCATION_TYPES.map(({ value, label, icon: Icon }) => (
-                <button
-                  key={value}
-                  onClick={() => handleLocationFilterChange(value)}
-                  className={cn(
-                    "flex items-center gap-1 px-3 py-1 rounded-md text-xs font-medium transition-all whitespace-nowrap border",
-                    locationFilter === value
-                      ? "bg-primary text-primary-foreground border-primary"
-                      : "bg-transparent text-muted-foreground border-border hover:bg-accent"
-                  )}
-                >
-                  <Icon className="h-3.5 w-3.5" />
-                  {label}
-                </button>
-              ))}
-            </Card>
-          </div>
-        </section>
+              )
+            })}
 
-        {/* --- 4. MAIN FEED --- */}
-        <section className="page-container !pt-4 space-y-8">
-          {/* Active Discoveries Trigger */}
+            <div className="shrink-0 h-4 w-px bg-border mx-1" />
+
+            {/* Location Pills */}
+            {LOCATION_TYPES.map(({ value, label, icon: Icon }) => (
+              <button
+                key={value}
+                onClick={() => handleLocationFilterChange(value)}
+                className={cn(
+                  "shrink-0 flex items-center gap-1.5 px-3 py-1 rounded-md text-xs font-medium transition-all whitespace-nowrap border cursor-pointer",
+                  locationFilter === value
+                    ? "bg-primary text-primary-foreground border-primary"
+                    : "bg-transparent text-muted-foreground border-border hover:bg-accent hover:text-accent-foreground"
+                )}
+              >
+                <Icon className="h-3.5 w-3.5" />
+                {label}
+              </button>
+            ))}
+
+            {/* Clear Filters */}
+            {(locationFilter !== "all" || typeFilter !== "all") && (
+              <>
+                <div className="shrink-0 h-4 w-px bg-border mx-1" />
+                <button
+                  onClick={() => {
+                    setLocationFilter("all")
+                    handleTypeFilterChange("all")
+                  }}
+                  className="shrink-0 flex items-center gap-1 px-2.5 py-1 rounded-md text-xs text-muted-foreground border border-dashed border-border hover:text-foreground transition-all cursor-pointer"
+                >
+                  <X className="h-3 w-3" />
+                  Clear
+                </button>
+              </>
+            )}
+          </div>
+        </div>
+
+        {/* ─── 4. MAIN FEED ─── */}
+        <div className="px-4 sm:px-6 max-w-7xl mx-auto py-8 space-y-8">
+          {/* Discovery Trigger */}
           <DiscoveryTriggerCard
             initialQuery={searchQuery}
             onComplete={handleDiscoveryComplete}
@@ -658,47 +669,80 @@ export default function OpportunitiesClient({ initialHighlightId }: Opportunitie
             existingOpportunityTitles={existingOpportunityTitles}
           />
 
-          {/* Main Content Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-            <AnimatePresence mode="popLayout">
-              {filteredOpportunities.slice(3).map((opp, idx) => (
-                <motion.div
-                  key={opp.id}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: idx * 0.05 }}
-                >
-                  <ModernOpportunityCard
-                    opportunity={opp}
-                    isSelected={selectedOpportunity?.id === opp.id}
-                    onSelect={handleSelectOpportunity}
-                    onToggleSave={(_, id) => handleToggleSave(id)}
-                  />
-                </motion.div>
-              ))}
-            </AnimatePresence>
-          </div>
-
-          {/* Infinite Load Mock */}
-          {hasMore && (
-            <div className="flex justify-center pt-6">
-              <Button
-                variant="outline"
-                onClick={loadMore}
-                disabled={loadingMore}
-                className="h-9 px-6 gap-2 text-sm font-medium"
-              >
-                {loadingMore ? <Loader2 className="h-4 w-4 animate-spin" /> : <ChevronDown className="h-4 w-4" />}
-                Load More
+          {/* Card Grid */}
+          {filteredOpportunities.length === 0 ? (
+            <div className="flex flex-col items-center justify-center py-20 text-center gap-4">
+              <div className="h-16 w-16 rounded-full bg-muted flex items-center justify-center">
+                <Search className="h-8 w-8 text-muted-foreground" />
+              </div>
+              <div>
+                <h3 className="text-lg font-semibold mb-1">No opportunities found</h3>
+                <p className="text-sm text-muted-foreground max-w-sm">
+                  Try adjusting your filters or use the discovery tool above to find new opportunities.
+                </p>
+              </div>
+              <Button variant="outline" size="sm" onClick={() => { handleTypeFilterChange("all"); setLocationFilter("all") }}>
+                Clear all filters
               </Button>
             </div>
-          )}
-        </section>
+          ) : (
+            <>
+              {filteredOpportunities.length > 3 && (
+                <div>
+                  <div className="flex items-center gap-2 mb-5">
+                    <div className="h-5 w-0.5 bg-primary rounded-full" />
+                    <h2 className="text-lg font-bold">
+                      {searchQuery ? `Results for "${searchQuery}"` : "All Opportunities"}
+                      <span className="text-muted-foreground text-sm font-normal ml-2">
+                        ({filteredOpportunities.length - 3} more)
+                      </span>
+                    </h2>
+                  </div>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                    <AnimatePresence mode="popLayout">
+                      {filteredOpportunities.slice(3).map((opp, idx) => (
+                        <motion.div
+                          key={opp.id}
+                          initial={{ opacity: 0, y: 16 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          exit={{ opacity: 0, scale: 0.95 }}
+                          transition={{ delay: Math.min(idx * 0.04, 0.5) }}
+                        >
+                          <ModernOpportunityCard
+                            opportunity={opp}
+                            isSelected={selectedOpportunity?.id === opp.id}
+                            onSelect={handleSelectOpportunity}
+                            onToggleSave={(_, id) => handleToggleSave(id)}
+                          />
+                        </motion.div>
+                      ))}
+                    </AnimatePresence>
+                  </div>
+                </div>
+              )}
 
-        {/* Selection Details Drawer */}
+              {hasMore && (
+                <div className="flex justify-center pt-4">
+                  <Button
+                    variant="outline"
+                    onClick={loadMore}
+                    disabled={loadingMore}
+                    className="h-9 px-6 gap-2 text-sm font-medium"
+                  >
+                    {loadingMore ? <Loader2 className="h-4 w-4 animate-spin" /> : <ChevronDown className="h-4 w-4" />}
+                    Load More
+                  </Button>
+                </div>
+              )}
+            </>
+          )}
+        </div>
+
+        {/* ─── DETAIL PANEL ─── */}
         <AnimatePresence>
           {selectedOpportunity && (
             <ExpandedOpportunityCard
+              key={selectedOpportunity.id}
               opportunity={selectedOpportunity}
               onClose={() => setSelectedOpportunity(null)}
               onToggleSave={handleToggleSave}
@@ -709,3 +753,4 @@ export default function OpportunitiesClient({ initialHighlightId }: Opportunitie
     </LayoutGroup>
   )
 }
+
