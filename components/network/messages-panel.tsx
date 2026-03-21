@@ -4,7 +4,7 @@ import { useState, useEffect } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
-import { ArrowRight, MessageCircle, Loader2 } from "lucide-react"
+import { ArrowRight, MessageCircle, Loader2 } from "@/components/ui/icons"
 import { getMessages } from "@/app/actions/messages"
 
 interface Message {

@@ -1,7 +1,7 @@
 "use client"
 
 import { Button } from "@/components/ui/button"
-import { Zap, PlusCircle, PenTool, Search } from "lucide-react"
+import { Zap, PlusCircle, PenTool, Search } from "@/components/ui/icons"
 import Link from "next/link"
 
 export function QuickActionsWidget() {

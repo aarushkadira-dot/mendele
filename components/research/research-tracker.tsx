@@ -24,7 +24,7 @@ import {
   MapPin,
   Loader2,
   Inbox,
-} from "lucide-react"
+} from "@/components/ui/icons"
 import type { Opportunity } from "@/types/opportunity"
 import {
   RESEARCH_STATUS_CONFIG,

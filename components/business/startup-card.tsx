@@ -3,7 +3,7 @@
 import { motion } from "framer-motion"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
-import { Globe, Presentation, Linkedin, Users } from "lucide-react"
+import { Globe, Presentation, Linkedin, Users } from "@/components/ui/icons"
 import type { Project } from "@/lib/projects"
 
 // ─── Grade badge ──────────────────────────────────────────────────────────────

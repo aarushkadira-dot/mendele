@@ -1,7 +1,7 @@
 import type React from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { ArrowRight, CheckCircle2, Clock, Send, FileCheck } from "lucide-react"
+import { ArrowRight, CheckCircle2, Clock, Send, FileCheck } from "@/components/ui/icons"
 import { getApplications } from "@/app/actions/applications"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"

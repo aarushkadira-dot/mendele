@@ -3,7 +3,7 @@
 import { useState, useRef, useCallback, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { Input } from "@/components/ui/input"
-import { Search, ArrowRight, Globe, Loader2 } from "lucide-react"
+import { Search, ArrowRight, Globe, Loader2 } from "@/components/ui/icons"
 import { cn } from "@/lib/utils"
 
 interface SearchWithDiscoveryProps {

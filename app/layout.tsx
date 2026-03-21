@@ -51,6 +51,7 @@ export default async function RootLayout({
               `,
           }}
         />
+        <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet' />
       </head>
       <body className={`${manrope.variable} ${jetbrainsMono.variable} font-sans antialiased`}>
         <ThemeProvider

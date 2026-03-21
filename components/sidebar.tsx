@@ -17,7 +17,7 @@ import {
   FlaskConical,
   Users2,
   Building2,
-} from "lucide-react"
+} from "@/components/ui/icons"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { useSupabaseUser } from "@/hooks/use-supabase-user"
 import { Button } from "@/components/ui/button"

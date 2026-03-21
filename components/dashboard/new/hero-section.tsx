@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button"
 import { Progress } from "@/components/ui/progress"
-import { Sparkles, ArrowRight, User, CheckCircle2 } from "lucide-react"
+import { Sparkles, ArrowRight, User, CheckCircle2 } from "@/components/ui/icons"
 import Link from "next/link"
 
 interface HeroSectionProps {

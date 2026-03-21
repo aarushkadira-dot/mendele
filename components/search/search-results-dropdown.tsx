@@ -14,7 +14,7 @@ import {
   SearchX,
   Loader2,
   ChevronRight
-} from 'lucide-react'
+} from "@/components/ui/icons"
 import { useRouter } from 'next/navigation'
 
 import { cn } from '@/lib/utils'

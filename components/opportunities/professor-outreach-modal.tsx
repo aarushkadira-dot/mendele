@@ -24,7 +24,7 @@ import {
   ChevronUp,
   FlaskConical,
   BookOpen,
-} from "lucide-react"
+} from "@/components/ui/icons"
 import type { Opportunity } from "@/types/opportunity"
 import type { Professor } from "@/app/api/opportunities/find-professors/route"
 

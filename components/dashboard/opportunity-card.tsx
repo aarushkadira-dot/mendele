@@ -2,7 +2,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { ArrowRight, Clock, MapPin, Sparkles } from "lucide-react"
+import { ArrowRight, Clock, MapPin, Sparkles } from "@/components/ui/icons"
 import { getOpportunities } from "@/app/actions/opportunities"
 import Link from "next/link"
 

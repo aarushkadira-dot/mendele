@@ -4,7 +4,7 @@ import { useState } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Plus, Quote, ChevronDown } from "lucide-react"
+import { Plus, Quote, ChevronDown } from "@/components/ui/icons"
 import { toast } from "sonner"
 import Image from "next/image"
 

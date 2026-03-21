@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { Building2, MapPin, DollarSign, ArrowRight, Sparkles } from "lucide-react"
+import { Building2, MapPin, DollarSign, ArrowRight, Sparkles } from "@/components/ui/icons"
 import Link from "next/link"
 
 interface OpportunitySpotlightProps {

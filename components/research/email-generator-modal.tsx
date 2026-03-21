@@ -21,7 +21,7 @@ import {
   Loader2,
   Sparkles,
   Send,
-} from "lucide-react"
+} from "@/components/ui/icons"
 import type { Opportunity } from "@/types/opportunity"
 import type { ResearchEmailVariation } from "@/types/research"
 

@@ -27,7 +27,7 @@ export function AppShell({ children }: AppShellProps) {
       <div
         className="flex-1 flex flex-col overflow-hidden transition-[margin] duration-300"
         style={{
-          marginLeft: isSidebarCollapsed ? "68px" : "260px",
+          marginLeft: isSidebarCollapsed ? "128px" : "320px",
           transitionTimingFunction: "cubic-bezier(0.16, 1, 0.3, 1)",
         }}
       >

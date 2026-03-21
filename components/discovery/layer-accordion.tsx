@@ -14,7 +14,7 @@ import {
   Loader2,
   AlertCircle,
   Clock,
-} from 'lucide-react'
+} from "@/components/ui/icons"
 import { cn } from '@/lib/utils'
 import type { DiscoveryState, LayerId, LayerState } from '@/types/discovery'
 

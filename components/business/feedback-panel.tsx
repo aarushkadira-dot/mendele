@@ -12,7 +12,7 @@ import {
   RotateCcw,
   ChevronDown,
   ChevronUp,
-} from "lucide-react"
+} from "@/components/ui/icons"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import type { StartupFeedback } from "@/app/api/business/feedback/route"

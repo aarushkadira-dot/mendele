@@ -14,7 +14,7 @@ import { motion } from 'framer-motion'
 import ReactMarkdown from 'react-markdown'
 import type { Components } from 'react-markdown'
 import { OpportunityCardInline, type InlineOpportunity } from './opportunity-card-inline'
-import { Loader2, Copy, Check } from 'lucide-react'
+import { Loader2, Copy, Check } from "@/components/ui/icons"
 import { fadeInVariants, PREMIUM_EASE } from './animations'
 
 // ─── Code block with copy button ────────────────────────────────

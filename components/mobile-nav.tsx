@@ -2,7 +2,7 @@
 
 import { Sheet, SheetContent, SheetTrigger, SheetTitle, SheetDescription } from "@/components/ui/sheet"
 import { Button } from "@/components/ui/button"
-import { Menu } from "lucide-react"
+import { Menu } from "@/components/ui/icons"
 import { Sidebar } from "@/components/sidebar"
 import { useState, useEffect } from "react"
 

@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
-import { Bug, X, ExternalLink } from "lucide-react"
+import { Bug, X, ExternalLink } from "@/components/ui/icons"
 import ReactMarkdown from "react-markdown"
 
 const STORAGE_KEY = "networkly-known-bugs-dismissed"

@@ -2,7 +2,7 @@
 
 import { useEffect, useCallback, useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
-import { Search, CheckCircle2, Loader2, X, ChevronDown, Sparkles } from "lucide-react"
+import { Search, CheckCircle2, Loader2, X, ChevronDown, Sparkles } from "@/components/ui/icons"
 import { useDiscoveryLayers } from "@/hooks/use-discovery-layers"
 import { LayerAccordion } from "./layer-accordion"
 import { Button } from "@/components/ui/button"

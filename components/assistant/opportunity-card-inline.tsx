@@ -11,7 +11,7 @@
 
 import { useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
-import { MapPin, Calendar, Building2, Bookmark, ExternalLink, Clock, CheckCircle2 } from 'lucide-react'
+import { MapPin, Calendar, Building2, Bookmark, ExternalLink, Clock, CheckCircle2 } from "@/components/ui/icons"
 
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'

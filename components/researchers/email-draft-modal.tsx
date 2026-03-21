@@ -11,7 +11,7 @@ import {
 import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
 import { Label } from "@/components/ui/label"
-import { Mail, Copy, Check, Loader2, Info } from "lucide-react"
+import { Mail, Copy, Check, Loader2, Info } from "@/components/ui/icons"
 import type { ScoredProfile, StudentProfile } from "@/types/researcher"
 
 interface EmailDraftModalProps {

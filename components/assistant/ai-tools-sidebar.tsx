@@ -18,7 +18,7 @@ import {
   History,
   Trash2,
   Loader2,
-} from 'lucide-react'
+} from "@/components/ui/icons"
 import { getSavedChatSession, deleteChatSession, type ChatSession } from '@/app/actions/chat'
 import { staggerContainerVariants, fadeInUpVariants, PREMIUM_EASE } from './animations'
 

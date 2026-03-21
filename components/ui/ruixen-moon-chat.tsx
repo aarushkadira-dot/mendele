@@ -22,7 +22,7 @@ import {
  UserRound,
  GraduationCap,
  Target
-} from "lucide-react";
+} from "@/components/ui/icons";
 
 interface Message {
  id: string;

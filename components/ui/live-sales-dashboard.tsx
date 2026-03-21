@@ -24,7 +24,7 @@ import {
   ArrowUpRight,
   Eye,
   Users,
-} from "lucide-react"
+} from "@/components/ui/icons"
 
 interface SalesDashboardProps {
   user?: any
@@ -39,9 +39,7 @@ const MetricCard: FC<{
   value: string | number
   subtitle?: string
   icon: React.ReactNode
-  trend?: string
-  isPositive?: boolean
-}> = ({ title, value, subtitle, icon, trend, isPositive }) => (
+}> = ({ title, value, subtitle, icon }) => (
   <Card className="border-border bg-card">
     <CardContent className="p-5">
       <div className="flex items-center justify-between mb-3">
@@ -53,19 +51,11 @@ const MetricCard: FC<{
       <div className="text-2xl font-bold tracking-tight text-foreground tabular-nums">
         {value}
       </div>
-      <div className="flex items-center gap-2 mt-1">
-        {trend && (
-          <span
-            className={`inline-flex items-center gap-0.5 text-xs font-semibold ${
-              isPositive ? "text-success" : "text-destructive"
-            }`}
-          >
-            <ArrowUpRight className={`h-3 w-3 ${!isPositive ? "rotate-90" : ""}`} />
-            {trend}
-          </span>
-        )}
-        {subtitle && <span className="text-caption text-muted-foreground">{subtitle}</span>}
-      </div>
+      {subtitle && (
+        <div className="flex items-center gap-2 mt-1">
+          <span className="text-caption text-muted-foreground">{subtitle}</span>
+        </div>
+      )}
     </CardContent>
   </Card>
 )
@@ -114,32 +104,24 @@ export const SalesDashboard: FC<SalesDashboardProps> = ({ user, stats }) => {
           value={stats?.profileViews || 1240}
           subtitle="this month"
           icon={<Eye className="h-4 w-4 text-primary" />}
-          trend="+12%"
-          isPositive
         />
         <MetricCard
           title="Connections"
           value={stats?.connections || 542}
           subtitle="professional links"
           icon={<Users className="h-4 w-4 text-primary" />}
-          trend="+8%"
-          isPositive
         />
         <MetricCard
           title="Opportunities"
           value={stats?.searchAppearances || 86}
           subtitle="AI-matched"
           icon={<Target className="h-4 w-4 text-primary" />}
-          trend="+5%"
-          isPositive
         />
         <MetricCard
           title="Growth Score"
           value="94.2"
           subtitle="index"
           icon={<TrendingUp className="h-4 w-4 text-primary" />}
-          trend="+2.1"
-          isPositive
         />
       </div>
 
