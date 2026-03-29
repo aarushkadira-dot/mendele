@@ -142,7 +142,7 @@ export function Header() {
                 className="text-destructive"
                 onClick={async () => {
                   await signOut()
-                  window.location.href = "/login"
+                  window.location.href = "/"
                 }}
               >
                 Sign Out

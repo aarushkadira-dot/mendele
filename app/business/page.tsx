@@ -8,7 +8,7 @@ import { BusinessClient } from "./business-client"
 export default async function BusinessPage() {
   const user = await getCurrentUser()
   if (!user) {
-    redirect("/login")
+    redirect("/")
   }
 
   // Parallel fetch all data needed for the page

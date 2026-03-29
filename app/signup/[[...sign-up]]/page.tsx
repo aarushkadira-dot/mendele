@@ -145,7 +145,7 @@ export default function SignupPage() {
                             className="space-y-3"
                         >
                             <Button
-                                onClick={() => router.push(`/login?redirect=${encodeURIComponent(redirect)}`)}
+                                onClick={() => router.push(`/dashboard`)}
                                 className="w-full relative overflow-hidden group"
                                 size="lg"
                             >
@@ -178,7 +178,7 @@ export default function SignupPage() {
             onGoogleSignIn={handleGoogleSignup}
             error={error}
             loading={loading}
-            onHaveAccount={() => router.push(`/login?redirect=${encodeURIComponent(redirect)}`)}
+            onHaveAccount={() => router.push(`/dashboard`)}
             title={<span className="font-light text-foreground tracking-tighter">Join Networkly</span>}
             description="Create your professional identity and connect with thousands of opportunities."
             heroImageSrc="https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&q=80&w=2000"

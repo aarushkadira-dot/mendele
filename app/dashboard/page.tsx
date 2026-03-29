@@ -11,7 +11,7 @@ export default async function DashboardPage() {
   if (!data) {
     const ensuredUser = await ensureUserRecord()
     if (!ensuredUser) {
-      redirect("/login")
+      redirect("/")
     }
 
     data = await getDashboardData()

@@ -67,7 +67,7 @@ export function SignupForm({ className, ...props }: SignupFormProps) {
             setIsLoading(false)
             console.log(values)
             toast.success("Account created successfully!")
-            router.push("/login")
+            router.push("/dashboard")
         }, 2000)
     }
 
@@ -148,8 +148,8 @@ export function SignupForm({ className, ...props }: SignupFormProps) {
                         </div>
                         <div className="mt-4 text-center text-sm">
                             Already have an account?{" "}
-                            <Link href="/login" className="underline underline-offset-4">
-                                Login
+                            <Link href="/dashboard" className="underline underline-offset-4">
+                                Go to Dashboard
                             </Link>
                         </div>
                     </form>

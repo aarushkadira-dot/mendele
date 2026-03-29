@@ -135,7 +135,7 @@ export async function requireAuth() {
   const user = await getCurrentUser()
   if (!user) {
     const { redirect } = await import("next/navigation")
-    redirect("/login")
+    redirect("/")
   }
   return user
 }
