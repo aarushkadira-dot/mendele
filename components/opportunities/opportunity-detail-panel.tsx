@@ -41,7 +41,7 @@ import {
   TrendingUp,
   AlertCircle,
   CircleDollarSign
-} from "lucide-react"
+} from "@/components/ui/icons"
 import type { Opportunity } from "@/types/opportunity"
 import { getTypeGradientStyle, getMatchScoreColor, getMatchScoreBgColor, formatGradeLevels } from "@/types/opportunity"
 import { AIInsightCard } from "@/components/opportunities/ai-insight-card"

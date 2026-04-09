@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Eye, EyeOff } from 'lucide-react';
+import { Eye, EyeOff } from "@/components/ui/icons";
 
 // --- HELPER COMPONENTS (ICONS) ---
 

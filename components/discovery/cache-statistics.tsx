@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react"
 import { Card } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { Loader2, RefreshCw, Trash2, CheckCircle2, XCircle, Clock } from "lucide-react"
+import { Loader2, RefreshCw, Trash2, CheckCircle2, XCircle, Clock } from "@/components/ui/icons"
 import { getCacheStats, clearOldCacheEntries } from "@/app/actions/discovery"
 
 interface CacheStats {

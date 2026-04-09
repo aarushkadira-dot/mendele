@@ -31,7 +31,7 @@ export function SkillsRadar({ skills, endorsements }: SkillsRadarProps) {
   // If no data, show a placeholder or empty state
   if (data.length === 0) {
     return (
-      <Card className="h-full">
+      <Card className="border-border">
         <CardHeader>
           <CardTitle className="text-sm font-medium">Skills Overview</CardTitle>
         </CardHeader>
@@ -43,7 +43,7 @@ export function SkillsRadar({ skills, endorsements }: SkillsRadarProps) {
   }
 
   return (
-    <Card className="h-full border-0 shadow-none bg-transparent">
+    <Card className="border-border">
       <CardHeader className="pb-2">
         <CardTitle className="text-lg font-medium">Skill Profile</CardTitle>
       </CardHeader>

@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { Badge } from "@/components/ui/badge"
-import { Lightbulb } from "lucide-react"
+import { Lightbulb } from "@/components/ui/icons"
 import type { Opportunity } from "@/types/opportunity"
 import type { InsightPayload } from "@/types/insight"
 

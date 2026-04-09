@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react"
 import { Card } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { ExternalLink, Calendar, MapPin, Building2, Sparkles } from "lucide-react"
+import { ExternalLink, Calendar, MapPin, Building2, Sparkles } from "@/components/ui/icons"
 import { cn } from "@/lib/utils"
 
 interface Opportunity {

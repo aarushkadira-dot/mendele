@@ -16,7 +16,7 @@ import {
   ThumbsDown,
   Minus,
   Check,
-} from "lucide-react"
+} from "@/components/ui/icons"
 import { toast } from "sonner"
 import { ScoreBreakdown } from "./score-breakdown"
 import { EmailDraftModal } from "./email-draft-modal"

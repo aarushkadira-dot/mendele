@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
-import { ChevronDown, ChevronUp, Zap, TrendingUp, Info } from "lucide-react"
+import { ChevronDown, ChevronUp, Zap, TrendingUp, Info } from "@/components/ui/icons"
 import type { MomentumBreakdown } from "@/lib/matching/momentum-score"
 
 // ─── Constants ────────────────────────────────────────────────────────────────

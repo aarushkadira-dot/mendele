@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react"
 import { Progress } from "@/components/ui/progress"
 import { Button } from "@/components/ui/button"
-import { Target, ChevronRight, Plus, Loader2, CheckCircle2, Clock, Circle } from "lucide-react"
+import { Target, ChevronRight, Plus, Loader2, CheckCircle2, Clock, Circle } from "@/components/ui/icons"
 import { getProfileGoals, getProfileGoalsProgress, type ProfileGoalData } from "@/app/actions/goals"
 import Link from "next/link"
 

@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Progress } from "@/components/ui/progress"
-import { Target, CheckCircle2, Circle, Clock, Loader2 } from "lucide-react"
+import { Target, CheckCircle2, Circle, Clock, Loader2 } from "@/components/ui/icons"
 import { getProfileGoals, getProfileGoalsProgress, type ProfileGoalData } from "@/app/actions/goals"
 
 export function GoalsProgress() {

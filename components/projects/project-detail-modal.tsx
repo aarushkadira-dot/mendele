@@ -18,7 +18,7 @@ import {
   Calendar,
   UserPlus,
   Link as LinkIcon,
-} from "lucide-react"
+} from "@/components/ui/icons"
 import Image from "next/image"
 import { type Project, PROJECT_CATEGORIES } from "@/lib/projects"
 

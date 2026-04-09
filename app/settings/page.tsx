@@ -5,9 +5,10 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Switch } from "@/components/ui/switch"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Textarea } from "@/components/ui/textarea"
-import { Loader2, Check } from "lucide-react"
+import { Loader2, Check } from "@/components/ui/icons"
 import { useTheme } from "next-themes"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { useSupabaseUser } from "@/hooks/use-supabase-user"
@@ -18,6 +19,9 @@ import { toast } from "sonner"
 import { BatchDiscoveryPanel } from "@/components/discovery/batch-discovery-panel"
 import { CacheStatistics } from "@/components/discovery/cache-statistics"
 import { motion, useReducedMotion } from "framer-motion"
+
+import { useSearchParams } from "next/navigation"
+import { Suspense } from "react"
 
 interface UserData {
  id: string
@@ -36,7 +40,9 @@ interface UserData {
  portfolioUrl: string | null
 }
 
-export default function SettingsPage() {
+function SettingsContent() {
+ const searchParams = useSearchParams()
+ const activeTab = searchParams.get("tab") || "profile"
  const { setTheme, theme } = useTheme()
  const { user } = useSupabaseUser()
  const [isPending, startTransition] = useTransition()
@@ -239,261 +245,286 @@ export default function SettingsPage() {
  </Button>
  </div>
 
- <div className="grid gap-6 lg:grid-cols-[2fr_3fr]">
- <div className="space-y-4">
- 
- <div className="rounded-lg border border-border bg-card p-5">
- <h2 className="text-body-sm font-semibold text-foreground">Profile Overview</h2>
- <p className="mb-4 text-caption text-muted-foreground">
- Your primary identity on Networkly.
- </p>
- 
- <div className="flex items-center gap-4 mb-6">
- <Avatar className="h-16 w-16 border border-border/60">
- <AvatarImage src={userAvatar} alt={userName} />
- <AvatarFallback>{userInitials}</AvatarFallback>
- </Avatar>
- <div>
- <Button variant="outline" size="sm" className="rounded-full text-xs h-8">
- Change photo
- </Button>
- <p className="text-[10px] mt-1 text-muted-foreground">JPG/PNG. Max 2MB.</p>
- </div>
- </div>
+  <Tabs value={activeTab} className="w-full mt-2">
+    <TabsContent value="profile" className="mt-0 outline-none">
+      <div className="grid gap-6 lg:grid-cols-[2fr_3fr]">
+        <div className="space-y-4">
+          
+          <div className="rounded-lg border border-border bg-card p-5">
+            <h2 className="text-body-sm font-semibold text-foreground">Profile Overview</h2>
+            <p className="mb-4 text-caption text-muted-foreground">
+              Your primary identity on Networkly.
+            </p>
+            
+            <div className="flex items-center gap-4 mb-6">
+              <Avatar className="h-16 w-16 border border-border/60">
+                <AvatarImage src={userAvatar} alt={userName} />
+                <AvatarFallback>{userInitials}</AvatarFallback>
+              </Avatar>
+              <div>
+                <Button variant="outline" size="sm" className="rounded-full text-xs h-8 cursor-pointer">
+                  Change photo
+                </Button>
+                <p className="text-[10px] mt-1 text-muted-foreground">JPG/PNG. Max 2MB.</p>
+              </div>
+            </div>
 
- <div className="space-y-4 text-sm">
- <div className="space-y-1">
- <Label className="text-xs font-medium text-muted-foreground">Email</Label>
- <p className="text-foreground text-sm font-medium">{userEmail}</p>
- </div>
- <div className="space-y-1">
- <Label className="text-xs font-medium text-muted-foreground">Full Name</Label>
- <Input
- value={formData.name}
- onChange={(e) => handleChange("name", e.target.value)}
- className="h-8 text-sm border-border bg-card"
- />
- </div>
- <div className="space-y-1">
- <Label className="text-xs font-medium text-muted-foreground">Headline</Label>
- <Input
- value={formData.headline}
- onChange={(e) => handleChange("headline", e.target.value)}
- placeholder="e.g. AI Researcher"
- className="h-8 text-sm border-border bg-card"
- />
- </div>
- </div>
- </div>
+            <div className="space-y-4 text-sm">
+              <div className="space-y-1">
+                <Label className="text-xs font-medium text-muted-foreground">Email</Label>
+                <p className="text-foreground text-sm font-medium">{userEmail}</p>
+              </div>
+              <div className="space-y-1">
+                <Label className="text-xs font-medium text-muted-foreground">Full Name</Label>
+                <Input
+                  value={formData.name}
+                  onChange={(e) => handleChange("name", e.target.value)}
+                  className="h-8 text-sm border-border bg-card"
+                />
+              </div>
+              <div className="space-y-1">
+                <Label className="text-xs font-medium text-muted-foreground">Headline</Label>
+                <Input
+                  value={formData.headline}
+                  onChange={(e) => handleChange("headline", e.target.value)}
+                  placeholder="e.g. AI Researcher"
+                  className="h-8 text-sm border-border bg-card"
+                />
+              </div>
+            </div>
+          </div>
 
- <div className="rounded-lg border border-border bg-card p-5">
- <h2 className="text-body-sm font-semibold text-foreground">Discovery Engine</h2>
- <p className="mb-4 text-caption text-muted-foreground">
- Manage your batch discovery opportunities.
- </p>
- <div className="space-y-6">
- <BatchDiscoveryPanel 
- onComplete={() => toast.success("Discovery completed! New opportunities added.")}
- />
- <CacheStatistics />
- </div>
- </div>
+          <div className="rounded-lg border border-border bg-card p-5">
+            <h2 className="text-body-sm font-semibold text-foreground">Appearance</h2>
+            <p className="mb-4 text-caption text-muted-foreground">
+              Customize your Networkly experience.
+            </p>
+            <div className="flex items-center justify-between">
+              <Label className="text-sm text-muted-foreground">Theme</Label>
+              <Select value={theme} onValueChange={setTheme}>
+                <SelectTrigger className="w-[120px] h-8 text-xs border-border bg-card rounded-md outline-none focus:ring-0">
+                  <SelectValue placeholder="Theme" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="light" className="cursor-pointer">Light</SelectItem>
+                  <SelectItem value="dark" className="cursor-pointer">Dark</SelectItem>
+                  <SelectItem value="system" className="cursor-pointer">System</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+          
+        </div>
 
- <div className="rounded-lg border border-border bg-card p-5">
- <h2 className="text-body-sm font-semibold text-foreground">Appearance</h2>
- <p className="mb-4 text-caption text-muted-foreground">
- Customize your Networkly experience.
- </p>
- <div className="flex items-center justify-between">
- <Label className="text-sm text-muted-foreground">Theme</Label>
- <Select value={theme} onValueChange={setTheme}>
- <SelectTrigger className="w-[120px] h-8 text-xs border-border bg-card rounded-md outline-none focus:ring-0">
- <SelectValue placeholder="Theme" />
- </SelectTrigger>
- <SelectContent>
- <SelectItem value="light">Light</SelectItem>
- <SelectItem value="dark">Dark</SelectItem>
- <SelectItem value="system">System</SelectItem>
- </SelectContent>
- </Select>
- </div>
- </div>
+        <div className="space-y-4">
+          <div className="rounded-lg border border-border bg-card p-5">
+            <h2 className="text-body-sm font-semibold text-foreground">Professional Details</h2>
+            <p className="mb-4 text-caption text-muted-foreground">
+              Expanded details used for matching and discovery.
+            </p>
 
- <div className="rounded-lg border border-destructive/30 bg-card p-5">
- <h2 className="text-body-sm font-semibold text-destructive">Danger Zone</h2>
- <p className="mb-4 text-caption text-muted-foreground">
- Irreversible account actions.
- </p>
- <Button variant="destructive" className="w-full text-xs h-9">
- Delete Account
- </Button>
- </div>
- 
- </div>
+            <div className="space-y-4">
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-1">
+                  <Label className="text-xs font-medium text-muted-foreground">Location</Label>
+                  <Input
+                    value={formData.location}
+                    onChange={(e) => handleChange("location", e.target.value)}
+                    placeholder="City, Country"
+                    className="h-8 text-sm border-border bg-card"
+                  />
+                </div>
+                <div className="space-y-1">
+                  <Label className="text-xs font-medium text-muted-foreground">University</Label>
+                  <Input
+                    value={formData.university}
+                    onChange={(e) => handleChange("university", e.target.value)}
+                    placeholder="University name"
+                    className="h-8 text-sm border-border bg-card"
+                  />
+                </div>
+              </div>
 
- <div className="space-y-4">
- <div className="rounded-lg border border-border bg-card p-5">
- <h2 className="text-body-sm font-semibold text-foreground">Professional Details</h2>
- <p className="mb-4 text-caption text-muted-foreground">
- Expanded details used for matching and discovery.
- </p>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-1">
+                  <Label className="text-xs font-medium text-muted-foreground">Grad Year</Label>
+                  <Input
+                    value={formData.graduationYear}
+                    onChange={(e) => handleChange("graduationYear", e.target.value)}
+                    type="number"
+                    placeholder="YYYY"
+                    className="h-8 text-sm border-border bg-card"
+                  />
+                </div>
+                <div className="space-y-1">
+                  <Label className="text-xs font-medium text-muted-foreground">Skills</Label>
+                  <Input
+                    value={formData.skills}
+                    onChange={(e) => handleChange("skills", e.target.value)}
+                    placeholder="React, AI (comma separated)"
+                    className="h-8 text-sm border-border bg-card"
+                  />
+                </div>
+              </div>
 
- <div className="space-y-4">
- <div className="grid grid-cols-2 gap-4">
- <div className="space-y-1">
- <Label className="text-xs font-medium text-muted-foreground">Location</Label>
- <Input
- value={formData.location}
- onChange={(e) => handleChange("location", e.target.value)}
- placeholder="City, Country"
- className="h-8 text-sm border-border bg-card"
- />
- </div>
- <div className="space-y-1">
- <Label className="text-xs font-medium text-muted-foreground">University</Label>
- <Input
- value={formData.university}
- onChange={(e) => handleChange("university", e.target.value)}
- placeholder="University name"
- className="h-8 text-sm border-border bg-card"
- />
- </div>
- </div>
+              <div className="space-y-1">
+                <Label className="text-xs font-medium text-muted-foreground">Interests</Label>
+                <Input
+                  value={formData.interests}
+                  onChange={(e) => handleChange("interests", e.target.value)}
+                  placeholder="Startups, Open Source"
+                  className="h-8 text-sm border-border bg-card"
+                />
+              </div>
 
- <div className="grid grid-cols-2 gap-4">
- <div className="space-y-1">
- <Label className="text-xs font-medium text-muted-foreground">Grad Year</Label>
- <Input
- value={formData.graduationYear}
- onChange={(e) => handleChange("graduationYear", e.target.value)}
- type="number"
- placeholder="YYYY"
- className="h-8 text-sm border-border bg-card"
- />
- </div>
- <div className="space-y-1">
- <Label className="text-xs font-medium text-muted-foreground">Skills</Label>
- <Input
- value={formData.skills}
- onChange={(e) => handleChange("skills", e.target.value)}
- placeholder="React, AI (comma separated)"
- className="h-8 text-sm border-border bg-card"
- />
- </div>
- </div>
+              <div className="space-y-1">
+                <Label className="text-xs font-medium text-muted-foreground">Bio</Label>
+                <Textarea
+                  value={formData.bio}
+                  onChange={(e) => handleChange("bio", e.target.value)}
+                  placeholder="Tell us about yourself..."
+                  rows={3}
+                  className="text-sm resize-none border-border bg-card"
+                />
+              </div>
+            </div>
 
- <div className="space-y-1">
- <Label className="text-xs font-medium text-muted-foreground">Interests</Label>
- <Input
- value={formData.interests}
- onChange={(e) => handleChange("interests", e.target.value)}
- placeholder="Startups, Open Source"
- className="h-8 text-sm border-border bg-card"
- />
- </div>
+            <div className="mt-6">
+              <h3 className="text-xs font-medium text-foreground mb-3">Social Links</h3>
+              <div className="space-y-3">
+                <div className="space-y-1">
+                  <Input
+                    value={formData.linkedinUrl}
+                    onChange={(e) => handleChange("linkedinUrl", e.target.value)}
+                    placeholder="LinkedIn URL"
+                    className="h-8 text-sm border-border bg-card"
+                  />
+                </div>
+                <div className="space-y-1">
+                  <Input
+                    value={formData.githubUrl}
+                    onChange={(e) => handleChange("githubUrl", e.target.value)}
+                    placeholder="GitHub URL"
+                    className="h-8 text-sm border-border bg-card"
+                  />
+                </div>
+                <div className="space-y-1">
+                  <Input
+                    value={formData.portfolioUrl}
+                    onChange={(e) => handleChange("portfolioUrl", e.target.value)}
+                    placeholder="Portfolio / Main Website"
+                    className="h-8 text-sm border-border bg-card"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </TabsContent>
 
- <div className="space-y-1">
- <Label className="text-xs font-medium text-muted-foreground">Bio</Label>
- <Textarea
- value={formData.bio}
- onChange={(e) => handleChange("bio", e.target.value)}
- placeholder="Tell us about yourself..."
- rows={3}
- className="text-sm resize-none border-border bg-card"
- />
- </div>
- </div>
+    <TabsContent value="preferences" className="mt-0 outline-none">
+      <div className="grid gap-6 lg:grid-cols-[2fr_3fr]">
+        <div className="space-y-4">
+          <div className="rounded-lg border border-border bg-card p-5">
+            <h2 className="text-body-sm font-semibold text-foreground">Discovery Engine</h2>
+            <p className="mb-4 text-caption text-muted-foreground">
+              Manage your batch discovery opportunities.
+            </p>
+            <div className="space-y-6">
+              <BatchDiscoveryPanel 
+                onComplete={() => toast.success("Discovery completed! New opportunities added.")}
+              />
+            </div>
+          </div>
 
- <div className="mt-6">
- <h3 className="text-xs font-medium text-foreground mb-3">Social Links</h3>
- <div className="space-y-3">
- <div className="space-y-1">
- <Input
- value={formData.linkedinUrl}
- onChange={(e) => handleChange("linkedinUrl", e.target.value)}
- placeholder="LinkedIn URL"
- className="h-8 text-sm border-border bg-card"
- />
- </div>
- <div className="space-y-1">
- <Input
- value={formData.githubUrl}
- onChange={(e) => handleChange("githubUrl", e.target.value)}
- placeholder="GitHub URL"
- className="h-8 text-sm border-border bg-card"
- />
- </div>
- <div className="space-y-1">
- <Input
- value={formData.portfolioUrl}
- onChange={(e) => handleChange("portfolioUrl", e.target.value)}
- placeholder="Portfolio / Main Website"
- className="h-8 text-sm border-border bg-card"
- />
- </div>
- </div>
- </div>
- </div>
+          <div className="rounded-lg border border-destructive/30 bg-card p-5">
+            <h2 className="text-body-sm font-semibold text-destructive">Danger Zone</h2>
+            <p className="mb-4 text-caption text-muted-foreground">
+              Irreversible account actions.
+            </p>
+            <Button variant="destructive" className="w-full text-xs h-9 cursor-pointer">
+              Delete Account
+            </Button>
+          </div>
+        </div>
 
- <div className="rounded-lg border border-border bg-card p-5">
- <h2 className="text-body-sm font-semibold text-foreground">Preferences</h2>
- <p className="mb-4 text-caption text-muted-foreground">
- Control your notifications and AI features.
- </p>
- 
- <div className="space-y-4 text-sm text-muted-foreground">
- <h3 className="text-[10px] font-semibold text-foreground uppercase tracking-wider mt-2">Notifications</h3>
- <label className="flex items-center justify-between gap-3">
- <span className="text-sm">New Opportunities</span>
- <Switch checked={preferences.notifyOpportunities} onCheckedChange={(checked) => handlePreferenceChange("notifyOpportunities", checked)} />
- </label>
- <label className="flex items-center justify-between gap-3">
- <span className="text-sm">Connection Requests</span>
- <Switch checked={preferences.notifyConnections} onCheckedChange={(checked) => handlePreferenceChange("notifyConnections", checked)} />
- </label>
- <label className="flex items-center justify-between gap-3">
- <span className="text-sm">Messages</span>
- <Switch checked={preferences.notifyMessages} onCheckedChange={(checked) => handlePreferenceChange("notifyMessages", checked)} />
- </label>
- <label className="flex items-center justify-between gap-3">
- <span className="text-sm">Weekly Digest</span>
- <Switch checked={preferences.weeklyDigest} onCheckedChange={(checked) => handlePreferenceChange("weeklyDigest", checked)} />
- </label>
+        <div className="space-y-4">
+          <div className="rounded-lg border border-border bg-card p-5">
+            <h2 className="text-body-sm font-semibold text-foreground">Preferences</h2>
+            <p className="mb-4 text-caption text-muted-foreground">
+              Control your notifications and AI features.
+            </p>
+            
+            <div className="space-y-4 text-sm text-muted-foreground">
+              <h3 className="text-[10px] font-semibold text-foreground uppercase tracking-wider mt-2">Notifications</h3>
+              <label className="flex items-center justify-between gap-3 cursor-pointer">
+                <span className="text-sm">New Opportunities</span>
+                <Switch checked={preferences.notifyOpportunities} onCheckedChange={(checked) => handlePreferenceChange("notifyOpportunities", checked)} className="cursor-pointer" />
+              </label>
+              <label className="flex items-center justify-between gap-3 cursor-pointer">
+                <span className="text-sm">Connection Requests</span>
+                <Switch checked={preferences.notifyConnections} onCheckedChange={(checked) => handlePreferenceChange("notifyConnections", checked)} className="cursor-pointer" />
+              </label>
+              <label className="flex items-center justify-between gap-3 cursor-pointer">
+                <span className="text-sm">Messages</span>
+                <Switch checked={preferences.notifyMessages} onCheckedChange={(checked) => handlePreferenceChange("notifyMessages", checked)} className="cursor-pointer" />
+              </label>
+              <label className="flex items-center justify-between gap-3 cursor-pointer">
+                <span className="text-sm">Weekly Digest</span>
+                <Switch checked={preferences.weeklyDigest} onCheckedChange={(checked) => handlePreferenceChange("weeklyDigest", checked)} className="cursor-pointer" />
+              </label>
 
- <h3 className="text-[10px] font-semibold text-foreground uppercase tracking-wider mt-6 mb-2">Privacy</h3>
- <label className="flex items-center justify-between gap-3">
- <span className="text-sm">Public Profile</span>
- <Switch checked={preferences.publicProfile} onCheckedChange={(checked) => handlePreferenceChange("publicProfile", checked)} />
- </label>
- <label className="flex items-center justify-between gap-3">
- <span className="text-sm">Show Activity Status</span>
- <Switch checked={preferences.showActivityStatus} onCheckedChange={(checked) => handlePreferenceChange("showActivityStatus", checked)} />
- </label>
- <label className="flex items-center justify-between gap-3">
- <span className="text-sm">Show Profile Views</span>
- <Switch checked={preferences.showProfileViews} onCheckedChange={(checked) => handlePreferenceChange("showProfileViews", checked)} />
- </label>
+              <h3 className="text-[10px] font-semibold text-foreground uppercase tracking-wider mt-6 mb-2">Privacy</h3>
+              <label className="flex items-center justify-between gap-3 cursor-pointer">
+                <span className="text-sm">Public Profile</span>
+                <Switch checked={preferences.publicProfile} onCheckedChange={(checked) => handlePreferenceChange("publicProfile", checked)} className="cursor-pointer" />
+              </label>
+              <label className="flex items-center justify-between gap-3 cursor-pointer">
+                <span className="text-sm">Show Activity Status</span>
+                <Switch checked={preferences.showActivityStatus} onCheckedChange={(checked) => handlePreferenceChange("showActivityStatus", checked)} className="cursor-pointer" />
+              </label>
+              <label className="flex items-center justify-between gap-3 cursor-pointer">
+                <span className="text-sm">Show Profile Views</span>
+                <Switch checked={preferences.showProfileViews} onCheckedChange={(checked) => handlePreferenceChange("showProfileViews", checked)} className="cursor-pointer" />
+              </label>
 
- <h3 className="text-[10px] font-semibold text-foreground uppercase tracking-wider mt-6 mb-2">AI Assistants</h3>
- <label className="flex items-center justify-between gap-3">
- <span className="text-sm">AI Suggestions</span>
- <Switch checked={preferences.aiSuggestions} onCheckedChange={(checked) => handlePreferenceChange("aiSuggestions", checked)} />
- </label>
- <label className="flex items-center justify-between gap-3">
- <span className="text-sm">Au Icebreakers</span>
- <Switch checked={preferences.autoIcebreakers} onCheckedChange={(checked) => handlePreferenceChange("autoIcebreakers", checked)} />
- </label>
- <label className="flex items-center justify-between gap-3">
- <span className="text-sm">Career Nudges</span>
- <Switch checked={preferences.careerNudges} onCheckedChange={(checked) => handlePreferenceChange("careerNudges", checked)} />
- </label>
- </div>
- </div>
- 
- </div>
- </div>
+              <h3 className="text-[10px] font-semibold text-foreground uppercase tracking-wider mt-6 mb-2">AI Assistants</h3>
+              <label className="flex items-center justify-between gap-3 cursor-pointer">
+                <span className="text-sm">AI Suggestions</span>
+                <Switch checked={preferences.aiSuggestions} onCheckedChange={(checked) => handlePreferenceChange("aiSuggestions", checked)} className="cursor-pointer" />
+              </label>
+              <label className="flex items-center justify-between gap-3 cursor-pointer">
+                <span className="text-sm">Auto Icebreakers</span>
+                <Switch checked={preferences.autoIcebreakers} onCheckedChange={(checked) => handlePreferenceChange("autoIcebreakers", checked)} className="cursor-pointer" />
+              </label>
+              <label className="flex items-center justify-between gap-3 cursor-pointer">
+                <span className="text-sm">Career Nudges</span>
+                <Switch checked={preferences.careerNudges} onCheckedChange={(checked) => handlePreferenceChange("careerNudges", checked)} className="cursor-pointer" />
+              </label>
+            </div>
+          </div>
+
+          <div className="rounded-lg border border-border bg-card p-5">
+            <h2 className="text-body-sm font-semibold text-foreground">Cache Statistics</h2>
+            <p className="mb-4 text-caption text-muted-foreground">
+              Monitor discovery engine usage and cache health.
+            </p>
+            <CacheStatistics />
+          </div>
+        </div>
+      </div>
+    </TabsContent>
+  </Tabs>
  </motion.div>
  </div>
  )
 }
 
+export default function SettingsPage() {
+  return (
+    <Suspense fallback={<div className="flex min-h-[calc(100vh-80px)] items-center justify-center p-8"><Loader2 className="h-8 w-8 animate-spin text-muted-foreground" /></div>}>
+      <SettingsContent />
+    </Suspense>
+  )
+}

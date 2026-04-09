@@ -20,7 +20,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { Loader2 } from "lucide-react"
+import { Loader2 } from "@/components/ui/icons"
 import { addExtracurricular, updateExtracurricular } from "@/app/actions/profile-items"
 import { toast } from "sonner"
 

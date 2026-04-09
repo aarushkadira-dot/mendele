@@ -13,7 +13,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { MapPin, GraduationCap, Pencil, Share2, MessageCircle, CheckCircle2, X, Loader2, Check } from "lucide-react"
+import { MapPin, GraduationCap, Pencil, Share2, MessageCircle, CheckCircle2, X, Loader2, Check } from "@/components/ui/icons"
 import { useSupabaseUser } from "@/hooks/use-supabase-user"
 import { useRouter } from "next/navigation"
 import { ShareProfileDialog } from "./dialogs"

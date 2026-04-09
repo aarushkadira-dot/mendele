@@ -1,5 +1,5 @@
 import { Card, CardContent } from "@/components/ui/card"
-import { Users, Eye, Search, FolderKanban } from "lucide-react"
+import { Users, Eye, Search, FolderKanban } from "@/components/ui/icons"
 
 interface User {
   connections: number

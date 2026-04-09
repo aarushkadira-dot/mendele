@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
-import { Loader2, Sparkles, ExternalLink } from "lucide-react"
+import { Loader2, Sparkles, ExternalLink } from "@/components/ui/icons"
 import { discoverOpportunitiesForProject } from "@/app/actions/goal-discovery"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Badge } from "@/components/ui/badge"

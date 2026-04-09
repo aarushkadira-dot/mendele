@@ -11,7 +11,7 @@ import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Badge } from "@/components/ui/badge"
 import { Slider } from "@/components/ui/slider"
-import { X, Plus, Link as LinkIcon } from "lucide-react"
+import { X, Plus, Link as LinkIcon } from "@/components/ui/icons"
 import { PROJECT_CATEGORIES, LINK_TYPES_BY_CATEGORY, type ProjectLink, type Project } from "@/lib/projects"
 
 interface EditProjectModalProps {

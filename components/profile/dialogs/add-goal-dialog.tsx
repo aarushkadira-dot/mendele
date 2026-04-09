@@ -19,7 +19,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { Loader2 } from "lucide-react"
+import { Loader2 } from "@/components/ui/icons"
 import { addProfileGoal, updateProfileGoal, type ProfileGoalStatus } from "@/app/actions/goals"
 import { toast } from "sonner"
 

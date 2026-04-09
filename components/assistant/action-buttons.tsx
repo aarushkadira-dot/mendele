@@ -1,6 +1,6 @@
 'use client'
 
-import { Check, X, Search } from 'lucide-react'
+import { Check, X, Search } from "@/components/ui/icons"
 import { motion } from 'framer-motion'
 
 import { cn } from '@/lib/utils'

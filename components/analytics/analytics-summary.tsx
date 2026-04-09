@@ -1,7 +1,7 @@
 "use client"
 
 import { Card, CardContent } from "@/components/ui/card"
-import { TrendingUp, TrendingDown, Users, Eye, Search, Briefcase, Target, Sparkles } from "lucide-react"
+import { TrendingUp, TrendingDown, Users, Eye, Search, Briefcase, Target, Sparkles } from "@/components/ui/icons"
 
 interface AnalyticsSummaryProps {
   statsData: {
@@ -77,12 +77,6 @@ export function AnalyticsSummary({ statsData }: AnalyticsSummaryProps) {
               <div className="flex-1">
                 <p className="text-2xl font-bold text-foreground">{metric.value}</p>
                 <p className="text-xs text-muted-foreground">{metric.label}</p>
-              </div>
-              <div
-                className={`flex items-center gap-0.5 text-xs font-medium ${metric.trend === "up" ? "text-secondary" : "text-destructive"}`}
-              >
-                {metric.trend === "up" ? <TrendingUp className="h-3 w-3" /> : <TrendingDown className="h-3 w-3" />}
-                {metric.change}
               </div>
             </div>
           </CardContent>

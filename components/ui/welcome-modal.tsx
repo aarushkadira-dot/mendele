@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
-import { Sparkles, Mail, ArrowRight } from "lucide-react"
+import { Sparkles, Mail, ArrowRight } from "@/components/ui/icons"
 
 const STORAGE_KEY = "networkly-welcome-seen"
 

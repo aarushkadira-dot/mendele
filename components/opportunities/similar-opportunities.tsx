@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react"
 import { getSimilarOpportunities } from "@/app/actions/similar-opportunities"
 import { OpportunityCard } from "./opportunity-card"
-import { Loader2 } from "lucide-react"
+import { Loader2 } from "@/components/ui/icons"
 import type { Opportunity } from "@/types/opportunity"
 
 interface SimilarOpportunitiesProps {

@@ -20,7 +20,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import {
   Sparkles, Send, User, Square, Plus, MessageSquare, Trash2,
   PanelLeftClose, PanelLeft, Copy, Check, RefreshCw, X
-} from 'lucide-react'
+} from "@/components/ui/icons"
 import { cn } from '@/lib/utils'
 import { useSupabaseUser } from '@/hooks/use-supabase-user'
 import { messageEntranceVariants, staggerContainerVariants, fadeInUpVariants, PREMIUM_EASE } from './animations'

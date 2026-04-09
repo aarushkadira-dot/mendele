@@ -16,7 +16,7 @@ import {
   Clock,
   Circle,
   Loader2
-} from "lucide-react"
+} from "@/components/ui/icons"
 import { AddGoalDialog } from "./dialogs"
 import { 
   getProfileGoals, 

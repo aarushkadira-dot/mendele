@@ -10,7 +10,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Badge } from "@/components/ui/badge"
-import { Sparkles, X, Plus, Link as LinkIcon } from "lucide-react"
+import { Sparkles, X, Plus, Link as LinkIcon } from "@/components/ui/icons"
 import { PROJECT_CATEGORIES, LINK_TYPES_BY_CATEGORY, type ProjectLink } from "@/lib/projects"
 
 interface CreateProjectModalProps {

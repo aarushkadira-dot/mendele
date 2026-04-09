@@ -3,7 +3,7 @@
 import { useState } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 import { motion } from "framer-motion"
-import { CheckCircle2, Mail, Sparkles, ArrowRight } from "lucide-react"
+import { CheckCircle2, Mail, Sparkles, ArrowRight } from "@/components/ui/icons"
 
 import { createClient } from "@/lib/supabase/client"
 import { ensureUserRecord } from "@/app/actions/user"

@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState, useTransition } from "react"
 import { useRouter } from "next/navigation"
-import { CheckCircle2, ChevronLeft, ChevronRight, Sparkles } from "lucide-react"
+import { CheckCircle2, ChevronLeft, ChevronRight, Sparkles } from "@/components/ui/icons"
 
 import { completeOnboarding } from "@/app/actions/onboarding"
 import { useSupabaseUser } from "@/hooks/use-supabase-user"

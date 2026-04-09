@@ -3,7 +3,7 @@
 import { useState } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { Pencil, Sparkles } from "lucide-react"
+import { Pencil, Sparkles } from "@/components/ui/icons"
 import { EditAboutDialog } from "./dialogs"
 import { toast } from "sonner"
 

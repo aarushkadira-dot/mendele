@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Check, Copy } from "lucide-react"
+import { Check, Copy } from "@/components/ui/icons"
 import { toast } from "sonner"
 
 interface ShareProfileDialogProps {

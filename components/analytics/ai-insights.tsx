@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { Sparkles, TrendingUp, Target, Users, Lightbulb, ArrowRight, Loader2 } from "lucide-react"
+import { Sparkles, TrendingUp, Target, Users, Lightbulb, ArrowRight, Loader2 } from "@/components/ui/icons"
 import { generateInsights } from "@/app/actions/insights"
 
 const iconMap: Record<string, any> = {

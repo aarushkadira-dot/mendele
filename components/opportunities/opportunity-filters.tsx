@@ -11,7 +11,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover"
 import { Badge } from "@/components/ui/badge"
-import { SlidersHorizontal, RotateCcw, Sparkles, Zap, Clock, Calendar, XCircle } from "lucide-react"
+import { SlidersHorizontal, RotateCcw, Sparkles, Zap, Clock, Calendar, XCircle } from "@/components/ui/icons"
 import { useHasMounted } from "@/hooks/use-has-mounted"
 import { cn } from "@/lib/utils"
 

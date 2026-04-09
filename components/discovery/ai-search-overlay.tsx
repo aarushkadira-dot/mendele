@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from "react"
 import { motion, AnimatePresence } from "framer-motion"
-import { Search, Sparkles, Globe, ArrowRight, CheckCircle2, Loader2, BrainCircuit } from "lucide-react"
+import { Search, Sparkles, Globe, ArrowRight, CheckCircle2, Loader2, BrainCircuit } from "@/components/ui/icons"
 import { Card } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 

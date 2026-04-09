@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { Card, CardContent } from "@/components/ui/card"
-import { Users, UserPlus, MessageCircle, TrendingUp, Loader2 } from "lucide-react"
+import { Users, UserPlus, MessageCircle, TrendingUp, Loader2 } from "@/components/ui/icons"
 import { getNetworkStats } from "@/app/actions/connections"
 
 export function NetworkStats() {

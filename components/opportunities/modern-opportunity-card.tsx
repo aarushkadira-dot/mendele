@@ -15,7 +15,7 @@ import {
   ArrowUpRight,
   Clock,
   Globe
-} from "lucide-react"
+} from "@/components/ui/icons"
 import type { Opportunity } from "@/types/opportunity"
 import { getTypeGradientStyle, getMatchScoreColor } from "@/types/opportunity"
 import { cn } from "@/lib/utils"
